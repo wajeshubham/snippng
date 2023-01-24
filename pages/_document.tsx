@@ -8,18 +8,18 @@ const modeScript = `
   window.addEventListener('storage', updateModeWithoutTransitions)
 
   function updateMode() {
-    let isSystemDarkMode = darkModeMediaQuery.matches
-    let isDarkMode = window.localStorage.isDarkMode === 'true' || (!('isDarkMode' in window.localStorage) && isSystemDarkMode)
+    let isDarkMode = window.localStorage.isDarkMode === 'true'
+    let isLightMode = window.localStorage.isDarkMode === 'false'
 
     if (isDarkMode) {
       document.documentElement.classList.add('dark')
-    } else {
+    } else if(isLightMode) {
       document.documentElement.classList.remove('dark')
+    } else {
+      localStorage.setItem("isDarkMode", true)
+      document.documentElement.classList.add('dark')
     }
 
-    if (isDarkMode === isSystemDarkMode) {
-      delete window.localStorage.isDarkMode
-    }
   }
 
   function disableTransitionsTemporarily() {

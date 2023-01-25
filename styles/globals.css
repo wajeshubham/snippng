@@ -13,9 +13,30 @@ body {
 }
 
 .CodeMirror__Main__Editor div {
-  @apply px-1 pb-1;
+  @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
 }
 
 .CodeMirror__Main__Editor div.cm-editor {
   @apply pt-8;
+}
+
+.cm-scroller {
+  position: relative;
+  overflow: hidden !important;
+}
+
+.cm-content {
+  border-right-width: 70px;
+  border-color: transparent;
+  max-width: 100%;
+  font-size: 14px;
+}
+
+.cm-gutters {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  min-height: 100%;
+  z-index: 3;
+  font-size: 14px;
 }

@@ -17,6 +17,7 @@ const CodeMirrorTextArea = () => {
   const [showLineNumbers, setShowLineNumbers] = useState(false);
   const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
   const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
+  const [wrapperBg, setWrapperBg] = useState("#eee811");
 
   const setContentMargin = () => {
     const gutter = document.querySelector(".cm-gutters") as HTMLDivElement;
@@ -103,11 +104,35 @@ const CodeMirrorTextArea = () => {
                   }}
                   options={[...LANGUAGES]}
                 />
+                <div className="relative">
+                  <label
+                    htmlFor="color-picker"
+                    className="h-8 rounded-sm outline outline-1 dark:outline-white outline-zinc-900 flex aspect-square "
+                    style={{
+                      backgroundColor: wrapperBg,
+                    }}
+                  ></label>
+                  <input
+                    className="h-0 w-0 p-0 m-0 absolute"
+                    style={{
+                      visibility: "hidden",
+                    }}
+                    id="color-picker"
+                    type={"color"}
+                    value={wrapperBg}
+                    onChange={(e) => {
+                      setWrapperBg(e.target.value);
+                    }}
+                  />
+                </div>
               </div>
             </div>
             <div
               id="code-wrapper"
-              className="overflow-hidden p-16 w-full bg-[#eee811]"
+              className="overflow-hidden p-16 w-full"
+              style={{
+                backgroundColor: wrapperBg,
+              }}
             >
               <div
                 data-testid="editor-container"

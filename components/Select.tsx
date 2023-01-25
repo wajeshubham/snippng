@@ -54,8 +54,8 @@ const Select: React.FC<SelectComponentProps> = ({
                     className={({ active }) =>
                       clsx(
                         active
-                          ? "text-white dark:bg-zinc-600 bg-zinc-100"
-                          : "dark:text-white text-zinc-900",
+                          ? "dark:text-white text-zinc-900 dark:bg-zinc-600 bg-zinc-100"
+                          : "",
                         "relative cursor-default dark:text-white text-zinc-900 select-none py-2 pl-3 pr-9 hover:dark:bg-zinc-600 hover:bg-zinc-100"
                       )
                     }

@@ -59,8 +59,6 @@ const CodeMirrorTextArea = () => {
     };
   }, [showLineNumbers]);
 
-  console.log(selectedLang.id);
-
   return (
     <>
       <section>

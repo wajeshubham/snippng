@@ -2,8 +2,124 @@ import { langs } from "@uiw/codemirror-extensions-langs";
 
 export const THEMES = [
   {
-    id: "vscode",
-    label: "VS Code",
+    id: "abcdef",
+    label: "abcdef",
+  },
+  {
+    id: "androidstudio",
+    label: "androidstudio",
+  },
+  {
+    id: "atomone",
+    label: "atomone",
+  },
+  {
+    id: "aura",
+    label: "aura",
+  },
+  {
+    id: "bbedit",
+    label: "bbedit",
+  },
+  {
+    id: "bespin",
+    label: "bespin",
+  },
+  {
+    id: "darcula",
+    label: "darcula",
+  },
+  {
+    id: "dracula",
+    label: "dracula",
+  },
+  {
+    id: "duotoneDark",
+    label: "duotoneDark",
+  },
+  {
+    id: "duotoneLight",
+    label: "duotoneLight",
+  },
+  {
+    id: "eclipse",
+    label: "eclipse",
+  },
+  {
+    id: "githubDark",
+    label: "githubDark",
+  },
+  {
+    id: "githubLight",
+    label: "githubLight",
+  },
+  {
+    id: "gruvboxDark",
+    label: "gruvboxDark",
+  },
+  {
+    id: "gruvboxLight",
+    label: "gruvboxLight",
+  },
+  {
+    id: "material",
+    label: "material",
+  },
+  {
+    id: "materialDark",
+    label: "materialDark",
+  },
+  {
+    id: "materialLight",
+    label: "materialLight",
+  },
+  {
+    id: "noctisLilac",
+    label: "noctisLilac",
+  },
+  {
+    id: "nord",
+    label: "nord",
+  },
+  {
+    id: "okaidia",
+    label: "okaidia",
+  },
+  {
+    id: "solarizedDark",
+    label: "solarizedDark",
+  },
+  {
+    id: "solarizedLight",
+    label: "solarizedLight",
+  },
+  {
+    id: "sublime",
+    label: "sublime",
+  },
+  {
+    id: "tokyoNight",
+    label: "tokyoNight",
+  },
+  {
+    id: "tokyoNightStorm",
+    label: "tokyoNightStorm",
+  },
+  {
+    id: "tokyoNightDay",
+    label: "tokyoNightDay",
+  },
+  {
+    id: "vscodeDark",
+    label: "vscodeDark",
+  },
+  {
+    id: "xcodeDark",
+    label: "xcodeDark",
+  },
+  {
+    id: "xcodeLight",
+    label: "xcodeLight",
   },
 ];
 

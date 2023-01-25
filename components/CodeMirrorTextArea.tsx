@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import SnippngHeader from "./SnippngHeader";
 import * as htmlToImage from "html-to-image";
 import { LANGUAGES, THEMES } from "@/lib/constants";
-import { getLanguage } from "@/utils";
+import { getLanguage, getTheme } from "@/utils";
 import Button from "./Button";
 import Select from "./Select";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
+import * as themes from "@uiw/codemirror-themes-all";
 
 const CodeMirrorTextArea = () => {
   const [code, setCode] = useState(`console.log("Hello world")`);
@@ -143,7 +144,6 @@ const CodeMirrorTextArea = () => {
                     loadLanguage(getLanguage(selectedLang.id))?.extension ||
                       langs.javascript(),
                   ]}
-                  theme="dark"
                   basicSetup={{
                     lineNumbers: true,
                     indentOnInput: true,
@@ -153,6 +153,8 @@ const CodeMirrorTextArea = () => {
                     highlightActiveLineGutter: false,
                     syntaxHighlighting: true,
                   }}
+                  // @ts-ignore
+                  theme={themes[getTheme(selectedTheme.id)]}
                   indentWithTab
                   onChange={(value, viewUpdate) => {
                     setCode(value);

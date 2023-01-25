@@ -5,7 +5,7 @@ describe("LandingPage", () => {
   it("renders the landing page", async () => {
     render(<Home />);
     await waitFor(() => {
-      screen.getByText("Hello world");
+      screen.getByText("Snippng");
     });
   });
 });

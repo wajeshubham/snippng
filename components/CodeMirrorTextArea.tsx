@@ -1,45 +1,159 @@
 import NoSSRWrapper from "./NoSSRWrapper";
 import CodeMirror from "@uiw/react-codemirror";
-import { langs } from "@uiw/codemirror-extensions-langs";
-import { useState } from "react";
+import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
+import { useEffect, useState } from "react";
 import SnippngHeader from "./SnippngHeader";
+import * as htmlToImage from "html-to-image";
+import { LANGUAGES, THEMES } from "@/lib/constants";
+import { getLanguage } from "@/utils";
+import Button from "./Button";
+import Select from "./Select";
+import { CheckIcon } from "@heroicons/react/20/solid";
+import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 
 const CodeMirrorTextArea = () => {
   const [code, setCode] = useState(`console.log("Hello world")`);
+  const [lineNumberDigits, setLineNumberDigits] = useState(0);
+  const [showLineNumbers, setShowLineNumbers] = useState(false);
+  const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
+  const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
+
+  const setContentMargin = () => {
+    const gutter = document.querySelector(".cm-gutters") as HTMLDivElement;
+    if (showLineNumbers) {
+      gutter?.classList.remove("!hidden");
+    } else {
+      gutter?.classList.add("!hidden");
+    }
+    const content = document.querySelector(".cm-content") as HTMLDivElement;
+    if (content) {
+      content.style.marginLeft = showLineNumbers
+        ? `${gutter?.clientWidth ?? 28}px`
+        : "0px";
+    }
+  };
+
+  const downloadImage = () => {
+    var node = document.getElementById("code-wrapper");
+    if (!node) return;
+    htmlToImage
+      .toPng(node)
+      .then((dataUrl) => {
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = dataUrl;
+        a.click();
+      })
+      .catch((error) => {
+        console.error("oops, something went wrong!", error);
+      });
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentMargin();
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [showLineNumbers]);
+
+  console.log(selectedLang.id);
+
   return (
-    <section>
-      <NoSSRWrapper>
-        <div className="overflow-hidden p-24 bg-[#eee811]">
-          <div
-            data-testid="editor-container"
-            className="overflow-hidden rounded-md !font-mono"
-          >
-            <CodeMirror
-              className="CodeMirror__Main__Editor"
-              value={code}
-              extensions={[langs.javascript()]}
-              theme="dark"
-              basicSetup={{
-                lineNumbers: true,
-                indentOnInput: true,
-                tabSize: 4,
-                foldGutter: false,
-                highlightActiveLine: false,
-                highlightActiveLineGutter: false,
-              }}
-              indentWithTab
-              onChange={(value, viewUpdate) => {
-                setCode(value);
-              }}
-            >
-              <div className="absolute top-0 z-50 w-full text-white !px-3.5 !py-3 bg-inherit">
-                <SnippngHeader type="mac-left" />
+    <>
+      <section>
+        <NoSSRWrapper>
+          <div className="rounded-md p-8 flex justify-start border-[1px] flex-col items-start dark:border-zinc-100 border-zinc-700 w-full">
+            <div className="w-full">
+              <div className="mb-4 flex w-full justify-start items-center gap-2">
+                <Button
+                  startIcon={<CloudArrowDownIcon className="w-4 h-4 mr-2" />}
+                  onClick={downloadImage}
+                >
+                  Download
+                </Button>
+                <Button
+                  className="inline-flex items-center"
+                  endIcon={
+                    showLineNumbers ? (
+                      <CheckIcon className="h-5 w-5 ml-2" />
+                    ) : null
+                  }
+                  onClick={() => {
+                    setShowLineNumbers(!showLineNumbers);
+                  }}
+                >
+                  Line count
+                </Button>
+
+                <Select
+                  value={selectedTheme}
+                  onChange={(val) => {
+                    if (!val.id) return;
+                    setSelectedTheme(val);
+                  }}
+                  options={[...THEMES]}
+                />
+                <Select
+                  value={selectedLang}
+                  onChange={(val) => {
+                    if (!val.id) return;
+                    setSelectedLang(val);
+                  }}
+                  options={[...LANGUAGES]}
+                />
               </div>
-            </CodeMirror>
+            </div>
+            <div
+              id="code-wrapper"
+              className="overflow-hidden p-16 w-full bg-[#eee811]"
+            >
+              <div
+                data-testid="editor-container"
+                className="overflow-hidden rounded-md shadow-md !font-mono relative"
+              >
+                <CodeMirror
+                  className="CodeMirror__Main__Editor"
+                  value={code}
+                  extensions={[
+                    loadLanguage(getLanguage(selectedLang.id))?.extension ||
+                      langs.javascript(),
+                  ]}
+                  theme="dark"
+                  basicSetup={{
+                    lineNumbers: true,
+                    indentOnInput: true,
+                    tabSize: 4,
+                    foldGutter: false,
+                    highlightActiveLine: false,
+                    highlightActiveLineGutter: false,
+                    syntaxHighlighting: true,
+                  }}
+                  indentWithTab
+                  onChange={(value, viewUpdate) => {
+                    setCode(value);
+                    const lineNumber = viewUpdate.state.doc.lines;
+                    const lineDigitLength = lineNumber.toString().length;
+                    if (
+                      lineDigitLength > lineNumberDigits ||
+                      lineDigitLength < lineNumberDigits
+                    ) {
+                      setLineNumberDigits(lineDigitLength);
+                      setContentMargin();
+                    }
+                  }}
+                >
+                  <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">
+                    <SnippngHeader type="mac-left" />
+                  </div>
+                </CodeMirror>
+              </div>
+            </div>
           </div>
-        </div>
-      </NoSSRWrapper>
-    </section>
+        </NoSSRWrapper>
+      </section>
+    </>
   );
 };
 

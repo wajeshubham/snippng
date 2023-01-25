@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import { SelectOptionInterface } from "@/types";
+import { clsx } from "@/utils";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { clsx } from "@/utils";
-import { SelectOptionInterface } from "@/types";
+import React, { Fragment } from "react";
 
 export interface SelectComponentProps {
   value: SelectOptionInterface;
@@ -10,6 +10,7 @@ export interface SelectComponentProps {
   onChange: (value: SelectOptionInterface) => void;
   children?: React.ReactNode;
   placeholder?: string | React.ReactNode;
+  Icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
 const Select: React.FC<SelectComponentProps> = ({
@@ -17,6 +18,7 @@ const Select: React.FC<SelectComponentProps> = ({
   placeholder = "Choose one",
   options,
   onChange,
+  Icon,
 }) => {
   return (
     <Listbox
@@ -28,7 +30,10 @@ const Select: React.FC<SelectComponentProps> = ({
       {({ open }) => (
         <>
           <div className="relative w-full max-w-xs">
-            <Listbox.Button className="py-1.5 text-sm px-3 rounded-sm outline outline-[1px] dark:outline-zinc-100 outline-zinc-700 dark:bg-black bg-white w-full dark:text-white text-zinc-900">
+            <Listbox.Button className="py-1.5 inline-flex dark:bg-black dark:hover:bg-zinc-800 hover:bg-zinc-100 bg-white items-center text-sm px-3 rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 w-full dark:text-white text-zinc-900">
+              {Icon ? (
+                <Icon className="h-4 w-4 text-zinc-900 dark:text-white mr-2" />
+              ) : null}
               <span className="block truncate text-left">
                 {value.label ?? placeholder}
               </span>
@@ -47,7 +52,7 @@ const Select: React.FC<SelectComponentProps> = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute dark:bg-black bg-white z-40 mt-1 max-h-60 w-full overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-100 outline-zinc-700 dark:text-white text-zinc-900">
+              <Listbox.Options className="absolute dark:bg-black bg-white z-40 mt-1 max-h-60 w-full overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-700 dark:text-white text-zinc-900">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id}

@@ -1,125 +1,121 @@
-import { langs } from "@uiw/codemirror-extensions-langs";
-
 export const THEMES = [
   {
+    id: "vscodeDark",
+    label: "VS Code Dark",
+  },
+  {
     id: "abcdef",
-    label: "abcdef",
+    label: "ABCDEF",
   },
   {
     id: "androidstudio",
-    label: "androidstudio",
+    label: "Android Studio",
   },
   {
     id: "atomone",
-    label: "atomone",
+    label: "Atom one",
   },
   {
     id: "aura",
-    label: "aura",
+    label: "Aura",
   },
   {
     id: "bbedit",
-    label: "bbedit",
+    label: "Bbedit",
   },
   {
     id: "bespin",
-    label: "bespin",
+    label: "Bespin",
   },
   {
     id: "darcula",
-    label: "darcula",
+    label: "Darcula",
   },
-  {
-    id: "dracula",
-    label: "dracula",
-  },
+
   {
     id: "duotoneDark",
-    label: "duotoneDark",
+    label: "Duotone Dark",
   },
   {
     id: "duotoneLight",
-    label: "duotoneLight",
+    label: "Duotone Light",
   },
   {
     id: "eclipse",
-    label: "eclipse",
+    label: "Eclipse",
   },
   {
     id: "githubDark",
-    label: "githubDark",
+    label: "Github Dark",
   },
   {
     id: "githubLight",
-    label: "githubLight",
+    label: "Github Light",
   },
   {
     id: "gruvboxDark",
-    label: "gruvboxDark",
+    label: "Gruvbox Dark",
   },
   {
     id: "gruvboxLight",
-    label: "gruvboxLight",
+    label: "Gruvbox Light",
   },
   {
     id: "material",
-    label: "material",
+    label: "Material",
   },
   {
     id: "materialDark",
-    label: "materialDark",
+    label: "Material Dark",
   },
   {
     id: "materialLight",
-    label: "materialLight",
+    label: "Material Light",
   },
   {
     id: "noctisLilac",
-    label: "noctisLilac",
+    label: "Noctis Lilac",
   },
   {
     id: "nord",
-    label: "nord",
+    label: "Nord",
   },
   {
     id: "okaidia",
-    label: "okaidia",
+    label: "Okaidia",
   },
   {
     id: "solarizedDark",
-    label: "solarizedDark",
+    label: "Solarized Dark",
   },
   {
     id: "solarizedLight",
-    label: "solarizedLight",
+    label: "Solarized Light",
   },
   {
     id: "sublime",
-    label: "sublime",
+    label: "Sublime",
   },
   {
     id: "tokyoNight",
-    label: "tokyoNight",
+    label: "Tokyo Night",
   },
   {
     id: "tokyoNightStorm",
-    label: "tokyoNightStorm",
+    label: "Tokyo Night Storm",
   },
   {
     id: "tokyoNightDay",
-    label: "tokyoNightDay",
+    label: "Tokyo Night Day",
   },
-  {
-    id: "vscodeDark",
-    label: "vscodeDark",
-  },
+
   {
     id: "xcodeDark",
-    label: "xcodeDark",
+    label: "xCode Dark",
   },
   {
     id: "xcodeLight",
-    label: "xcodeLight",
+    label: "xCode Light",
   },
 ];
 
@@ -440,3 +436,13 @@ export const LANGUAGES = [
     id: "yaml",
   },
 ];
+
+export const DEFAULT_BASE_SETUP = {
+  lineNumbers: true,
+  indentOnInput: true,
+  tabSize: 4,
+  foldGutter: false,
+  highlightActiveLine: false,
+  highlightActiveLineGutter: false,
+  syntaxHighlighting: true,
+};

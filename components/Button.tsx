@@ -3,21 +3,21 @@ import React from "react";
 
 const Button: React.FC<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    startIcon?: JSX.Element | null;
-    endIcon?: JSX.Element | null;
+    StartIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
+    EndIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
   }
-> = ({ startIcon, endIcon, ...props }) => {
+> = ({ StartIcon, EndIcon, ...props }) => {
   return (
     <button
       {...props}
       className={clsx(
-        "py-1.5 text-sm flex-shrink-0 inline-flex items-center px-3 rounded-sm outline outline-[1px] dark:outline-zinc-100 outline-zinc-700 dark:text-white text-zinc-900",
+        "py-1.5 text-sm flex-shrink-0 disabled:opacity-60 inline-flex items-center px-3 rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900 dark:bg-black dark:hover:bg-zinc-800 hover:bg-zinc-100 bg-white",
         props.className ?? ""
       )}
     >
-      {startIcon}
+      {StartIcon ? <StartIcon className="w-4 h-4 mr-2" /> : null}
       <span>{props.children}</span>
-      {endIcon}
+      {EndIcon ? <EndIcon className="w-4 h-4 ml-2" /> : null}
     </button>
   );
 };

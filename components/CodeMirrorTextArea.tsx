@@ -3,8 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_BASE_SETUP, LANGUAGES, THEMES } from "@/lib/constants";
 import { getLanguage, getTheme } from "@/utils";
 
-import { CheckIcon } from "@heroicons/react/20/solid";
 import {
+  CheckIcon,
+  Cog6ToothIcon,
   CloudArrowDownIcon,
   CommandLineIcon,
   ListBulletIcon,
@@ -33,12 +34,16 @@ const CodeMirrorTextArea = () => {
 
   const setContentMargin = useCallback(() => {
     const gutter = document.querySelector(".cm-gutters") as HTMLDivElement;
+    const content = document.querySelector(".cm-content") as HTMLDivElement;
+    if (!gutter || !content) {
+      setShowLineNumbers(true);
+      return;
+    }
     if (showLineNumbers) {
       gutter?.classList.remove("!hidden");
     } else {
       gutter?.classList.add("!hidden");
     }
-    const content = document.querySelector(".cm-content") as HTMLDivElement;
     if (content) {
       content.style.marginLeft = showLineNumbers
         ? `${gutter?.clientWidth ?? 28}px`
@@ -69,7 +74,7 @@ const CodeMirrorTextArea = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setContentMargin();
-    }, 100);
+    }, 50);
     return () => {
       clearTimeout(timer);
     };
@@ -139,13 +144,18 @@ const CodeMirrorTextArea = () => {
                     }}
                   />
                 </div>
+                <div className="ml-auto">
+                  <Button>
+                    <Cog6ToothIcon className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
             <div
               id="code-wrapper"
               className="overflow-hidden p-16 w-full"
               style={{
-                backgroundColor: wrapperBg,
+                background: wrapperBg,
               }}
             >
               <div

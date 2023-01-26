@@ -12,6 +12,7 @@ const customJestConfig = {
     "^@/layout(.*)$": "<rootDir>/layout/$1",
     "^@/utils(.*)$": "<rootDir>/utils/$1",
     "^@/types(.*)$": "<rootDir>/types/$1",
+    "^@/lib(.*)$": "<rootDir>/lib/$1",
   },
   moduleDirectories: ["node_modules", __dirname],
   testEnvironment: "jest-environment-jsdom",

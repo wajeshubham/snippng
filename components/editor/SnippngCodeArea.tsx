@@ -73,13 +73,13 @@ const SnippngCodeArea = () => {
             >
               <div
                 data-testid="editor-container"
-                className="overflow-hidden rounded-md shadow-md !font-mono relative"
+                className={clsx(
+                  "overflow-hidden rounded-md shadow-md !font-mono relative",
+                  hasDropShadow ? "shadow-xl shadow-zinc-900/40" : ""
+                )}
               >
                 <CodeMirror
-                  className={clsx(
-                    "CodeMirror__Main__Editor",
-                    hasDropShadow ? "shadow-2xl" : ""
-                  )}
+                  className={clsx("CodeMirror__Main__Editor")}
                   value={code}
                   extensions={[
                     loadLanguage(getLanguage(selectedLang.id))?.extension ||
@@ -99,7 +99,8 @@ const SnippngCodeArea = () => {
                     const lineDigitLength = lineNumber.toString().length;
                     if (lineDigitLength !== lineNumberDigits) {
                       setLineNumberDigits(lineDigitLength);
-                      setContentMargin();
+                      setContentMargin(); // update margin of content based on gutter width
+                      // gutter width will change for every digit in line number change
                     }
                   }}
                 >

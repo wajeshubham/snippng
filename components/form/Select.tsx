@@ -52,7 +52,7 @@ const Select: React.FC<SelectComponentProps> = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute dark:bg-black bg-white z-40 mt-1 max-h-60 w-full overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-700 dark:text-white text-zinc-900">
+              <Listbox.Options className="absolute dark:bg-black bg-white z-40 mt-1 max-h-60 w-full overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id}

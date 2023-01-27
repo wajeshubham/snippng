@@ -1,15 +1,19 @@
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import { LANGUAGES, THEMES } from "@/lib/constants";
+import { clsx } from "@/utils";
+import { Menu, Transition } from "@headlessui/react";
 import {
+  ChevronDownIcon,
   CloudArrowDownIcon,
   Cog6ToothIcon,
   CommandLineIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
+import Range from "../form/Range";
 import Select from "../form/Select";
 
 const SnippngControlHeader = () => {
@@ -17,8 +21,14 @@ const SnippngControlHeader = () => {
 
   const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
 
-  const { selectedLang, selectedTheme, showLineNumbers, wrapperBg } =
-    editorConfig;
+  const {
+    selectedLang,
+    selectedTheme,
+    showLineNumbers,
+    wrapperBg,
+    hasDropShadow,
+    editorFontSize,
+  } = editorConfig;
 
   const downloadImage = () => {
     var node = document.getElementById("code-wrapper");
@@ -49,13 +59,6 @@ const SnippngControlHeader = () => {
       >
         {downloadingSnippet ? "Downloading..." : "Download"}
       </Button>
-      <Checkbox
-        label="Line count"
-        id="line-count"
-        onChange={() => {
-          handleConfigChange("showLineNumbers")(!showLineNumbers);
-        }}
-      />
 
       <Select
         Icon={SparklesIcon}
@@ -97,9 +100,63 @@ const SnippngControlHeader = () => {
         />
       </div>
       <div className="ml-auto">
-        <Button>
-          <Cog6ToothIcon className="h-5 w-5" />
-        </Button>
+        <Menu as="div" className="relative inline-block text-left">
+          <div>
+            <Menu.Button className="py-1.5 inline-flex dark:bg-black dark:hover:bg-zinc-800 hover:bg-zinc-100 bg-white items-center text-sm px-3 rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 w-full dark:text-white text-zinc-900">
+              <Cog6ToothIcon className="h-5 w-5" />
+              <ChevronDownIcon
+                className="-mr-1 ml-2 h-5 w-5"
+                aria-hidden="true"
+              />
+            </Menu.Button>
+          </div>
+
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="absolute right-0 z-30 mt-2 w-72 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white max-h-60 overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
+              <div className="py-1 px-2">
+                <Checkbox
+                  label="Line count"
+                  id="line-count"
+                  checked={showLineNumbers}
+                  onChange={() => {
+                    handleConfigChange("showLineNumbers")(!showLineNumbers);
+                  }}
+                />
+              </div>
+              <div className="py-1 px-2">
+                <Checkbox
+                  label="Drop shadow"
+                  id="drop-shadow"
+                  checked={hasDropShadow}
+                  onChange={() => {
+                    handleConfigChange("hasDropShadow")(!hasDropShadow);
+                  }}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Font size (${editorFontSize})`}
+                  value={editorFontSize.split("px")[0]}
+                  onChange={(e) => {
+                    handleConfigChange("editorFontSize")(e.target.value + "px");
+                  }}
+                  max={32}
+                  min={10}
+                  rangeMin={"10px"}
+                  rangeMax={"32px"}
+                />
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </div>
     </div>
   );

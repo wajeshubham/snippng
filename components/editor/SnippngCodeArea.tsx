@@ -30,9 +30,8 @@ const SnippngCodeArea = () => {
 
   return debounced as (...args: Parameters<F>) => ReturnType<F>;
 };`);
-  const [lineNumberDigits, setLineNumberDigits] = useState(0);
-  const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
 
+  const { editorConfig } = useContext(SnippngEditorContext);
   const {
     selectedLang,
     selectedTheme,
@@ -47,35 +46,6 @@ const SnippngCodeArea = () => {
     fileName,
     showFileName,
   } = editorConfig;
-
-  const setContentMargin = useCallback(() => {
-    const gutter = document.querySelector(".cm-gutters") as HTMLDivElement;
-    const content = document.querySelector(".cm-content") as HTMLDivElement;
-    if (!gutter || !content) {
-      handleConfigChange("showLineNumbers")(true);
-      // recalculate the margin once gutter and content are mounted
-      return;
-    }
-    if (showLineNumbers) {
-      gutter?.classList.remove("!hidden");
-    } else {
-      gutter?.classList.add("!hidden");
-    }
-    if (content) {
-      content.style.marginLeft = showLineNumbers
-        ? `${gutter?.clientWidth ?? 28}px`
-        : "0px";
-    }
-  }, [showLineNumbers]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setContentMargin();
-    }, 50);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [setContentMargin, showLineNumbers]);
 
   return (
     <>
@@ -108,22 +78,18 @@ const SnippngCodeArea = () => {
                     loadLanguage(getLanguage(selectedLang.id))?.extension ||
                       langs.javascript(),
                   ]}
-                  basicSetup={{ ...DEFAULT_BASE_SETUP }}
+                  basicSetup={{
+                    ...DEFAULT_BASE_SETUP,
+                    lineNumbers: showLineNumbers,
+                  }}
                   style={{
                     fontSize: `${editorFontSize}px`,
                   }}
                   // @ts-ignore
                   theme={themes[getTheme(selectedTheme.id)]}
                   indentWithTab
-                  onChange={(value, viewUpdate) => {
+                  onChange={(value) => {
                     setCode(value);
-                    const lineNumber = viewUpdate.state.doc.lines;
-                    const lineDigitLength = lineNumber.toString().length;
-                    if (lineDigitLength !== lineNumberDigits) {
-                      setLineNumberDigits(lineDigitLength);
-                      setContentMargin(); // update margin of content based on gutter width
-                      // gutter width will change for every digit in line number change
-                    }
                   }}
                 >
                   <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">

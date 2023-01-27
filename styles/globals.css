@@ -32,9 +32,6 @@ body {
 }
 
 .cm-gutters {
-  position: absolute !important;
-  left: 0;
-  top: 0;
   min-height: 100%;
   z-index: 3;
 }

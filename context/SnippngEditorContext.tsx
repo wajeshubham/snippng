@@ -1,6 +1,6 @@
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { SnippngEditorConfig, SnippngEditorContext } from "@/types";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 const defaultEditorConfig: SnippngEditorConfig = {
   selectedLang:
@@ -46,18 +46,18 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     };
 
-  const handleLineHeight = () => {
+  const handleLineHeight = useCallback(() => {
     const content = document.querySelector(".cm-content") as HTMLDivElement;
     const gutters = document.querySelector(".cm-gutters") as HTMLDivElement;
     if (content && gutters) {
       content.style.lineHeight = `${editorConfig.lineHeight}px`;
       gutters.style.lineHeight = `${editorConfig.lineHeight}px`;
     }
-  };
+  }, [editorConfig.lineHeight]);
 
   useEffect(() => {
     handleLineHeight();
-  }, [editorConfig.lineHeight]);
+  }, [editorConfig.lineHeight, handleLineHeight]);
 
   return (
     <SnippngEditorContext.Provider value={{ editorConfig, handleConfigChange }}>

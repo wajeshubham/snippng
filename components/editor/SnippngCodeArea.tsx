@@ -113,13 +113,13 @@ const SnippngCodeArea = () => {
                 >
                   <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">
                     {showFileName ? (
-                      <div
-                        className="absolute top-2 -translate-x-1/2 left-1/2 text-xs font-extralight text-zinc-400 focus:border-b-[0.1px] border-zinc-500 outline-none ring-0"
+                      <input
+                        defaultValue={fileName}
+                        className="absolute bg-transparent w-72 text-center top-2 -translate-x-1/2 left-1/2 text-xs font-extralight text-zinc-400 focus:border-b-[0.1px] border-zinc-500 outline-none ring-0"
                         spellCheck={false}
                         contentEditable
-                      >
-                        {fileName}
-                      </div>
+                        autoComplete="off"
+                      />
                     ) : null}
                     <SnippngHeader type={editorWindowControlsType} />
                   </div>

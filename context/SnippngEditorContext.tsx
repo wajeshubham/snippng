@@ -47,11 +47,10 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleLineHeight = () => {
     const content = document.querySelector(".cm-content") as HTMLDivElement;
-    if (
-      content &&
-      content.style.lineHeight !== `${editorConfig.lineHeight}px`
-    ) {
+    const gutters = document.querySelector(".cm-gutters") as HTMLDivElement;
+    if (content && gutters) {
       content.style.lineHeight = `${editorConfig.lineHeight}px`;
+      gutters.style.lineHeight = `${editorConfig.lineHeight}px`;
     }
   };
 

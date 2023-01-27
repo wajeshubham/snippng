@@ -33,6 +33,16 @@ describe("SnippngCodeArea", () => {
   });
 
   describe("showLineNumbers flag", () => {
+    it("renders WITH line count when showLineNumbers flag is true", async () => {
+      await act(async () => {
+        render(<SnippngCodeArea />);
+      });
+      const lineGutters = document.querySelector(".cm-gutters");
+      await waitFor(() => {
+        expect(lineGutters).toBeInTheDocument();
+      });
+    });
+
     it("renders WITHOUT line count when showLineNumbers flag is false", async () => {
       await act(async () => {
         render(
@@ -52,16 +62,6 @@ describe("SnippngCodeArea", () => {
         expect(lineGutters).not.toBeInTheDocument();
       });
     });
-
-    it("renders WITH line count when showLineNumbers flag is true", async () => {
-      await act(async () => {
-        render(<SnippngCodeArea />);
-      });
-      const lineGutters = document.querySelector(".cm-gutters");
-      await waitFor(() => {
-        expect(lineGutters).toBeInTheDocument();
-      });
-    });
   });
 
   describe("hasDropShadow flag", () => {
@@ -76,6 +76,7 @@ describe("SnippngCodeArea", () => {
         expect(editorWithShadow).toBeInTheDocument();
       });
     });
+
     it("renders WITHOUT box-shadow when hasDropShadow flag is false", async () => {
       await act(async () => {
         render(
@@ -132,7 +133,7 @@ describe("SnippngCodeArea", () => {
   });
 
   describe("showFilename flag", () => {
-    it("renders the editor with file title when showFilename flag is true", async () => {
+    it("renders the editor WITH file name when showFilename flag is true", async () => {
       await act(async () => {
         render(<SnippngCodeArea />);
       });
@@ -144,10 +145,32 @@ describe("SnippngCodeArea", () => {
         expect(value).toBe("@utils/debounce.ts");
       });
     });
+
+    it("renders the editor WITHOUT file name when showFilename flag is false", async () => {
+      await act(async () => {
+        render(
+          <SnippngEditorContext.Provider
+            // @ts-ignore
+            value={{
+              editorConfig: { ...defaultEditorConfig, showFileName: false },
+              // override hasDropShadow with false
+            }}
+          >
+            <SnippngCodeArea />
+          </SnippngEditorContext.Provider>
+        );
+      });
+      const fileNameInput = document.getElementById(
+        "file-name-input"
+      ) as HTMLInputElement;
+      await waitFor(() => {
+        expect(fileNameInput).not.toBeInTheDocument();
+      });
+    });
   });
 
   describe("wrapperBg property", () => {
-    it("renders wrapper with background-color equals to the color selected with color picker", async () => {
+    it("renders wrapper with background-color equals to the color selected with color picker input", async () => {
       await act(async () => {
         render(<SnippngCodeArea />);
         render(<SnippngControlHeader />);

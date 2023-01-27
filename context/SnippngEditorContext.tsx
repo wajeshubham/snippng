@@ -1,8 +1,11 @@
 import { LANGUAGES, THEMES } from "@/lib/constants";
-import { SnippngEditorConfig, SnippngEditorContext } from "@/types";
+import {
+  SnippngEditorConfigInterface,
+  SnippngEditorContextInterface,
+} from "@/types";
 import React, { createContext, useCallback, useEffect, useState } from "react";
 
-const defaultEditorConfig: SnippngEditorConfig = {
+const defaultEditorConfig: SnippngEditorConfigInterface = {
   selectedLang:
     LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
   selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
@@ -19,10 +22,13 @@ const defaultEditorConfig: SnippngEditorConfig = {
   lineHeight: 19,
 };
 
-const SnippngEditorContext = createContext<SnippngEditorContext>({
+const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },
   handleConfigChange:
-    <K extends keyof SnippngEditorConfig, V extends SnippngEditorConfig[K]>(
+    <
+      K extends keyof SnippngEditorConfigInterface,
+      V extends SnippngEditorConfigInterface[K]
+    >(
       key: K
     ) =>
     (value: V) => {},
@@ -31,12 +37,16 @@ const SnippngEditorContext = createContext<SnippngEditorContext>({
 const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [editorConfig, setEditorConfig] = useState<SnippngEditorConfig>({
-    ...defaultEditorConfig,
-  });
+  const [editorConfig, setEditorConfig] =
+    useState<SnippngEditorConfigInterface>({
+      ...defaultEditorConfig,
+    });
 
   const handleConfigChange =
-    <K extends keyof SnippngEditorConfig, V extends SnippngEditorConfig[K]>(
+    <
+      K extends keyof SnippngEditorConfigInterface,
+      V extends SnippngEditorConfigInterface[K]
+    >(
       key: K
     ) =>
     (value: V) => {

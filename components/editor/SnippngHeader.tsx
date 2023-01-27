@@ -1,4 +1,4 @@
-import { SnippngWindowControls } from "@/types";
+import { SnippngWindowControlsType } from "@/types";
 import React from "react";
 
 const MacHeader = () => (
@@ -70,7 +70,7 @@ const WindowsHeader = () => (
 );
 
 const SnippngHeader: React.FC<{
-  type: SnippngWindowControls;
+  type: SnippngWindowControlsType;
 }> = ({ type = "mac-left" }) => {
   switch (type) {
     case "mac-left":

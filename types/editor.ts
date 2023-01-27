@@ -1,17 +1,17 @@
 import { SelectOptionInterface } from "./tsx";
 
-export type SnippngWindowControls =
+export type SnippngWindowControlsType =
   | "mac-left"
   | "mac-right"
   | "windows-left"
   | "windows-right";
 
-export interface SnippngEditorConfig {
+export interface SnippngEditorConfigInterface {
   selectedLang: SelectOptionInterface;
   selectedTheme: SelectOptionInterface;
   wrapperBg: string;
   showLineNumbers: boolean;
-  editorWindowControlsType: SnippngWindowControls;
+  editorWindowControlsType: SnippngWindowControlsType;
   editorFontSize: number;
   hasDropShadow: boolean;
   paddingVertical: number;
@@ -22,11 +22,11 @@ export interface SnippngEditorConfig {
   lineHeight: number;
 }
 
-export interface SnippngEditorContext {
-  editorConfig: SnippngEditorConfig;
+export interface SnippngEditorContextInterface {
+  editorConfig: SnippngEditorConfigInterface;
   handleConfigChange: <
-    K extends keyof SnippngEditorConfig,
-    V extends SnippngEditorConfig[K]
+    K extends keyof SnippngEditorConfigInterface,
+    V extends SnippngEditorConfigInterface[K]
   >(
     key: K
   ) => (value: V) => void;

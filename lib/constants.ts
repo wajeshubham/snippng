@@ -1,9 +1,5 @@
 export const THEMES = [
   {
-    id: "vscodeDark",
-    label: "VS Code Dark",
-  },
-  {
     id: "abcdef",
     label: "ABCDEF",
   },
@@ -108,7 +104,10 @@ export const THEMES = [
     id: "tokyoNightDay",
     label: "Tokyo Night Day",
   },
-
+  {
+    id: "vscodeDark",
+    label: "VS Code Dark",
+  },
   {
     id: "xcodeDark",
     label: "xCode Dark",

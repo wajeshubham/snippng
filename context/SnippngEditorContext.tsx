@@ -4,8 +4,8 @@ import React, { createContext, useEffect, useState } from "react";
 
 const defaultEditorConfig: SnippngEditorConfig = {
   selectedLang:
-    LANGUAGES.find((theme) => theme.id === "typescript") || LANGUAGES[0],
-  selectedTheme: THEMES[0],
+    LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
+  selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
   showLineNumbers: true,
   wrapperBg: "#eee811",
   editorWindowControlsType: "mac-left",

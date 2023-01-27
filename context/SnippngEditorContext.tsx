@@ -6,20 +6,20 @@ import {
 import React, { createContext, useCallback, useEffect, useState } from "react";
 
 const defaultEditorConfig: SnippngEditorConfigInterface = {
+  editorFontSize: 14,
+  editorWindowControlsType: "mac-left",
+  fileName: "@utils/debounce.js",
+  hasDropShadow: true,
+  lineHeight: 19,
+  paddingHorizontal: 70,
+  paddingVertical: 70,
+  rounded: true,
   selectedLang:
     LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
   selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
+  showFileName: true,
   showLineNumbers: true,
   wrapperBg: "#eee811",
-  editorWindowControlsType: "mac-left",
-  editorFontSize: 14,
-  paddingVertical: 70,
-  paddingHorizontal: 70,
-  hasDropShadow: true,
-  rounded: true,
-  fileName: "@utils/debounce.js",
-  showFileName: true,
-  lineHeight: 19,
 };
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({

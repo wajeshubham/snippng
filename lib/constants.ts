@@ -437,11 +437,11 @@ export const LANGUAGES = [
 ];
 
 export const DEFAULT_BASE_SETUP = {
-  lineNumbers: true,
-  indentOnInput: true,
-  tabSize: 4,
   foldGutter: false,
   highlightActiveLine: false,
   highlightActiveLineGutter: false,
+  indentOnInput: true,
+  lineNumbers: true,
   syntaxHighlighting: true,
+  tabSize: 4,
 };

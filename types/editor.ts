@@ -7,19 +7,19 @@ export type SnippngWindowControlsType =
   | "windows-right";
 
 export interface SnippngEditorConfigInterface {
+  editorFontSize: number;
+  editorWindowControlsType: SnippngWindowControlsType;
+  fileName: string;
+  hasDropShadow: boolean;
+  lineHeight: number;
+  paddingHorizontal: number;
+  paddingVertical: number;
+  rounded: boolean;
   selectedLang: SelectOptionInterface;
   selectedTheme: SelectOptionInterface;
-  wrapperBg: string;
-  showLineNumbers: boolean;
-  editorWindowControlsType: SnippngWindowControlsType;
-  editorFontSize: number;
-  hasDropShadow: boolean;
-  paddingVertical: number;
-  paddingHorizontal: number;
-  rounded: boolean;
-  fileName: string;
   showFileName: boolean;
-  lineHeight: number;
+  showLineNumbers: boolean;
+  wrapperBg: string;
 }
 
 export interface SnippngEditorContextInterface {

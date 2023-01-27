@@ -8,7 +8,7 @@ import React, { createContext, useCallback, useEffect, useState } from "react";
 const defaultEditorConfig: SnippngEditorConfigInterface = {
   editorFontSize: 14,
   editorWindowControlsType: "mac-left",
-  fileName: "@utils/debounce.js",
+  fileName: "@utils/debounce.ts",
   hasDropShadow: true,
   lineHeight: 19,
   paddingHorizontal: 70,

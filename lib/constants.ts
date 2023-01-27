@@ -440,7 +440,7 @@ export const DEFAULT_BASE_SETUP = {
   lineNumbers: true,
   indentOnInput: true,
   tabSize: 4,
-  foldGutter: true,
+  foldGutter: false,
   highlightActiveLine: false,
   highlightActiveLineGutter: false,
   syntaxHighlighting: true,

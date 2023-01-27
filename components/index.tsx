@@ -1,6 +1,6 @@
 import SnippngCodeArea from "./editor/SnippngCodeArea";
 import SnippngControlHeader from "./editor/SnippngControlHeader";
-import SnippngHeader from "./editor/SnippngHeader";
+import SnippngWindowControls from "./editor/SnippngWindowControls";
 import Button from "./form/Button";
 import Checkbox from "./form/Checkbox";
 import Range from "./form/Range";
@@ -12,7 +12,7 @@ export {
   ThemeToggle,
   SnippngCodeArea,
   NoSSRWrapper,
-  SnippngHeader,
+  SnippngWindowControls,
   Button,
   Select,
   Range,

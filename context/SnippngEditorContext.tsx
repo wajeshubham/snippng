@@ -1,26 +1,9 @@
-import { LANGUAGES, THEMES } from "@/lib/constants";
+import { defaultEditorConfig } from "@/lib/constants";
 import {
   SnippngEditorConfigInterface,
   SnippngEditorContextInterface,
 } from "@/types";
 import React, { createContext, useCallback, useEffect, useState } from "react";
-
-const defaultEditorConfig: SnippngEditorConfigInterface = {
-  editorFontSize: 14,
-  editorWindowControlsType: "mac-left",
-  fileName: "@utils/debounce.ts",
-  hasDropShadow: true,
-  lineHeight: 19,
-  paddingHorizontal: 70,
-  paddingVertical: 70,
-  rounded: true,
-  selectedLang:
-    LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
-  selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
-  showFileName: true,
-  showLineNumbers: true,
-  wrapperBg: "#eee811",
-};
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },

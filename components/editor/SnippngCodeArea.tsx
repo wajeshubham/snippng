@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getLanguage, getTheme } from "@/utils";
@@ -10,7 +10,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
-import SnippngHeader from "./SnippngHeader";
+import SnippngWindowControls from "./SnippngWindowControls";
 
 const SnippngCodeArea = () => {
   const [code, setCode] =
@@ -49,7 +49,7 @@ const SnippngCodeArea = () => {
 
   return (
     <>
-      <section>
+      <section data-testid="snippng-code-area">
         <NoSSRWrapper>
           <div className="rounded-md bg-white dark:bg-zinc-900 p-8 flex justify-start border-[1px] flex-col items-start dark:border-zinc-400 border-zinc-200 shadow-md w-full">
             <div className="w-full">
@@ -59,16 +59,18 @@ const SnippngCodeArea = () => {
               id="code-wrapper"
               className="overflow-hidden p-16 w-full"
               style={{
-                background: wrapperBg,
+                backgroundColor: wrapperBg,
                 padding: `${paddingVertical}px ${paddingHorizontal}px`,
               }}
             >
               <div
                 data-testid="editor-container"
                 className={clsx(
-                  "overflow-hidden shadow-md !font-mono relative",
-                  hasDropShadow ? "shadow-xl shadow-zinc-900/40" : "",
-                  rounded ? "rounded-md" : "!rounded-none"
+                  "overflow-hidden !font-mono relative",
+                  hasDropShadow
+                    ? "shadow-xl shadow-zinc-900/40 has-drop-shadow-testclass"
+                    : "",
+                  rounded ? "rounded-md rounded-testclass" : "!rounded-none"
                 )}
               >
                 <CodeMirror
@@ -95,6 +97,7 @@ const SnippngCodeArea = () => {
                   <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">
                     {showFileName ? (
                       <input
+                        id="file-name-input"
                         defaultValue={fileName}
                         className="absolute bg-transparent w-72 text-center top-2 -translate-x-1/2 left-1/2 text-xs font-extralight text-zinc-400 focus:border-b-[0.1px] border-zinc-500 outline-none ring-0"
                         spellCheck={false}
@@ -102,7 +105,7 @@ const SnippngCodeArea = () => {
                         autoComplete="off"
                       />
                     ) : null}
-                    <SnippngHeader type={editorWindowControlsType} />
+                    <SnippngWindowControls type={editorWindowControlsType} />
                   </div>
                 </CodeMirror>
               </div>

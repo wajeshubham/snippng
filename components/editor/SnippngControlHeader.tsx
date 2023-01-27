@@ -9,7 +9,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
-import { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
 import Range from "../form/Range";
@@ -58,6 +58,7 @@ const SnippngControlHeader = () => {
   return (
     <div className="mb-4 flex w-full justify-start items-center gap-2">
       <Button
+        data-testid="download-cta"
         disabled={downloadingSnippet}
         StartIcon={CloudArrowDownIcon}
         onClick={downloadImage}
@@ -83,7 +84,7 @@ const SnippngControlHeader = () => {
         }}
         options={[...LANGUAGES]}
       />
-      <div className="relative">
+      <div data-testid="wrapper-color-picker" className="relative">
         <label
           htmlFor="color-picker"
           className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-400 flex aspect-square "
@@ -107,7 +108,10 @@ const SnippngControlHeader = () => {
       <div className="ml-auto">
         <Menu as="div" className="relative inline-block text-left">
           <div>
-            <Menu.Button className="py-1.5 inline-flex dark:bg-black dark:hover:bg-zinc-800 hover:bg-zinc-100 bg-white items-center text-sm px-3 rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 w-full dark:text-white text-zinc-900">
+            <Menu.Button
+              data-testid="settings-cta"
+              className="py-1.5 inline-flex dark:bg-black dark:hover:bg-zinc-800 hover:bg-zinc-100 bg-white items-center text-sm px-3 rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 w-full dark:text-white text-zinc-900"
+            >
               <Cog6ToothIcon className="h-5 w-5" />
               <ChevronDownIcon
                 className="-mr-1 ml-2 h-5 w-5"
@@ -130,6 +134,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Line count"
                   id="line-count"
+                  data-testid="line-count"
                   checked={showLineNumbers}
                   onChange={() => {
                     handleConfigChange("showLineNumbers")(!showLineNumbers);
@@ -140,6 +145,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Drop shadow"
                   id="drop-shadow"
+                  data-testid="drop-shadow"
                   checked={hasDropShadow}
                   onChange={() => {
                     handleConfigChange("hasDropShadow")(!hasDropShadow);
@@ -150,6 +156,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Rounded edges"
                   id="rounded"
+                  data-testid="rounded"
                   checked={rounded}
                   onChange={() => {
                     handleConfigChange("rounded")(!rounded);
@@ -161,6 +168,7 @@ const SnippngControlHeader = () => {
                   label="Show filename"
                   description="It renders an input at the top in which you can edit the filename"
                   id="file-name"
+                  data-testid="file-name"
                   checked={showFileName}
                   onChange={() => {
                     handleConfigChange("showFileName")(!showFileName);
@@ -224,6 +232,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Mac left"
                   id="mac-pos-l"
+                  data-testid="mac-pos-l"
                   checked={editorWindowControlsType === "mac-left"}
                   onChange={() => {
                     handleConfigChange("editorWindowControlsType")("mac-left");
@@ -232,6 +241,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Mac right"
                   id="mac-pos-r"
+                  data-testid="mac-pos-r"
                   checked={editorWindowControlsType === "mac-right"}
                   onChange={() => {
                     handleConfigChange("editorWindowControlsType")("mac-right");
@@ -240,6 +250,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Windows left"
                   id="windows-pos-l"
+                  data-testid="windows-pos-l"
                   checked={editorWindowControlsType === "windows-left"}
                   onChange={() => {
                     handleConfigChange("editorWindowControlsType")(
@@ -250,6 +261,7 @@ const SnippngControlHeader = () => {
                 <Checkbox
                   label="Windows right"
                   id="windows-pos-r"
+                  data-testid="windows-pos-r"
                   checked={editorWindowControlsType === "windows-right"}
                   onChange={() => {
                     handleConfigChange("editorWindowControlsType")(

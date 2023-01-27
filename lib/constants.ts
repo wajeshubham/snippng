@@ -1,3 +1,5 @@
+import { SnippngEditorConfigInterface } from "@/types";
+
 export const THEMES = [
   {
     id: "abcdef",
@@ -435,6 +437,23 @@ export const LANGUAGES = [
     id: "yaml",
   },
 ];
+
+export const defaultEditorConfig: SnippngEditorConfigInterface = {
+  editorFontSize: 14,
+  editorWindowControlsType: "mac-left",
+  fileName: "@utils/debounce.ts",
+  hasDropShadow: true,
+  lineHeight: 19,
+  paddingHorizontal: 70,
+  paddingVertical: 70,
+  rounded: true,
+  selectedLang:
+    LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
+  selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
+  showFileName: true,
+  showLineNumbers: true,
+  wrapperBg: "#eee811",
+};
 
 export const DEFAULT_BASE_SETUP = {
   foldGutter: false,

@@ -69,42 +69,42 @@ const WindowsHeader = () => (
   </svg>
 );
 
-const SnippngHeader: React.FC<{
+const SnippngWindowControls: React.FC<{
   type: SnippngWindowControlsType;
 }> = ({ type = "mac-left" }) => {
   switch (type) {
     case "mac-left":
       return (
-        <span>
+        <span data-testid="mac-left">
           <MacHeader />
         </span>
       );
     case "mac-right":
       return (
-        <span className="ml-auto table">
+        <span className="ml-auto table" data-testid="mac-right">
           <MacHeader />
         </span>
       );
     case "windows-left":
       return (
-        <span>
+        <span data-testid="windows-left">
           <WindowsHeader />
         </span>
       );
     case "windows-right":
       return (
-        <span className="ml-auto table">
+        <span className="ml-auto table" data-testid="windows-right">
           <WindowsHeader />
         </span>
       );
 
     default:
       return (
-        <span>
+        <span data-testid="mac-left">
           <MacHeader />
         </span>
       );
   }
 };
 
-export default SnippngHeader;
+export default SnippngWindowControls;

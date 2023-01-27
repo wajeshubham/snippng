@@ -1,6 +1,6 @@
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { SnippngEditorConfig, SnippngEditorContext } from "@/types";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 const defaultEditorConfig: SnippngEditorConfig = {
   selectedLang: LANGUAGES[0],
@@ -15,6 +15,7 @@ const defaultEditorConfig: SnippngEditorConfig = {
   rounded: true,
   fileName: "@pages/index.tsx",
   showFileName: false,
+  lineHeight: 19,
 };
 
 const SnippngEditorContext = createContext<SnippngEditorContext>({
@@ -43,6 +44,20 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
         [key]: value,
       });
     };
+
+  const handleLineHeight = () => {
+    const content = document.querySelector(".cm-content") as HTMLDivElement;
+    if (
+      content &&
+      content.style.lineHeight !== `${editorConfig.lineHeight}px`
+    ) {
+      content.style.lineHeight = `${editorConfig.lineHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    handleLineHeight();
+  }, [editorConfig.lineHeight]);
 
   return (
     <SnippngEditorContext.Provider value={{ editorConfig, handleConfigChange }}>

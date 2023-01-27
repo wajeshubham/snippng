@@ -95,7 +95,6 @@ const SnippngCodeArea = () => {
                   basicSetup={{ ...DEFAULT_BASE_SETUP }}
                   style={{
                     fontSize: `${editorFontSize}px`,
-                    lineHeight: "100px",
                   }}
                   // @ts-ignore
                   theme={themes[getTheme(selectedTheme.id)]}

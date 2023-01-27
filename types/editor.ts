@@ -19,6 +19,7 @@ export interface SnippngEditorConfig {
   rounded: boolean;
   fileName: string;
   showFileName: boolean;
+  lineHeight: number;
 }
 
 export interface SnippngEditorContext {

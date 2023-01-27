@@ -32,6 +32,7 @@ const SnippngControlHeader = () => {
     paddingHorizontal,
     editorWindowControlsType,
     showFileName,
+    lineHeight,
   } = editorConfig;
 
   const downloadImage = () => {
@@ -202,6 +203,19 @@ const SnippngControlHeader = () => {
                   min={0}
                   rangeMin={"0px"}
                   rangeMax={"100px"}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Line height (${lineHeight}px)`}
+                  value={lineHeight}
+                  onChange={(e) => {
+                    handleConfigChange("lineHeight")(+e.target.value);
+                  }}
+                  max={40}
+                  min={10}
+                  rangeMin={"10px"}
+                  rangeMax={"40px"}
                 />
               </div>
               <div className="py-1 px-2 gap-2 flex flex-col">

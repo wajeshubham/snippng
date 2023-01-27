@@ -12,8 +12,11 @@ export interface SnippngEditorConfig {
   wrapperBg: string;
   showLineNumbers: boolean;
   editorWindowControlsType: SnippngWindowControls;
-  editorFontSize: string;
+  editorFontSize: number;
   hasDropShadow: boolean;
+  paddingVertical: number;
+  paddingHorizontal: number;
+  rounded: boolean;
 }
 
 export interface SnippngEditorContext {

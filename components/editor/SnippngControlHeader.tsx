@@ -1,6 +1,5 @@
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import { LANGUAGES, THEMES } from "@/lib/constants";
-import { clsx } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -27,7 +26,11 @@ const SnippngControlHeader = () => {
     showLineNumbers,
     wrapperBg,
     hasDropShadow,
+    rounded,
     editorFontSize,
+    paddingVertical,
+    paddingHorizontal,
+    editorWindowControlsType,
   } = editorConfig;
 
   const downloadImage = () => {
@@ -81,7 +84,7 @@ const SnippngControlHeader = () => {
       <div className="relative">
         <label
           htmlFor="color-picker"
-          className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-900 flex aspect-square "
+          className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-400 flex aspect-square "
           style={{
             backgroundColor: wrapperBg,
           }}
@@ -120,7 +123,7 @@ const SnippngControlHeader = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 z-30 mt-2 w-72 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white max-h-60 overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
+            <Menu.Items className="absolute right-0 z-30 mt-2 w-72 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white max-h-max overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
               <div className="py-1 px-2">
                 <Checkbox
                   label="Line count"
@@ -141,17 +144,92 @@ const SnippngControlHeader = () => {
                   }}
                 />
               </div>
+              <div className="py-1 px-2">
+                <Checkbox
+                  label="Rounded edges"
+                  id="rounded"
+                  checked={rounded}
+                  onChange={() => {
+                    handleConfigChange("rounded")(!rounded);
+                  }}
+                />
+              </div>
               <div className="py-1 px-2 z-30">
                 <Range
-                  label={`Font size (${editorFontSize})`}
-                  value={editorFontSize.split("px")[0]}
+                  label={`Font size (${editorFontSize}px)`}
+                  value={editorFontSize}
                   onChange={(e) => {
-                    handleConfigChange("editorFontSize")(e.target.value + "px");
+                    handleConfigChange("editorFontSize")(+e.target.value);
                   }}
                   max={32}
                   min={10}
                   rangeMin={"10px"}
                   rangeMax={"32px"}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Padding vertical (${paddingVertical}px)`}
+                  value={paddingVertical}
+                  onChange={(e) => {
+                    handleConfigChange("paddingVertical")(+e.target.value);
+                  }}
+                  max={100}
+                  min={0}
+                  rangeMin={"0px"}
+                  rangeMax={"100px"}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Padding horizontal (${paddingHorizontal}px)`}
+                  value={paddingHorizontal}
+                  onChange={(e) => {
+                    handleConfigChange("paddingHorizontal")(+e.target.value);
+                  }}
+                  max={100}
+                  min={0}
+                  rangeMin={"0px"}
+                  rangeMax={"100px"}
+                />
+              </div>
+              <div className="py-1 px-2 gap-2 flex flex-col">
+                <p>Window controls type</p>
+                <Checkbox
+                  label="Mac left"
+                  id="mac-pos-l"
+                  checked={editorWindowControlsType === "mac-left"}
+                  onChange={() => {
+                    handleConfigChange("editorWindowControlsType")("mac-left");
+                  }}
+                />
+                <Checkbox
+                  label="Mac right"
+                  id="mac-pos-r"
+                  checked={editorWindowControlsType === "mac-right"}
+                  onChange={() => {
+                    handleConfigChange("editorWindowControlsType")("mac-right");
+                  }}
+                />
+                <Checkbox
+                  label="Windows left"
+                  id="windows-pos-l"
+                  checked={editorWindowControlsType === "windows-left"}
+                  onChange={() => {
+                    handleConfigChange("editorWindowControlsType")(
+                      "windows-left"
+                    );
+                  }}
+                />
+                <Checkbox
+                  label="Windows right"
+                  id="windows-pos-r"
+                  checked={editorWindowControlsType === "windows-right"}
+                  onChange={() => {
+                    handleConfigChange("editorWindowControlsType")(
+                      "windows-right"
+                    );
+                  }}
                 />
               </div>
             </Menu.Items>

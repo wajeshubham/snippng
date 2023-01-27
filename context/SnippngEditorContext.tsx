@@ -8,8 +8,11 @@ const defaultEditorConfig: SnippngEditorConfig = {
   showLineNumbers: false,
   wrapperBg: "#eee811",
   editorWindowControlsType: "mac-left",
-  editorFontSize: "14px",
+  editorFontSize: 14,
+  paddingVertical: 70,
+  paddingHorizontal: 70,
   hasDropShadow: true,
+  rounded: true,
 };
 
 const SnippngEditorContext = createContext<SnippngEditorContext>({

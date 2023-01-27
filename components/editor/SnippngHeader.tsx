@@ -46,23 +46,23 @@ const WindowsHeader = () => (
   >
     <path
       d="M1 7H11"
-      stroke="#878787"
+      stroke="#aaaaaa"
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>
     <path
       d="M35 1H25C24.4477 1 24 1.44772 24 2V12C24 12.5523 24.4477 13 25 13H35C35.5523 13 36 12.5523 36 12V2C36 1.44772 35.5523 1 35 1Z"
-      stroke="#878787"
+      stroke="#aaaaaa"
     ></path>
     <path
       d="M47 2L57 12"
-      stroke="#878787"
+      stroke="#aaaaaa"
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>
     <path
       d="M47 12L57 2"
-      stroke="#878787"
+      stroke="#aaaaaa"
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>

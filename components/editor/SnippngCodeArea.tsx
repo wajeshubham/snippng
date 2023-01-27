@@ -9,8 +9,8 @@ import CodeMirror from "@uiw/react-codemirror";
 
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import NoSSRWrapper from "../NoSSRWrapper";
-import SnippngHeader from "./SnippngHeader";
 import SnippngControlHeader from "./SnippngControlHeader";
+import SnippngHeader from "./SnippngHeader";
 
 const SnippngCodeArea = () => {
   const [code, setCode] = useState(`console.log("Hello world")`);
@@ -25,6 +25,9 @@ const SnippngCodeArea = () => {
     editorWindowControlsType,
     showLineNumbers,
     hasDropShadow,
+    paddingVertical,
+    paddingHorizontal,
+    rounded,
   } = editorConfig;
 
   const setContentMargin = useCallback(() => {
@@ -69,13 +72,15 @@ const SnippngCodeArea = () => {
               className="overflow-hidden p-16 w-full"
               style={{
                 background: wrapperBg,
+                padding: `${paddingVertical}px ${paddingHorizontal}px`,
               }}
             >
               <div
                 data-testid="editor-container"
                 className={clsx(
-                  "overflow-hidden rounded-md shadow-md !font-mono relative",
-                  hasDropShadow ? "shadow-xl shadow-zinc-900/40" : ""
+                  "overflow-hidden shadow-md !font-mono relative",
+                  hasDropShadow ? "shadow-xl shadow-zinc-900/40" : "",
+                  rounded ? "rounded-md" : "!rounded-none"
                 )}
               >
                 <CodeMirror
@@ -87,7 +92,7 @@ const SnippngCodeArea = () => {
                   ]}
                   basicSetup={{ ...DEFAULT_BASE_SETUP }}
                   style={{
-                    fontSize: editorFontSize,
+                    fontSize: `${editorFontSize}px`,
                     lineHeight: "100px",
                   }}
                   // @ts-ignore

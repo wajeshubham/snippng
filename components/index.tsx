@@ -1,12 +1,12 @@
-import Button from "./Button";
-import CodeMirrorTextArea from "./CodeMirrorTextArea";
+import SnippngCodeArea from "./editor/SnippngCodeArea";
+import SnippngHeader from "./editor/SnippngHeader";
+import Button from "./form/Button";
+import Select from "./form/Select";
 import NoSSRWrapper from "./NoSSRWrapper";
-import Select from "./Select";
-import SnippngHeader from "./SnippngHeader";
 import ThemeToggle from "./ThemeToggle";
 export {
   ThemeToggle,
-  CodeMirrorTextArea,
+  SnippngCodeArea,
   NoSSRWrapper,
   SnippngHeader,
   Button,

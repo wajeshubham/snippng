@@ -15,3 +15,13 @@ export interface SnippngEditorConfig {
   editorFontSize: string;
   hasDropShadow: boolean;
 }
+
+export interface SnippngEditorContext {
+  editorConfig: SnippngEditorConfig;
+  handleConfigChange: <
+    K extends keyof SnippngEditorConfig,
+    V extends SnippngEditorConfig[K]
+  >(
+    key: K
+  ) => (value: V) => void;
+}

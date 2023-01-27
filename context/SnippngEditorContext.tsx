@@ -13,6 +13,8 @@ const defaultEditorConfig: SnippngEditorConfig = {
   paddingHorizontal: 70,
   hasDropShadow: true,
   rounded: true,
+  fileName: "@pages/index.tsx",
+  showFileName: false,
 };
 
 const SnippngEditorContext = createContext<SnippngEditorContext>({

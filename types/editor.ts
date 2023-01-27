@@ -17,6 +17,8 @@ export interface SnippngEditorConfig {
   paddingVertical: number;
   paddingHorizontal: number;
   rounded: boolean;
+  fileName: string;
+  showFileName: boolean;
 }
 
 export interface SnippngEditorContext {

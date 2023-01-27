@@ -31,6 +31,7 @@ const SnippngControlHeader = () => {
     paddingVertical,
     paddingHorizontal,
     editorWindowControlsType,
+    showFileName,
   } = editorConfig;
 
   const downloadImage = () => {
@@ -151,6 +152,16 @@ const SnippngControlHeader = () => {
                   checked={rounded}
                   onChange={() => {
                     handleConfigChange("rounded")(!rounded);
+                  }}
+                />
+              </div>
+              <div className="py-1 px-2">
+                <Checkbox
+                  label="Show filename"
+                  id="file-name"
+                  checked={showFileName}
+                  onChange={() => {
+                    handleConfigChange("showFileName")(!showFileName);
                   }}
                 />
               </div>

@@ -29,7 +29,6 @@ body {
   border-right-width: 70px;
   border-color: transparent;
   max-width: 100%;
-  font-size: 14px;
 }
 
 .cm-gutters {
@@ -38,5 +37,4 @@ body {
   top: 0;
   min-height: 100%;
   z-index: 3;
-  font-size: 14px;
 }

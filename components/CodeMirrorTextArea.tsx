@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { DEFAULT_BASE_SETUP, LANGUAGES, THEMES } from "@/lib/constants";
-import { getLanguage, getTheme } from "@/utils";
+import { clsx, getLanguage, getTheme } from "@/utils";
 
 import {
   CheckIcon,
@@ -22,21 +22,49 @@ import Button from "./Button";
 import NoSSRWrapper from "./NoSSRWrapper";
 import Select from "./Select";
 import SnippngHeader from "./SnippngHeader";
+import { SnippngEditorConfig } from "@/types";
 
 const CodeMirrorTextArea = () => {
   const [code, setCode] = useState(`console.log("Hello world")`);
   const [lineNumberDigits, setLineNumberDigits] = useState(0);
-  const [showLineNumbers, setShowLineNumbers] = useState(false);
-  const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
-  const [selectedTheme, setSelectedTheme] = useState(THEMES[0]);
-  const [wrapperBg, setWrapperBg] = useState("#eee811");
   const [downloadingSnippet, setDownloadingSnippet] = useState(false);
+
+  const [editorConfig, setEditorConfig] = useState<SnippngEditorConfig>({
+    selectedLang: LANGUAGES[0],
+    selectedTheme: THEMES[0],
+    showLineNumbers: false,
+    wrapperBg: "#eee811",
+    editorWindowControlsType: "mac-left",
+    editorFontSize: "14px",
+    hasDropShadow: true,
+  });
+
+  const {
+    selectedLang,
+    selectedTheme,
+    showLineNumbers,
+    wrapperBg,
+    editorWindowControlsType,
+    editorFontSize,
+    hasDropShadow,
+  } = editorConfig;
+
+  const handleConfigChange =
+    <K extends keyof SnippngEditorConfig, V extends SnippngEditorConfig[K]>(
+      key: K
+    ) =>
+    (value: V) => {
+      setEditorConfig({
+        ...editorConfig,
+        [key]: value,
+      });
+    };
 
   const setContentMargin = useCallback(() => {
     const gutter = document.querySelector(".cm-gutters") as HTMLDivElement;
     const content = document.querySelector(".cm-content") as HTMLDivElement;
     if (!gutter || !content) {
-      setShowLineNumbers(true);
+      handleConfigChange("showLineNumbers")(true);
       return;
     }
     if (showLineNumbers) {
@@ -99,7 +127,7 @@ const CodeMirrorTextArea = () => {
                   StartIcon={ListBulletIcon}
                   EndIcon={showLineNumbers ? CheckIcon : null}
                   onClick={() => {
-                    setShowLineNumbers(!showLineNumbers);
+                    handleConfigChange("showLineNumbers")(!showLineNumbers);
                   }}
                 >
                   Line count
@@ -110,7 +138,7 @@ const CodeMirrorTextArea = () => {
                   value={selectedTheme}
                   onChange={(val) => {
                     if (!val.id) return;
-                    setSelectedTheme(val);
+                    handleConfigChange("selectedTheme")(val);
                   }}
                   options={[...THEMES]}
                 />
@@ -119,7 +147,7 @@ const CodeMirrorTextArea = () => {
                   value={selectedLang}
                   onChange={(val) => {
                     if (!val.id) return;
-                    setSelectedLang(val);
+                    handleConfigChange("selectedLang")(val);
                   }}
                   options={[...LANGUAGES]}
                 />
@@ -140,7 +168,7 @@ const CodeMirrorTextArea = () => {
                     type={"color"}
                     value={wrapperBg}
                     onChange={(e) => {
-                      setWrapperBg(e.target.value);
+                      handleConfigChange("wrapperBg")(e.target.value);
                     }}
                   />
                 </div>
@@ -163,13 +191,20 @@ const CodeMirrorTextArea = () => {
                 className="overflow-hidden rounded-md shadow-md !font-mono relative"
               >
                 <CodeMirror
-                  className="CodeMirror__Main__Editor"
+                  className={clsx(
+                    "CodeMirror__Main__Editor",
+                    hasDropShadow ? "shadow-2xl" : ""
+                  )}
                   value={code}
                   extensions={[
                     loadLanguage(getLanguage(selectedLang.id))?.extension ||
                       langs.javascript(),
                   ]}
                   basicSetup={{ ...DEFAULT_BASE_SETUP }}
+                  style={{
+                    fontSize: editorFontSize,
+                    lineHeight: "100px",
+                  }}
                   // @ts-ignore
                   theme={themes[getTheme(selectedTheme.id)]}
                   indentWithTab
@@ -184,7 +219,7 @@ const CodeMirrorTextArea = () => {
                   }}
                 >
                   <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">
-                    <SnippngHeader type="mac-left" />
+                    <SnippngHeader type={editorWindowControlsType} />
                   </div>
                 </CodeMirror>
               </div>

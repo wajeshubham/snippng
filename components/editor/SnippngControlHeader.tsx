@@ -159,6 +159,7 @@ const SnippngControlHeader = () => {
               <div className="py-1 px-2">
                 <Checkbox
                   label="Show filename"
+                  description="It renders an input at the top in which you can edit the filename"
                   id="file-name"
                   checked={showFileName}
                   onChange={() => {
@@ -218,7 +219,7 @@ const SnippngControlHeader = () => {
                   rangeMax={"40px"}
                 />
               </div>
-              <div className="py-1 px-2 gap-2 flex flex-col">
+              <div className="py-3 px-2 gap-2 flex flex-col">
                 <p>Window controls type</p>
                 <Checkbox
                   label="Mac left"

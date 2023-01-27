@@ -13,7 +13,23 @@ import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngHeader from "./SnippngHeader";
 
 const SnippngCodeArea = () => {
-  const [code, setCode] = useState(`console.log("Hello world")`);
+  const [code, setCode] =
+    useState(`export const debounce = <F extends (...args: any[]) => any>(
+  func: F,
+  waitFor: number
+) => {
+  let timeout: NodeJS.Timeout | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
+};`);
   const [lineNumberDigits, setLineNumberDigits] = useState(0);
   const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
 

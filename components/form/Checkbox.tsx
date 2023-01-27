@@ -11,7 +11,7 @@ const Checkbox: React.FC<Props> = ({ label, id, description, ...props }) => {
   return (
     <fieldset className="my-1 cursor-pointer">
       <legend className="sr-only">Checkboxes</legend>
-      <div className="relative flex items-center">
+      <div className="relative flex items-start">
         <div className="flex h-5 items-center">
           <input
             {...props}
@@ -31,7 +31,10 @@ const Checkbox: React.FC<Props> = ({ label, id, description, ...props }) => {
             {label}
           </label>
           {description ? (
-            <p id="comments-description" className="text-zinc-500">
+            <p
+              id="comments-description"
+              className="dark:text-zinc-400 text-zinc-500 text-xs"
+            >
               {description}
             </p>
           ) : null}

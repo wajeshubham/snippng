@@ -3,9 +3,10 @@ import { SnippngEditorConfig, SnippngEditorContext } from "@/types";
 import React, { createContext, useEffect, useState } from "react";
 
 const defaultEditorConfig: SnippngEditorConfig = {
-  selectedLang: LANGUAGES[0],
+  selectedLang:
+    LANGUAGES.find((theme) => theme.id === "typescript") || LANGUAGES[0],
   selectedTheme: THEMES[0],
-  showLineNumbers: false,
+  showLineNumbers: true,
   wrapperBg: "#eee811",
   editorWindowControlsType: "mac-left",
   editorFontSize: 14,
@@ -13,8 +14,8 @@ const defaultEditorConfig: SnippngEditorConfig = {
   paddingHorizontal: 70,
   hasDropShadow: true,
   rounded: true,
-  fileName: "@pages/index.tsx",
-  showFileName: false,
+  fileName: "@utils/debounce.js",
+  showFileName: true,
   lineHeight: 19,
 };
 

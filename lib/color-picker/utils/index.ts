@@ -1,22 +1,22 @@
 import { Color, ColorHSV, ColorRGB } from "../types";
 
-export function rgbToHex(color: ColorRGB): string {
-  var { r, g, b } = color;
-  var hexR = r.toString(16);
-  var hexG = g.toString(16);
-  var hexB = b.toString(16);
+export const rgbToHex = (color: ColorRGB): string => {
+  let { r, g, b } = color;
+  let hexR = r.toString(16);
+  let hexG = g.toString(16);
+  let hexB = b.toString(16);
 
   if (hexR.length === 1) hexR = "0" + r;
   if (hexG.length === 1) hexG = "0" + g;
   if (hexB.length === 1) hexB = "0" + b;
 
   return "#" + hexR + hexG + hexB;
-}
+};
 
-export function hexToRgb(color: string): ColorRGB {
-  var r = 0;
-  var g = 0;
-  var b = 0;
+export const hexToRgb = (color: string): ColorRGB => {
+  let r = 0;
+  let g = 0;
+  let b = 0;
 
   // 3 digits
   if (color.length === 4) {
@@ -36,10 +36,10 @@ export function hexToRgb(color: string): ColorRGB {
     g,
     b,
   };
-}
+};
 
-export function rgbToHsv(color: ColorRGB): ColorHSV {
-  var { r, g, b } = color;
+export const rgbToHsv = (color: ColorRGB): ColorHSV => {
+  let { r, g, b } = color;
   r /= 255;
   g /= 255;
   b /= 255;
@@ -58,10 +58,10 @@ export function rgbToHsv(color: ColorRGB): ColorHSV {
   const v = max * 100;
 
   return { h, s, v };
-}
+};
 
-export function hsvToRgb(color: ColorHSV): ColorRGB {
-  var { h, s, v } = color;
+export const hsvToRgb = (color: ColorHSV): ColorRGB => {
+  let { h, s, v } = color;
   s /= 100;
   v /= 100;
 
@@ -81,9 +81,9 @@ export function hsvToRgb(color: ColorHSV): ColorRGB {
     g,
     b,
   };
-}
+};
 
-export function getRgb(color: string): ColorRGB {
+export const getRgb = (color: string): ColorRGB => {
   const matches = /rgb\((\d+),\s?(\d+),\s?(\d+)\)/i.exec(color);
   const r = Number(matches?.[1] ?? 0);
   const g = Number(matches?.[2] ?? 0);
@@ -94,16 +94,16 @@ export function getRgb(color: string): ColorRGB {
     g,
     b,
   };
-}
+};
 
-export function parseColor(color: string): Color {
-  var hex = "";
-  var rgb = {
+export const parseColor = (color: string): Color => {
+  let hex = "";
+  let rgb = {
     r: 0,
     g: 0,
     b: 0,
   };
-  var hsv = {
+  let hsv = {
     h: 0,
     s: 0,
     v: 0,
@@ -124,26 +124,26 @@ export function parseColor(color: string): Color {
     rgb,
     hsv,
   };
-}
+};
 
-export function getSaturationCoordinates(color: Color): [number, number] {
+export const getSaturationCoordinates = (color: Color): [number, number] => {
   const { s, v } = rgbToHsv(color.rgb);
 
   const x = s;
   const y = 100 - v;
 
   return [x, y];
-}
+};
 
-export function getHueCoordinates(color: Color): number {
+export const getHueCoordinates = (color: Color): number => {
   const { h } = color.hsv;
 
   const x = (h / 360) * 100;
 
   return x;
-}
+};
 
-export function clamp(number: number, min: number, max: number): number {
+export const clamp = (number: number, min: number, max: number): number => {
   if (!max) {
     return Math.max(number, min) === min ? number : min;
   } else if (Math.min(number, min) === number) {
@@ -152,4 +152,4 @@ export function clamp(number: number, min: number, max: number): number {
     return max;
   }
   return number;
-}
+};

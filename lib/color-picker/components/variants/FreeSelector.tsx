@@ -1,7 +1,7 @@
 import React from "react";
 import { Color } from "../../types";
 
-interface FreeSelectorProps {
+interface Props {
   parsedColor: Color;
   satCoords: Array<number>;
   hueCoords: number;
@@ -9,10 +9,13 @@ interface FreeSelectorProps {
   onHueChange: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FreeSelector = (props: FreeSelectorProps) => {
-  const { parsedColor, satCoords, hueCoords, onSaturationChange, onHueChange } =
-    props;
-
+export const FreeSelector: React.FC<Props> = ({
+  parsedColor,
+  satCoords,
+  hueCoords,
+  onSaturationChange,
+  onHueChange,
+}) => {
   return (
     <div className="w-96 max-w-full mb-4 grid gap-2">
       <div

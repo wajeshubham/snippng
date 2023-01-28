@@ -10,15 +10,13 @@ import {
 } from "../utils";
 import { FreeSelector } from "./variants";
 
-interface ColorPickerProps {
+interface Props {
   color: string;
   onChange(color: string): void;
   children: React.ReactNode;
 }
 
-export const ColorPicker = (props: ColorPickerProps) => {
-  const { color, onChange } = props;
-
+export const ColorPicker: React.FC<Props> = ({ color, onChange, children }) => {
   const parsedColor = useMemo(() => parseColor(color), [color]);
   const satCoords = useMemo(
     () => getSaturationCoordinates(parsedColor),
@@ -106,7 +104,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
         type={"color"}
         value={color}
       />
-      <Menu.Button>{props.children}</Menu.Button>
+      <Menu.Button>{children}</Menu.Button>
 
       <Transition
         as={Fragment}

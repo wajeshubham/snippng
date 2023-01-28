@@ -1,4 +1,5 @@
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
+import { ColorPicker } from "@/lib/color-picker";
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { Menu, Transition } from "@headlessui/react";
 import {
@@ -85,25 +86,19 @@ const SnippngControlHeader = () => {
         options={[...LANGUAGES]}
       />
       <div data-testid="wrapper-color-picker" className="relative">
-        <label
-          htmlFor="color-picker"
-          className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-400 flex aspect-square "
-          style={{
-            backgroundColor: wrapperBg,
+        <ColorPicker
+          color={wrapperBg}
+          onChange={(color) => {
+            handleConfigChange("wrapperBg")(color);
           }}
-        ></label>
-        <input
-          className="h-0 w-0 p-0 m-0 absolute"
-          style={{
-            visibility: "hidden",
-          }}
-          id="color-picker"
-          type={"color"}
-          value={wrapperBg}
-          onChange={(e) => {
-            handleConfigChange("wrapperBg")(e.target.value);
-          }}
-        />
+        >
+          <button
+            className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-400 flex aspect-square "
+            style={{
+              backgroundColor: wrapperBg,
+            }}
+          ></button>
+        </ColorPicker>
       </div>
       <div className="ml-auto">
         <Menu as="div" className="relative inline-block text-left">

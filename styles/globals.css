@@ -35,3 +35,21 @@ body {
   min-height: 100%;
   z-index: 3;
 }
+
+.cp-saturation {
+  background-image: linear-gradient(transparent, black),
+    linear-gradient(to right, white, transparent);
+}
+
+.cp-hue {
+  background-image: linear-gradient(
+    to right,
+    #ff0000,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #ff00ff,
+    #ff0000
+  );
+}

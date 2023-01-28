@@ -467,8 +467,6 @@ export const DEFAULT_BASE_SETUP = {
   tabSize: 4,
 };
 
-export const DEFAULT_COLOR = "#181d23";
-
 export const DEFAULT_COLORS = [
   "#000000",
   "#424242",

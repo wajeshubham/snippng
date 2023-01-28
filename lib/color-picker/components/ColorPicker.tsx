@@ -102,9 +102,9 @@ export const ColorPicker: React.FC<Props> = ({ color, onChange, children }) => {
         }}
         id="color-picker"
         type={"color"}
-        value={color}
+        defaultValue={color}
       />
-      <Menu.Button>{children}</Menu.Button>
+      <Menu.Button as="div">{children}</Menu.Button>
 
       <Transition
         as={Fragment}

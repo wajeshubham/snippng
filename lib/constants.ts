@@ -454,7 +454,7 @@ export const defaultEditorConfig: SnippngEditorConfigInterface = {
   showLineNumbers: true,
   wrapperBg: "#eee811",
   gradients: [],
-  gradientAngle: 360,
+  gradientAngle: 140,
 };
 
 export const DEFAULT_BASE_SETUP = {

@@ -15,7 +15,7 @@ export const GradientSelect: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <p className="dark:text-white text-zinc-900 mt-4">Palette</p>
+      <p className="dark:text-white text-zinc-900 mt-4">Color palette</p>
       <span className="text-xs dark:text-white text-zinc-900">
         (Select multiple for gradient){" "}
       </span>

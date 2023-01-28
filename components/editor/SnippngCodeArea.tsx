@@ -14,10 +14,7 @@ import SnippngWindowControls from "./SnippngWindowControls";
 
 const SnippngCodeArea = () => {
   const [code, setCode] =
-    useState(`export const debounce = <F extends (...args: any[]) => any>(
-  func: F,
-  waitFor: number
-) => {
+    useState(`export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
   let timeout: NodeJS.Timeout | null = null;
 
   const debounced = (...args: Parameters<F>) => {

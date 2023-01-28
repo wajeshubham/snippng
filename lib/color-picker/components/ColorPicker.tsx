@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import React, { Fragment, useCallback, useMemo, useState } from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 import {
   clamp,
   getHueCoordinates,
@@ -8,15 +8,25 @@ import {
   parseColor,
   rgbToHex,
 } from "../utils";
-import { FreeSelector } from "./variants";
+import { FreeSelector, GradientSelect } from "./variants";
 
 interface Props {
   color: string;
-  onChange(color: string): void;
+  gradientColors: string[];
+  onChange: (color: string) => void;
+  onGradientSelect: (color: string) => void;
+  onGradientUnSelect: (color: string) => void;
   children: React.ReactNode;
 }
 
-export const ColorPicker: React.FC<Props> = ({ color, onChange, children }) => {
+export const ColorPicker: React.FC<Props> = ({
+  color,
+  gradientColors,
+  onGradientSelect,
+  onGradientUnSelect,
+  onChange,
+  children,
+}) => {
   const parsedColor = useMemo(() => parseColor(color), [color]);
   const satCoords = useMemo(
     () => getSaturationCoordinates(parsedColor),
@@ -202,6 +212,11 @@ export const ColorPicker: React.FC<Props> = ({ color, onChange, children }) => {
                 />
               </div>
             </div>
+            <GradientSelect
+              selectedColors={gradientColors}
+              onSelect={onGradientSelect}
+              onUnSelect={onGradientUnSelect}
+            />
           </div>
         </Menu.Items>
       </Transition>

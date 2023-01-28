@@ -9,6 +9,8 @@ export type SnippngWindowControlsType =
 export interface SnippngEditorConfigInterface {
   editorFontSize: number;
   editorWindowControlsType: SnippngWindowControlsType;
+  gradients: string[];
+  gradientAngle: number;
   fileName: string;
   hasDropShadow: boolean;
   lineHeight: number;

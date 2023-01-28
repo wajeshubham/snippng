@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
-import { clsx, getLanguage, getTheme } from "@/utils";
+import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
 import * as themes from "@uiw/codemirror-themes-all";
@@ -45,6 +45,8 @@ const SnippngCodeArea = () => {
     rounded,
     fileName,
     showFileName,
+    gradients,
+    gradientAngle,
   } = editorConfig;
 
   return (
@@ -59,7 +61,11 @@ const SnippngCodeArea = () => {
               id="code-wrapper"
               className="overflow-hidden p-16 w-full"
               style={{
-                backgroundColor: wrapperBg,
+                background: getEditorWrapperBg(
+                  wrapperBg,
+                  gradients,
+                  gradientAngle
+                ),
                 padding: `${paddingVertical}px ${paddingHorizontal}px`,
               }}
             >

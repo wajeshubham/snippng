@@ -1,6 +1,7 @@
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import { ColorPicker } from "@/lib/color-picker";
 import { LANGUAGES, THEMES } from "@/lib/constants";
+import { getEditorWrapperBg } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -34,6 +35,8 @@ const SnippngControlHeader = () => {
     editorWindowControlsType,
     showFileName,
     lineHeight,
+    gradients,
+    gradientAngle,
   } = editorConfig;
 
   const downloadImage = () => {
@@ -88,6 +91,15 @@ const SnippngControlHeader = () => {
       <div data-testid="wrapper-color-picker" className="relative">
         <ColorPicker
           color={wrapperBg}
+          gradientColors={gradients}
+          onGradientSelect={(color) => {
+            let colors = [...gradients, color];
+            handleConfigChange("gradients")(colors);
+          }}
+          onGradientUnSelect={(color) => {
+            let colors = [...gradients].filter((c) => c !== color);
+            handleConfigChange("gradients")(colors);
+          }}
           onChange={(color) => {
             handleConfigChange("wrapperBg")(color);
           }}
@@ -95,7 +107,11 @@ const SnippngControlHeader = () => {
           <button
             className="h-8 cursor-pointer rounded-sm outline outline-1 dark:outline-white outline-zinc-400 flex aspect-square "
             style={{
-              backgroundColor: wrapperBg,
+              background: getEditorWrapperBg(
+                wrapperBg,
+                gradients,
+                gradientAngle
+              ),
             }}
           ></button>
         </ColorPicker>
@@ -220,6 +236,19 @@ const SnippngControlHeader = () => {
                   min={10}
                   rangeMin={"10px"}
                   rangeMax={"40px"}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Gradient angle (${gradientAngle}deg)`}
+                  value={gradientAngle}
+                  onChange={(e) => {
+                    handleConfigChange("gradientAngle")(+e.target.value);
+                  }}
+                  max={360}
+                  min={0}
+                  rangeMin={"0deg"}
+                  rangeMax={"360deg"}
                 />
               </div>
               <div className="py-3 px-2 gap-2 flex flex-col">

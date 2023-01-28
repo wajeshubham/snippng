@@ -16,13 +16,11 @@ export const GradientSelect: React.FC<Props> = ({
   return (
     <>
       <p className="dark:text-white text-zinc-900 mt-4">Color palette</p>
-      <span className="text-xs dark:text-white text-zinc-900">
-        (Select multiple for gradient){" "}
+
+      <span className="mb-3 text-xs dark:text-zinc-400 text-zinc-500">
+        Select multiple for gradient. Control <strong>gradient angle</strong> of
+        the gradient in settings dropdown at the top right corner
       </span>
-      <em className="mb-3 text-xs dark:text-white text-zinc-900">
-        Control angle of the gradient in settings dropdown at the top right
-        corner
-      </em>
       <div className="flex justify-start items-start gap-3 flex-wrap">
         {DEFAULT_COLORS.map((color) => {
           let selected = selectedColors.includes(color);

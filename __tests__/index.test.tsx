@@ -26,7 +26,7 @@ describe("LandingPage", () => {
       render(<Home />);
     });
     await waitFor(() => {
-      screen.getByText("Snippng");
+      screen.getByTestId("landing-container");
     });
   });
 });

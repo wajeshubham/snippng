@@ -18,8 +18,9 @@ export const GradientSelect: React.FC<Props> = ({
       <p className="dark:text-white text-zinc-900 mt-4">Color palette</p>
 
       <span className="mb-3 text-xs dark:text-zinc-400 text-zinc-500">
-        Select multiple for gradient. Control <strong>gradient angle</strong> of
-        the gradient in settings dropdown at the top right corner
+        To create a <strong>gradient</strong>, select multiple. You can control
+        the <strong>gradient angle</strong> in the settings dropdown at the top
+        right corner.
       </span>
       <div className="flex justify-start items-start gap-3 flex-wrap">
         {DEFAULT_COLORS.map((color) => {

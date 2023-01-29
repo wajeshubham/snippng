@@ -16,6 +16,8 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
+ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN yarn build
 
 
@@ -23,6 +25,8 @@ RUN yarn build
 FROM node:16-alpine3.17 as runner
 
 WORKDIR /app
+
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

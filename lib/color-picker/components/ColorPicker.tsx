@@ -103,7 +103,7 @@ export const ColorPicker: React.FC<Props> = ({
   );
 
   return (
-    <Menu as="div" className="relative flex flex-auto">
+    <Menu as="div" className="relative">
       <input
         className="h-0 w-0 p-0 m-0 absolute"
         data-note="input-to-test-color-picker-and-wrapperBg"
@@ -125,7 +125,7 @@ export const ColorPicker: React.FC<Props> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-30 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
+        <Menu.Items className="absolute md:w-96 w-72 right-0 z-30 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
           <FreeSelector
             parsedColor={parsedColor}
             satCoords={satCoords}

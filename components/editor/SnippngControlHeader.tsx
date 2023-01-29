@@ -60,8 +60,9 @@ const SnippngControlHeader = () => {
   };
 
   return (
-    <div className="mb-4 flex w-full justify-start items-center gap-2">
+    <div className="mb-4 flex flex-wrap w-full justify-start items-center gap-2">
       <Button
+        className="md:w-fit w-full"
         data-testid="download-cta"
         disabled={downloadingSnippet}
         StartIcon={CloudArrowDownIcon}
@@ -88,7 +89,10 @@ const SnippngControlHeader = () => {
         }}
         options={[...LANGUAGES]}
       />
-      <div data-testid="wrapper-color-picker" className="relative">
+      <div
+        data-testid="wrapper-color-picker"
+        className="relative md:w-fit w-full"
+      >
         <ColorPicker
           color={wrapperBg}
           gradientColors={gradients}

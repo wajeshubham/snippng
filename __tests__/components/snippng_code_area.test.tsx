@@ -172,7 +172,21 @@ describe("SnippngCodeArea", () => {
   describe("wrapperBg property", () => {
     it("renders wrapper with background-color equals to the color selected with color picker input", async () => {
       await act(async () => {
-        render(<SnippngCodeArea />);
+        render(
+          <SnippngEditorContext.Provider
+            // @ts-ignore
+            value={{
+              editorConfig: {
+                ...defaultEditorConfig,
+                gradients: [],
+                wrapperBg: "#eee811",
+              },
+              // override hasDropShadow with false
+            }}
+          >
+            <SnippngCodeArea />
+          </SnippngEditorContext.Provider>
+        );
         render(<SnippngControlHeader />);
       });
       const colorPicker = document.getElementById(

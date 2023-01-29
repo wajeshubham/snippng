@@ -1,4 +1,6 @@
 import { SnippngControlHeader } from "@/components";
+import { SnippngEditorContext } from "@/context/SnippngEditorContext";
+import { defaultEditorConfig, LANGUAGES, THEMES } from "@/lib/constants";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
@@ -35,7 +37,24 @@ describe("SnippngControlHeader", () => {
   describe("Default theme and language", () => {
     it("renders with VS Code dark as a default theme", async () => {
       await act(async () => {
-        render(<SnippngControlHeader />);
+        render(
+          <SnippngEditorContext.Provider
+            // @ts-ignore
+            value={{
+              editorConfig: {
+                ...defaultEditorConfig,
+                selectedLang:
+                  LANGUAGES.find((language) => language.id === "typescript") ||
+                  LANGUAGES[0],
+                selectedTheme:
+                  THEMES.find((theme) => theme.id === "vscodeDark") ||
+                  THEMES[0],
+              },
+            }}
+          >
+            <SnippngControlHeader />
+          </SnippngEditorContext.Provider>
+        );
       });
       await waitFor(() => {
         screen.getByText("VS Code Dark");

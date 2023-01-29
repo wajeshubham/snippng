@@ -439,7 +439,7 @@ export const LANGUAGES = [
 ];
 
 export const defaultEditorConfig: SnippngEditorConfigInterface = {
-  editorFontSize: 14,
+  editorFontSize: 16,
   editorWindowControlsType: "mac-left",
   fileName: "@utils/debounce.ts",
   hasDropShadow: true,
@@ -449,11 +449,12 @@ export const defaultEditorConfig: SnippngEditorConfigInterface = {
   rounded: true,
   selectedLang:
     LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
-  selectedTheme: THEMES.find((theme) => theme.id === "vscodeDark") || THEMES[0],
+  selectedTheme:
+    THEMES.find((theme) => theme.id === "tokyoNightStorm") || THEMES[0],
   showFileName: true,
   showLineNumbers: true,
   wrapperBg: "#eee811",
-  gradients: [],
+  gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
   gradientAngle: 140,
 };
 

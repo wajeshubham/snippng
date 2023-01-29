@@ -13,7 +13,7 @@ const Layout: React.FC<Props> = ({ className, ...props }) => {
       <Header />
       <div
         className={clsx(
-          "relative max-w-7xl min-h-screen mx-auto px-4 sm:px-8 lg:px-12 py-6",
+          "relative max-w-7xl min-h-screen mx-auto px-4 sm:px-8 lg:px-12 pb-6",
           className ?? ""
         )}
         {...props}

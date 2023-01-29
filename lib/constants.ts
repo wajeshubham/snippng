@@ -495,3 +495,17 @@ export const DEFAULT_COLORS = [
   "#a1887f",
   "#ffa7c4",
 ];
+
+export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+  let timeout: NodeJS.Timeout | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
+};`;

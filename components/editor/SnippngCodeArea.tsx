@@ -47,7 +47,7 @@ const SnippngCodeArea = () => {
             </div>
             <div
               id="code-wrapper"
-              className="overflow-hidden p-16 w-full"
+              className="overflow-auto p-16 w-full"
               style={{
                 background: getEditorWrapperBg(
                   wrapperBg,
@@ -60,7 +60,7 @@ const SnippngCodeArea = () => {
               <div
                 data-testid="editor-container"
                 className={clsx(
-                  "overflow-hidden !font-mono relative",
+                  "overflow-hidden !font-mono relative min-w-[400px]",
                   hasDropShadow
                     ? "shadow-xl shadow-zinc-900/40 has-drop-shadow-testclass"
                     : "",

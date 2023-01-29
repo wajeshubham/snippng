@@ -148,7 +148,7 @@ export default function Home() {
                               __html: `<pre class="text-[0.8125rem] leading-6 text-gray-300"><code><span class="text-[#ff8c28]">import</span> { <span class="text-[#7dd3fc]">useState</span> } <span class="text-[#ff8c28]">from</span> <span class="text-emerald-300">'react'</span>
 <span class="text-[#ff8c28]">import</span> { <span class="text-[#7dd3fc]">Switch</span> } <span class="text-[#ff8c28]">from</span> <span class="text-emerald-300">'@headlessui/react'</span>
 
-<span class="text-[#FFC623]"><span class="text-[#ff8c28]">export default const</span> Example</span> <span class="text-[#ff8c28]">=</span> () <span class="text-[#ff8c28]">=></span> {
+<span class="text-[#FFC623]"><span class="text-[#ff8c28]">export const</span> Example</span> <span class="text-[#ff8c28]">=</span> () <span class="text-[#ff8c28]">=></span> {
   <span class="text-[#ff8c28]">&nbsp;&nbsp;const</span> [<span class="text-[#7dd3fc]">enabled</span>, <span class="text-[#7dd3fc]">setEnabled</span>] = <span class="text-[#FFC623]">useState</span>(<span class="text-[#7dd3fc]">true</span>)
 
   <span class="text-[#ff8c28]">&nbsp;&nbsp;return</span> (

@@ -35,11 +35,46 @@ const modeScript = `
   }
 `;
 
+const faviconScript = `
+  let matcher = window.matchMedia('(prefers-color-scheme: dark)');
+  matcher.addListener(onUpdate);
+
+  let lightSchemeIcon = document.querySelector('link#light-scheme-icon');
+  let darkSchemeIcon = document.querySelector('link#dark-scheme-icon');
+
+  function onUpdate() {
+    if (matcher.matches) {
+      lightSchemeIcon.remove();
+      document.head.append(darkSchemeIcon);
+    } else {
+      document.head.append(lightSchemeIcon);
+      darkSchemeIcon.remove();
+    }
+  }
+
+  onUpdate();
+`;
+
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <meta property="og:url" content="https://snippng.wajeshubham.in/" />
+        <meta property="og:type" content="website" />
+        <link
+          rel="icon"
+          id="dark-scheme-icon"
+          href="/logo-dark.svg"
+          type="image/svg+xml"
+        />
+        <link
+          rel="icon"
+          id="light-scheme-icon"
+          href="/logo.svg"
+          type="image/svg+xml"
+        />
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: faviconScript }} />
       </Head>
       <body className="!min-h-screen bg-zinc-50 dark:bg-black">
         <Main />

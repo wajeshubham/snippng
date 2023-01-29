@@ -1,6 +1,4 @@
-import { ThemeToggle } from "@/components";
-import Logo from "@/components/Logo";
-import { CommandLineIcon } from "@heroicons/react/24/outline";
+import { Logo, ThemeToggle } from "@/components";
 
 const Header = () => {
   return (

@@ -47,9 +47,10 @@ describe("SnippngCodeArea", () => {
       await act(async () => {
         render(
           <SnippngEditorContext.Provider
-            // @ts-ignore
             value={{
               editorConfig: { ...defaultEditorConfig, showLineNumbers: false },
+              // @ts-ignore
+              handleConfigChange: () => {},
               // override showLineNumbers with false
             }}
           >
@@ -81,9 +82,10 @@ describe("SnippngCodeArea", () => {
       await act(async () => {
         render(
           <SnippngEditorContext.Provider
-            // @ts-ignore
             value={{
               editorConfig: { ...defaultEditorConfig, hasDropShadow: false },
+              // @ts-ignore
+              handleConfigChange: () => {},
               // override hasDropShadow with false
             }}
           >
@@ -115,9 +117,10 @@ describe("SnippngCodeArea", () => {
       await act(async () => {
         render(
           <SnippngEditorContext.Provider
-            // @ts-ignore
             value={{
               editorConfig: { ...defaultEditorConfig, rounded: false },
+              // @ts-ignore
+              handleConfigChange: () => {},
               // override rounded with false
             }}
           >
@@ -150,9 +153,10 @@ describe("SnippngCodeArea", () => {
       await act(async () => {
         render(
           <SnippngEditorContext.Provider
-            // @ts-ignore
             value={{
               editorConfig: { ...defaultEditorConfig, showFileName: false },
+              // @ts-ignore
+              handleConfigChange: () => {},
               // override hasDropShadow with false
             }}
           >
@@ -174,13 +178,14 @@ describe("SnippngCodeArea", () => {
       await act(async () => {
         render(
           <SnippngEditorContext.Provider
-            // @ts-ignore
             value={{
               editorConfig: {
                 ...defaultEditorConfig,
                 gradients: [],
                 wrapperBg: "#eee811",
               },
+              // @ts-ignore
+              handleConfigChange: () => {},
               // override hasDropShadow with false
             }}
           >

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { createRef, useContext, useState } from "react";
 
 import { DEFAULT_BASE_SETUP, DEFAULT_CODE_SNIPPET } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
@@ -8,14 +8,16 @@ import * as themes from "@uiw/codemirror-themes-all";
 import CodeMirror from "@uiw/react-codemirror";
 
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
+import { WidthHandler } from "@/lib/width-handler";
 import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
 
 const SnippngCodeArea = () => {
   const [code, setCode] = useState(DEFAULT_CODE_SNIPPET);
+  const editorRef = createRef<HTMLDivElement>();
 
-  const { editorConfig } = useContext(SnippngEditorContext);
+  const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
   const {
     selectedLang,
     selectedTheme,
@@ -31,6 +33,7 @@ const SnippngCodeArea = () => {
     showFileName,
     gradients,
     gradientAngle,
+    editorWidth,
   } = editorConfig;
 
   return (
@@ -41,13 +44,16 @@ const SnippngCodeArea = () => {
         data-testid="snippng-code-area"
       >
         <NoSSRWrapper>
-          <div className="rounded-md bg-white dark:bg-zinc-900 p-8 flex justify-start border-[1px] flex-col items-start dark:border-zinc-500 border-zinc-200 shadow-md w-full">
+          <div className="rounded-md bg-white dark:bg-zinc-900 p-8 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
             <div className="w-full">
               <SnippngControlHeader />
             </div>
             <div
               id="code-wrapper"
-              className="overflow-auto p-16 w-full"
+              className={clsx(
+                "overflow-auto p-16 max-w-full",
+                editorWidth ? "w-fit" : "w-full"
+              )}
               style={{
                 background: getEditorWrapperBg(
                   wrapperBg,
@@ -58,15 +64,23 @@ const SnippngCodeArea = () => {
               }}
             >
               <div
+                ref={editorRef}
                 data-testid="editor-container"
                 className={clsx(
-                  "overflow-hidden !font-mono relative min-w-[400px]",
+                  "overflow-hidden !font-mono relative max-w-full min-w-[320px]",
                   hasDropShadow
                     ? "shadow-xl shadow-zinc-900/40 has-drop-shadow-testclass"
                     : "",
                   rounded ? "rounded-xl rounded-testclass" : "!rounded-none"
                 )}
+                style={{
+                  width: editorWidth || "100%",
+                }}
               >
+                <WidthHandler
+                  innerRef={editorRef}
+                  onChange={handleConfigChange("editorWidth")}
+                />
                 <CodeMirror
                   className={clsx("CodeMirror__Main__Editor")}
                   value={code}

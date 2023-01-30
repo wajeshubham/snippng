@@ -456,6 +456,7 @@ export const defaultEditorConfig: SnippngEditorConfigInterface = {
   wrapperBg: "#eee811",
   gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
   gradientAngle: 140,
+  editorWidth: 0,
 };
 
 export const DEFAULT_BASE_SETUP = {
@@ -495,6 +496,11 @@ export const DEFAULT_COLORS = [
   "#a1887f",
   "#ffa7c4",
 ];
+
+export const DEFAULT_WIDTHS = {
+  minWidth: 320,
+  maxWidth: 1200,
+};
 
 export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
   let timeout: NodeJS.Timeout | null = null;

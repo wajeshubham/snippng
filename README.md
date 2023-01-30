@@ -30,13 +30,12 @@
 <br />
 <div align="center">
 
-
-  <h3 style="font-size: 40px;display:inline-flex; align-items:center" align="center">
+  <h3 style="font-size: 3.25rem;display:inline-flex; align-items:center; width: fit-content: justify-content:center;" align="center">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-  width="50px"
-  height="50px"
+  width="4rem"
+  height="4rem"
   style="margin-right:12px"
-  stroke-width="1" stroke="currentColor">
+  stroke-width="1" stroke="white">
   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
 </svg>
 Snippng</h3>

@@ -7,7 +7,7 @@ import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
 import * as themes from "@uiw/codemirror-themes-all";
 import CodeMirror from "@uiw/react-codemirror";
 
-import { SnippngEditorContext } from "@/context/SnippngEditorContext";
+import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { WidthHandler } from "@/lib/width-handler";
 import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
@@ -17,7 +17,7 @@ const SnippngCodeArea = () => {
   const [code, setCode] = useState(DEFAULT_CODE_SNIPPET);
   const editorRef = createRef<HTMLDivElement>();
 
-  const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
+  const { editorConfig, handleConfigChange } = useSnippngEditor();
   const {
     selectedLang,
     selectedTheme,

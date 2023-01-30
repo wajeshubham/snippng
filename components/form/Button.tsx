@@ -16,7 +16,7 @@ const Button: React.FC<
       )}
     >
       {StartIcon ? <StartIcon className="w-4 h-4 mr-2" /> : null}
-      <span>{props.children}</span>
+      {props.children}
       {EndIcon ? <EndIcon className="w-4 h-4 ml-2" /> : null}
     </button>
   );

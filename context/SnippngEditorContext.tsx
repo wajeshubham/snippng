@@ -3,7 +3,13 @@ import {
   SnippngEditorConfigInterface,
   SnippngEditorContextInterface,
 } from "@/types";
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },
@@ -16,6 +22,8 @@ const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
     ) =>
     (value: V) => {},
 });
+
+const useSnippngEditor = () => useContext(SnippngEditorContext);
 
 const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -59,4 +67,4 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export { SnippngContextProvider, SnippngEditorContext };
+export { SnippngContextProvider, useSnippngEditor };

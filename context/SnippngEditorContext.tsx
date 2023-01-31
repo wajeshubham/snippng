@@ -70,4 +70,4 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export { SnippngContextProvider, useSnippngEditor };
+export { SnippngContextProvider, useSnippngEditor, SnippngEditorContext };

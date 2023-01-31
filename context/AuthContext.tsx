@@ -62,4 +62,4 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export { useAuth, AuthProvider };
+export { useAuth, AuthProvider, AuthContext };

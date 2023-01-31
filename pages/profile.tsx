@@ -14,6 +14,7 @@ import { collection, deleteDoc, doc, getDocs, query } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+// TODO: Add HOC to handle secure route mounting
 const UserProfile = () => {
   const [savedSnippets, setSavedSnippets] = useState<
     SnippngEditorConfigInterface[]

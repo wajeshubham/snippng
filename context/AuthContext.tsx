@@ -5,8 +5,6 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   signOut,
-  browserLocalPersistence,
-  setPersistence,
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
 
@@ -31,13 +29,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const loginWithGithub = async () => {
     if (!auth) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-    await setPersistence(auth, browserLocalPersistence)
-      .then(() => {
-        return signInWithPopup(auth!, provider);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.log("Error while logging in", error);
+    }
   };
 
   const logout = async () => {

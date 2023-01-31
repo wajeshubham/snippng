@@ -15,11 +15,11 @@ const provider = new GithubAuthProvider();
 const AuthContext = createContext<{
   user: User | null;
   loginWithGithub: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }>({
   user: null,
   loginWithGithub: async () => {},
-  logout: () => {},
+  logout: async () => {},
 });
 
 const useAuth = () => useContext(AuthContext);

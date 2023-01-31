@@ -26,7 +26,7 @@ try {
 } catch (error) {
   console.log(
     Error(
-      "Error while setting up firebase. Please add .env file with required credentials for firebase setup"
+      "Error while setting up firebase. Please add .env file with required credentials for firebase setup. Refer README.md for required credentials"
     )
   );
 }

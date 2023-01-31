@@ -1,4 +1,4 @@
-import { Button, ErrorText, SigninButton } from "@/components";
+import { Button, ErrorText, Loader, SigninButton } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import Layout from "@/layout/Layout";
@@ -179,7 +179,9 @@ const UserProfile = () => {
                                     }}
                                   />
                                 )
-                              ) : null}
+                              ) : (
+                                <Loader />
+                              )}
                             </dd>
                           </div>
                         </dl>

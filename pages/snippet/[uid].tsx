@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ErrorText, SigninButton, SnippngCodeArea } from "@/components";
+import { ErrorText, Loader, SigninButton, SnippngCodeArea } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
@@ -74,7 +74,7 @@ const SavedSnippet = () => {
           <SigninButton />
         </div>
       ) : loadingConfig ? (
-        <p className="text-white">Loading...</p>
+        <Loader />
       ) : (
         <SnippngCodeArea />
       )}

@@ -6,6 +6,7 @@ import Button from "./form/Button";
 import Checkbox from "./form/Checkbox";
 import Range from "./form/Range";
 import Select from "./form/Select";
+import Loader from "./Loader";
 import Logo from "./Logo";
 import NoSSRWrapper from "./NoSSRWrapper";
 import SigninButton from "./SigninButton";
@@ -24,4 +25,5 @@ export {
   Logo,
   ErrorText,
   SigninButton,
+  Loader,
 };

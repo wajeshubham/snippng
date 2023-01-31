@@ -7,6 +7,7 @@ export type SnippngWindowControlsType =
   | "windows-right";
 
 export interface SnippngEditorConfigInterface {
+  code: string;
   editorFontSize: number;
   editorWidth: number;
   editorWindowControlsType: SnippngWindowControlsType;

@@ -1,6 +1,6 @@
-import { createRef, useContext, useState } from "react";
+import { createRef } from "react";
 
-import { DEFAULT_BASE_SETUP, DEFAULT_CODE_SNIPPET } from "@/lib/constants";
+import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
@@ -14,11 +14,11 @@ import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
 
 const SnippngCodeArea = () => {
-  const [code, setCode] = useState(DEFAULT_CODE_SNIPPET);
   const editorRef = createRef<HTMLDivElement>();
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const {
+    code,
     selectedLang,
     selectedTheme,
     wrapperBg,
@@ -98,9 +98,7 @@ const SnippngCodeArea = () => {
                   // @ts-ignore
                   theme={themes[getTheme(selectedTheme.id)]}
                   indentWithTab
-                  onChange={(value) => {
-                    setCode(value);
-                  }}
+                  onChange={(value) => handleConfigChange("code")(value)}
                 >
                   <div className="absolute top-0 z-20 w-full text-white !px-3.5 !py-3 bg-inherit">
                     {showFileName ? (

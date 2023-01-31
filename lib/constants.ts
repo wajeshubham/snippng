@@ -438,7 +438,22 @@ export const LANGUAGES = [
   },
 ];
 
+export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+  let timeout: NodeJS.Timeout | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
+};`;
+
 export const defaultEditorConfig: SnippngEditorConfigInterface = {
+  code: DEFAULT_CODE_SNIPPET,
   editorFontSize: 16,
   editorWindowControlsType: "mac-left",
   fileName: "@utils/debounce.ts",
@@ -501,17 +516,3 @@ export const DEFAULT_WIDTHS = {
   minWidth: 320,
   maxWidth: 1200,
 };
-
-export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
-  let timeout: NodeJS.Timeout | null = null;
-
-  const debounced = (...args: Parameters<F>) => {
-    if (timeout !== null) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-    timeout = setTimeout(() => func(...args), waitFor);
-  };
-
-  return debounced as (...args: Parameters<F>) => ReturnType<F>;
-};`;

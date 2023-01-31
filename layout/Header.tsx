@@ -1,5 +1,4 @@
-import { Button, Logo, ThemeToggle } from "@/components";
-import SigninButton from "@/components/SigninButton";
+import { Button, Logo, SigninButton, ThemeToggle } from "@/components";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -30,7 +29,7 @@ const Header = () => {
                   alt="profile_image"
                   className="h-5 w-5 rounded-full object-cover inline-flex mr-2"
                 />
-                {user.displayName}
+                {user.displayName || "Snippng user"}
               </Button>
               <Button StartIcon={ArrowLeftOnRectangleIcon} onClick={logout}>
                 Logout

@@ -1,5 +1,4 @@
-import { Button } from "@/components";
-import SigninButton from "@/components/SigninButton";
+import { Button, ErrorText, SigninButton } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import Layout from "@/layout/Layout";
@@ -8,6 +7,7 @@ import {
   CommandLineIcon,
   FolderOpenIcon,
   PlusCircleIcon,
+  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { collection, deleteDoc, doc, getDocs, query } from "firebase/firestore";
@@ -92,7 +92,7 @@ const UserProfile = () => {
                   </div>
                   <div>
                     <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
-                      {user.displayName}
+                      {user.displayName || "Snippng user"}
                     </h1>
                     <p className="text-sm text-zinc-500 dark:text-zinc-300">
                       {user.email || "Snippng user"}
@@ -122,49 +122,63 @@ const UserProfile = () => {
                             </dt>
                             <dd className="mt-1 text-sm text-zinc-900">
                               {!loadingSnippets ? (
-                                <ul
-                                  role="list"
-                                  className="divide-y dark:divide-zinc-500 divide-zinc-200 rounded-md border-[1px] dark:border-zinc-500 border-zinc-200"
-                                >
-                                  {savedSnippets.map((snippet) => (
-                                    <li
-                                      key={snippet.uid}
-                                      className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
-                                    >
-                                      <div className="flex w-0 flex-1 items-center dark:text-white text-zinc-900">
-                                        <CommandLineIcon
-                                          className="h-5 w-5 flex-shrink-0x"
-                                          aria-hidden="true"
-                                        />
-                                        <span className="ml-2 w-0 flex-1 truncate">
-                                          {snippet.snippetsName}
-                                        </span>
-                                      </div>
-                                      <div className="ml-4 flex-shrink-0 gap-3 inline-flex items-center">
-                                        <Button
-                                          className="!text-red-500"
-                                          disabled={deletingSnippet}
-                                          StartIcon={TrashIcon}
-                                          onClick={() =>
-                                            deleteCodeSnippet(snippet.uid ?? "")
-                                          }
-                                        >
-                                          Delete
-                                        </Button>
-                                        <Button
-                                          EndIcon={FolderOpenIcon}
-                                          onClick={() => {
-                                            router.push(
-                                              `/snippet/${snippet.uid}`
-                                            );
-                                          }}
-                                        >
-                                          Open
-                                        </Button>
-                                      </div>
-                                    </li>
-                                  ))}
-                                </ul>
+                                savedSnippets.length ? (
+                                  <ul
+                                    role="list"
+                                    className="divide-y dark:divide-zinc-500 divide-zinc-200 rounded-md border-[1px] dark:border-zinc-500 border-zinc-200"
+                                  >
+                                    {savedSnippets.map((snippet) => (
+                                      <li
+                                        key={snippet.uid}
+                                        className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                                      >
+                                        <div className="flex w-0 flex-1 items-center dark:text-white text-zinc-900">
+                                          <CommandLineIcon
+                                            className="h-5 w-5 flex-shrink-0x"
+                                            aria-hidden="true"
+                                          />
+                                          <span className="ml-2 w-0 flex-1 truncate">
+                                            {snippet.snippetsName}
+                                          </span>
+                                        </div>
+                                        <div className="ml-4 flex-shrink-0 gap-3 inline-flex items-center">
+                                          <Button
+                                            className="!text-red-500"
+                                            disabled={deletingSnippet}
+                                            StartIcon={TrashIcon}
+                                            onClick={() =>
+                                              deleteCodeSnippet(
+                                                snippet.uid ?? ""
+                                              )
+                                            }
+                                          >
+                                            Delete
+                                          </Button>
+                                          <Button
+                                            EndIcon={FolderOpenIcon}
+                                            onClick={() => {
+                                              router.push(
+                                                `/snippet/${snippet.uid}`
+                                              );
+                                            }}
+                                          >
+                                            Open
+                                          </Button>
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <ErrorText
+                                    errorTitle="No snippets found"
+                                    errorSubTitle="Please generate some snippets to list them here"
+                                    errorActionProps={{
+                                      children: "Generate",
+                                      StartIcon: PlusIcon,
+                                      onClick: () => router.push("/"),
+                                    }}
+                                  />
+                                )
                               ) : null}
                             </dd>
                           </div>

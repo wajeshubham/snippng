@@ -1,12 +1,12 @@
 import { clsx } from "@/utils";
 import React from "react";
 
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    StartIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
-    EndIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
-  }
-> = ({ StartIcon, EndIcon, ...props }) => {
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  StartIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
+  EndIcon?: ((props: React.SVGProps<SVGSVGElement>) => JSX.Element) | null;
+}
+
+const Button: React.FC<Props> = ({ StartIcon, EndIcon, ...props }) => {
   return (
     <button
       {...props}
@@ -23,3 +23,5 @@ const Button: React.FC<
 };
 
 export default Button;
+
+export type SnippngButtonType = Props;

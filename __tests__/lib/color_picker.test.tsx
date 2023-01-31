@@ -5,6 +5,8 @@ import {
   rgbToHsv,
   hsvToRgb,
 } from "@/lib/color-picker/utils";
+import { getEditorWrapperBg } from "@/utils";
+import { waitFor } from "@testing-library/react";
 
 describe("ColoPicker", () => {
   describe("Utility functions", () => {
@@ -44,6 +46,21 @@ describe("ColoPicker", () => {
       expect(Math.floor(expectedRGB.r)).toBe(Math.floor(convertedRGB.r));
       expect(Math.floor(expectedRGB.g)).toBe(Math.floor(convertedRGB.g));
       expect(Math.floor(expectedRGB.b)).toBe(Math.floor(convertedRGB.b));
+    });
+  });
+
+  describe("Gradients property", () => {
+    it("renders wrapper with gradient equals to the gradient array", async () => {
+      let renderedBackground = getEditorWrapperBg(
+        "#eee811",
+        ["#ba68c8", "#ffa7c4", "#e57373"],
+        140
+      );
+      await waitFor(() => {
+        expect(renderedBackground).toBe(
+          `linear-gradient(140deg, #ba68c8, #ffa7c4, #e57373)`
+        );
+      });
     });
   });
 });

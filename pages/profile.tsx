@@ -26,6 +26,7 @@ const UserProfile = () => {
   const router = useRouter();
 
   const fetchCodeSnippets = async () => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
     if (!user) return;
     try {
       const snippets: SnippngEditorConfigInterface[] = [];
@@ -47,6 +48,7 @@ const UserProfile = () => {
   };
 
   const deleteCodeSnippet = async (snippetId: string) => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
     if (!user || !snippetId) return;
     setDeletingSnippet(true);
     try {

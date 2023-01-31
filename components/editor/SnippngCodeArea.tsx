@@ -50,6 +50,8 @@ const SnippngCodeArea = () => {
   } = editorConfig;
 
   const saveSnippet = async () => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+
     if (!user) return;
     try {
       const docRef = await addDoc(
@@ -62,6 +64,8 @@ const SnippngCodeArea = () => {
   };
 
   const updateSnippet = async () => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+
     if (!user || !uid) return;
     try {
       await updateDoc(doc(db, "user", user.uid, "snippets", uid), {

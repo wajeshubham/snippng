@@ -106,6 +106,29 @@ You need `NodeJs` and `yarn` installed on your machine.
   npm install --global yarn
   ```
 
+### Firebase prerequisites (optional)
+
+Firebase is used in this project for authentications and to store snippets. In order to contribute in the part requiring Firebase, create a file called `.env` inside the root folder and add the following credentials in it once you create a Firebase app.
+
+```.env
+NEXT_PUBLIC_FIREBASE_API_KEY=<your_FIREBASE_APP_API_KEY>
+
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<your_FIREBASE_APP_AUTH_DOMAIN>
+
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=<your_FIREBASE_APP_PROJECT_ID>
+
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=<your_FIREBASE_APP_STORAGE_BUCKET>
+
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=<your_FIREBASE_APP_MESSAGING_SENDER_ID>
+
+NEXT_PUBLIC_FIREBASE_APP_ID=<your_FIREBASE_APP_APP_ID>
+
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=<your_FIREBASE_APP_MEASUREMENT_ID>
+
+```
+
+It does not matter what credentials you add to your `.env` file, as the app won't crash while developing since the error is taken care of for the Firebase services that are unavailable.
+
 ### Installation
 
 1. Clone the repo

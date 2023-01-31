@@ -21,8 +21,9 @@ const SavedSnippet = () => {
   const { uid } = router.query as { uid: string };
 
   const fetchCodeSnippet = async () => {
-    if (!user) {
+    if (!user || !db) {
       setLoadingConfig(false);
+      if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
       return;
     }
     try {

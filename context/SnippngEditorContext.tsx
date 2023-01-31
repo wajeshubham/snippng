@@ -3,10 +3,17 @@ import {
   SnippngEditorConfigInterface,
   SnippngEditorContextInterface,
 } from "@/types";
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },
+  setEditorConfig: (config: SnippngEditorConfigInterface) => {},
   handleConfigChange:
     <
       K extends keyof SnippngEditorConfigInterface,
@@ -16,6 +23,8 @@ const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
     ) =>
     (value: V) => {},
 });
+
+const useSnippngEditor = () => useContext(SnippngEditorContext);
 
 const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -53,10 +62,12 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [editorConfig.lineHeight, handleLineHeight]);
 
   return (
-    <SnippngEditorContext.Provider value={{ editorConfig, handleConfigChange }}>
+    <SnippngEditorContext.Provider
+      value={{ editorConfig, handleConfigChange, setEditorConfig }}
+    >
       {children}
     </SnippngEditorContext.Provider>
   );
 };
 
-export { SnippngContextProvider, SnippngEditorContext };
+export { SnippngContextProvider, useSnippngEditor };

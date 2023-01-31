@@ -7,6 +7,8 @@ export type SnippngWindowControlsType =
   | "windows-right";
 
 export interface SnippngEditorConfigInterface {
+  uid?: string;
+  code: string;
   editorFontSize: number;
   editorWidth: number;
   editorWindowControlsType: SnippngWindowControlsType;
@@ -22,6 +24,7 @@ export interface SnippngEditorConfigInterface {
   selectedTheme: SelectOptionInterface;
   showFileName: boolean;
   showLineNumbers: boolean;
+  snippetsName: string;
   wrapperBg: string;
 }
 
@@ -33,4 +36,5 @@ export interface SnippngEditorContextInterface {
   >(
     key: K
   ) => (value: V) => void;
+  setEditorConfig: (config: SnippngEditorConfigInterface) => void;
 }

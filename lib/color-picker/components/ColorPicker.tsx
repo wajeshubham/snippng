@@ -1,3 +1,4 @@
+import Input from "@/components/form/Input";
 import { Menu, Transition } from "@headlessui/react";
 import React, { Fragment, useCallback, useMemo } from "react";
 import {
@@ -142,75 +143,48 @@ export const ColorPicker: React.FC<Props> = ({
               }}
             />
             <div className="w-full mt-2">
-              <div className="w-full">
-                <label
-                  className="text-sm my-0.5 dark:text-white text-zinc-900"
-                  htmlFor="cp-input-hex"
-                >
-                  Hex
-                </label>
-                <input
-                  className="w-full dark:bg-zinc-600 block px-2 py-1.5 bg-zinc-200 dark:border-none border-[1px] border-zinc-300 dark:text-white text-zinc-900 outline-none rounded-sm"
-                  id="cp-input-hex"
-                  placeholder="Hex"
-                  value={parsedColor?.hex}
-                  onChange={handleHexChange}
-                />
-              </div>
+              <Input
+                label="Hex"
+                id="cp-input-hex"
+                placeholder="Hex"
+                value={parsedColor?.hex}
+                onChange={handleHexChange}
+              />
             </div>
 
             <div className="w-full flex justify-start gap-2 mt-3">
-              <div>
-                <label
-                  className="text-sm my-0.5 dark:text-white text-zinc-900"
-                  htmlFor="cp-input-r"
-                >
-                  R
-                </label>
-                <input
-                  id="cp-input-r"
-                  placeholder="R"
-                  className="w-14 dark:bg-zinc-600 block px-2 py-1.5 bg-zinc-200 dark:border-none border-[1px] border-zinc-300 dark:text-white text-zinc-900 outline-none rounded-sm"
-                  value={parsedColor.rgb.r}
-                  onChange={(event) => handleRgbChange("r", event.target.value)}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </div>
-              <div>
-                <label
-                  className="text-sm my-0.5 dark:text-white text-zinc-900"
-                  htmlFor="cp-input-g"
-                >
-                  G
-                </label>
-                <input
-                  id="cp-input-g"
-                  placeholder="G"
-                  className="w-14 dark:bg-zinc-600 block px-2 py-1.5 bg-zinc-200 dark:border-none border-[1px] border-zinc-300 dark:text-white text-zinc-900 outline-none rounded-sm"
-                  value={parsedColor.rgb.g}
-                  onChange={(event) => handleRgbChange("g", event.target.value)}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </div>
-              <div>
-                <label
-                  className="text-sm my-0.5 dark:text-white text-zinc-900"
-                  htmlFor="cp-input-b"
-                >
-                  B
-                </label>
-                <input
-                  id="cp-input-b"
-                  placeholder="B"
-                  className="w-14 dark:bg-zinc-600 block px-2 py-1.5 bg-zinc-200 dark:border-none border-[1px] border-zinc-300 dark:text-white text-zinc-900 outline-none rounded-sm"
-                  value={parsedColor.rgb.b}
-                  onChange={(event) => handleRgbChange("b", event.target.value)}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </div>
+              <Input
+                label="R"
+                id="cp-input-r"
+                placeholder="R"
+                className="w-14"
+                value={parsedColor.rgb.r}
+                onChange={(event) => handleRgbChange("r", event.target.value)}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+
+              <Input
+                label="G"
+                id="cp-input-g"
+                placeholder="G"
+                className="w-14"
+                value={parsedColor.rgb.g}
+                onChange={(event) => handleRgbChange("g", event.target.value)}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+
+              <Input
+                label="B"
+                id="cp-input-b"
+                placeholder="B"
+                className="w-14"
+                value={parsedColor.rgb.b}
+                onChange={(event) => handleRgbChange("b", event.target.value)}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
             </div>
             <GradientSelect
               selectedColors={gradientColors}

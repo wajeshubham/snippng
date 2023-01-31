@@ -1,4 +1,4 @@
-import { SnippngEditorContext } from "@/context/SnippngEditorContext";
+import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { ColorPicker } from "@/lib/color-picker";
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { getEditorWrapperBg } from "@/utils";
@@ -11,7 +11,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useState } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
 import Range from "../form/Range";
@@ -20,7 +20,7 @@ import Select from "../form/Select";
 const SnippngControlHeader = () => {
   const [downloadingSnippet, setDownloadingSnippet] = useState(false);
 
-  const { editorConfig, handleConfigChange } = useContext(SnippngEditorContext);
+  const { editorConfig, handleConfigChange } = useSnippngEditor();
 
   const {
     selectedLang,

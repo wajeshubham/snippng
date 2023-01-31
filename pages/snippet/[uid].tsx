@@ -31,6 +31,8 @@ const SavedSnippet = () => {
           ...docRef.data(),
           uid,
         } as SnippngEditorConfigInterface);
+      } else {
+        setNotFound(true);
       }
     } catch (error) {
       setNotFound(true);

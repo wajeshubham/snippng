@@ -12,6 +12,8 @@ import { WidthHandler } from "@/lib/width-handler";
 import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
+import Button from "../form/Button";
+import Input from "../form/Input";
 
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();
@@ -19,6 +21,7 @@ const SnippngCodeArea = () => {
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const {
     code,
+    snippetsName,
     selectedLang,
     selectedTheme,
     wrapperBg,
@@ -104,7 +107,10 @@ const SnippngCodeArea = () => {
                     {showFileName ? (
                       <input
                         id="file-name-input"
-                        defaultValue={fileName}
+                        value={fileName}
+                        onChange={(e) =>
+                          handleConfigChange("fileName")(e.target.value)
+                        }
                         className="absolute bg-transparent w-72 text-center top-2 -translate-x-1/2 left-1/2 text-xs font-extralight text-zinc-400 focus:border-b-[0.1px] border-zinc-500 outline-none ring-0"
                         spellCheck={false}
                         contentEditable
@@ -114,6 +120,20 @@ const SnippngCodeArea = () => {
                     <SnippngWindowControls type={editorWindowControlsType} />
                   </div>
                 </CodeMirror>
+              </div>
+            </div>
+            <div className="w-full mt-8 flex gap-4 justify-start items-center">
+              <div className="w-full">
+                <Input
+                  value={snippetsName}
+                  onChange={(e) =>
+                    handleConfigChange("snippetsName")(e.target.value)
+                  }
+                  placeholder="Snippet name..."
+                />
+              </div>
+              <div className="flex flex-shrink-0">
+                <Button>Save snippet</Button>
               </div>
             </div>
           </div>

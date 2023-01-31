@@ -454,6 +454,7 @@ export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args
 
 export const defaultEditorConfig: SnippngEditorConfigInterface = {
   code: DEFAULT_CODE_SNIPPET,
+  snippetsName: "",
   editorFontSize: 16,
   editorWindowControlsType: "mac-left",
   fileName: "@utils/debounce.ts",

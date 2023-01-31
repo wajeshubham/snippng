@@ -23,6 +23,7 @@ export interface SnippngEditorConfigInterface {
   selectedTheme: SelectOptionInterface;
   showFileName: boolean;
   showLineNumbers: boolean;
+  snippetsName: string;
   wrapperBg: string;
 }
 

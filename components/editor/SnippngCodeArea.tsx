@@ -1,4 +1,4 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
@@ -25,6 +25,8 @@ import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();
+  const [saving, setSaving] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const { user } = useAuth();
@@ -53,13 +55,13 @@ const SnippngCodeArea = () => {
     if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
 
     if (!user) return;
+    setSaving(true);
     try {
-      const docRef = await addDoc(
-        collection(db, "user", user.uid, "snippets"),
-        editorConfig
-      );
+      await addDoc(collection(db, "user", user.uid, "snippets"), editorConfig);
     } catch (e) {
       console.error("Error adding document: ", e);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -67,12 +69,15 @@ const SnippngCodeArea = () => {
     if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
 
     if (!user || !uid) return;
+    setUpdating(true);
     try {
       await updateDoc(doc(db, "user", user.uid, "snippets", uid), {
         ...editorConfig,
       });
     } catch (e) {
       console.error("Error adding document: ", e);
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -172,24 +177,34 @@ const SnippngCodeArea = () => {
               <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
                 <Button
                   StartIcon={ArrowDownOnSquareStackIcon}
+                  disabled={saving}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!user) return alert("Please login first");
+                    if (!snippetsName)
+                      return alert("Please give snippet a name");
                     else saveSnippet();
                   }}
                 >
-                  {uid ? "Save separately" : "Save snippet"}
+                  {saving
+                    ? "Saving..."
+                    : uid
+                    ? "Save separately"
+                    : "Save snippet"}
                 </Button>
                 {uid ? (
                   <Button
                     StartIcon={ArrowPathIcon}
+                    disabled={updating}
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!user) return alert("Please login first");
+                      if (!snippetsName)
+                        return alert("Please give snippet a name");
                       updateSnippet();
                     }}
                   >
-                    Update snippet
+                    {updating ? "Updating..." : "Update snippet"}
                   </Button>
                 ) : null}
               </div>

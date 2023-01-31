@@ -56,9 +56,9 @@ const faviconScript = `
   onUpdate();
 `;
 
-const adSenseScript = `
-(adsbygoogle = (window.adsbygoogle || [])).push({});
-`;
+// const adSenseScript = `
+// (adsbygoogle = (window.adsbygoogle || [])).push({});
+// `;
 
 export default function Document() {
   return (
@@ -80,7 +80,8 @@ export default function Document() {
         />
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
         <script dangerouslySetInnerHTML={{ __html: faviconScript }} />
-        <script
+        {/* TODO: Configure adsense */}
+        {/* <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
         ></script>
@@ -91,7 +92,7 @@ export default function Document() {
           data-ad-client={`ca-pub-${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
           data-ad-slot={`${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
           data-full-width-responsive="true"
-        ></ins>
+        ></ins> */}
       </Head>
       <body className="!min-h-screen bg-zinc-50 dark:bg-black">
         <Main />

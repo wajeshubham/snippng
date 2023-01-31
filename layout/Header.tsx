@@ -31,7 +31,11 @@ const Header = () => {
                 />
                 {user.displayName || "Snippng user"}
               </Button>
-              <Button StartIcon={ArrowLeftOnRectangleIcon} onClick={logout}>
+              <Button
+                data-testid="logout-btn"
+                StartIcon={ArrowLeftOnRectangleIcon}
+                onClick={logout}
+              >
                 Logout
               </Button>
             </>

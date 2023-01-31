@@ -53,7 +53,6 @@ const SnippngCodeArea = () => {
 
   const saveSnippet = async () => {
     if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-
     if (!user) return;
     setSaving(true);
     try {
@@ -176,6 +175,7 @@ const SnippngCodeArea = () => {
               </div>
               <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
                 <Button
+                  id="save-snippet-btn"
                   StartIcon={ArrowDownOnSquareStackIcon}
                   disabled={saving}
                   onClick={(e) => {

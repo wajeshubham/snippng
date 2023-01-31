@@ -70,7 +70,10 @@ const UserProfile = () => {
   return (
     <Layout>
       {!user ? (
-        <div className="w-full h-full flex justify-center items-center py-32">
+        <div
+          data-testid="signin-btn-container"
+          className="w-full h-full flex justify-center items-center py-32"
+        >
           <SigninButton />
         </div>
       ) : (

@@ -7,7 +7,7 @@ const SigninButton = () => {
   const { loginWithGithub } = useAuth();
 
   return (
-    <Button onClick={loginWithGithub}>
+    <Button data-testid="signin-btn" onClick={loginWithGithub}>
       <GithubIcon className="inline-flex mr-1" />
       Signin
     </Button>

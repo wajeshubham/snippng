@@ -20,6 +20,8 @@ beforeAll(() => {
   };
 });
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 describe("LandingPage", () => {
   it("renders the landing page", async () => {
     await act(async () => {

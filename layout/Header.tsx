@@ -1,6 +1,7 @@
 import { Button, Logo, ThemeToggle } from "@/components";
 import GithubIcon from "@/components/icons/GithubIcon";
 import { useAuth } from "@/context/AuthContext";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useContext } from "react";
 
 const Header = () => {
@@ -14,15 +15,20 @@ const Header = () => {
         <div className="flex justify-end gap-4 items-center w-1/2 flex-shrink-0">
           <ThemeToggle />
           {user?.uid ? (
-            <Button onClick={logout}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={user.photoURL || ""}
-                alt="profile_image"
-                className="h-6 w-6 rounded-full object-cover inline-flex mr-2"
-              />
-              {user.displayName}
-            </Button>
+            <>
+              <Button>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={user.photoURL || ""}
+                  alt="profile_image"
+                  className="h-5 w-5 rounded-full object-cover inline-flex mr-2"
+                />
+                {user.displayName}
+              </Button>
+              <Button StartIcon={ArrowLeftOnRectangleIcon} onClick={logout}>
+                Logout
+              </Button>
+            </>
           ) : (
             <Button onClick={loginWithGithub}>
               <GithubIcon className="inline-flex mr-1" />

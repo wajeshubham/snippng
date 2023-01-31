@@ -15,10 +15,15 @@ import SnippngWindowControls from "./SnippngWindowControls";
 import Button from "../form/Button";
 import Input from "../form/Input";
 
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/config/firebase";
+import { useAuth } from "@/context/AuthContext";
+
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
+  const { user } = useAuth();
   const {
     code,
     snippetsName,
@@ -38,6 +43,19 @@ const SnippngCodeArea = () => {
     gradientAngle,
     editorWidth,
   } = editorConfig;
+
+  const saveSnippet = async () => {
+    if (!user) return;
+    try {
+      const docRef = await addDoc(
+        collection(db, "user", user.uid, "snippets"),
+        editorConfig
+      );
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   return (
     <>
@@ -133,7 +151,15 @@ const SnippngCodeArea = () => {
                 />
               </div>
               <div className="flex flex-shrink-0">
-                <Button>Save snippet</Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!user) return alert("Please login first");
+                    else saveSnippet();
+                  }}
+                >
+                  Save snippet
+                </Button>
               </div>
             </div>
           </div>

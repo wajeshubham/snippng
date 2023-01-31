@@ -9,15 +9,19 @@ import CodeMirror from "@uiw/react-codemirror";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { WidthHandler } from "@/lib/width-handler";
+import Button from "../form/Button";
+import Input from "../form/Input";
 import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
-import Button from "../form/Button";
-import Input from "../form/Input";
 
-import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
+import {
+  ArrowDownOnSquareStackIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();
@@ -42,6 +46,7 @@ const SnippngCodeArea = () => {
     gradients,
     gradientAngle,
     editorWidth,
+    uid,
   } = editorConfig;
 
   const saveSnippet = async () => {
@@ -51,7 +56,17 @@ const SnippngCodeArea = () => {
         collection(db, "user", user.uid, "snippets"),
         editorConfig
       );
-      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
+  const updateSnippet = async () => {
+    if (!user || !uid) return;
+    try {
+      await updateDoc(doc(db, "user", user.uid, "snippets", uid), {
+        ...editorConfig,
+      });
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -140,7 +155,7 @@ const SnippngCodeArea = () => {
                 </CodeMirror>
               </div>
             </div>
-            <div className="w-full mt-8 flex gap-4 justify-start items-center">
+            <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">
               <div className="w-full">
                 <Input
                   value={snippetsName}
@@ -150,16 +165,29 @@ const SnippngCodeArea = () => {
                   placeholder="Snippet name..."
                 />
               </div>
-              <div className="flex flex-shrink-0">
+              <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
                 <Button
+                  StartIcon={ArrowDownOnSquareStackIcon}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!user) return alert("Please login first");
                     else saveSnippet();
                   }}
                 >
-                  Save snippet
+                  {uid ? "Save separately" : "Save snippet"}
                 </Button>
+                {uid ? (
+                  <Button
+                    StartIcon={ArrowPathIcon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!user) return alert("Please login first");
+                      updateSnippet();
+                    }}
+                  >
+                    Update snippet
+                  </Button>
+                ) : null}
               </div>
             </div>
           </div>

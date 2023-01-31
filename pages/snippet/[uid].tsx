@@ -7,6 +7,7 @@ import Layout from "@/layout/Layout";
 import { SnippngEditorConfigInterface } from "@/types";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { defaultEditorConfig } from "@/lib/constants";
 
 const SavedSnippet = () => {
   const router = useRouter();
@@ -41,6 +42,9 @@ const SavedSnippet = () => {
   useEffect(() => {
     if (!router.isReady || !user) return;
     fetchCodeSnippet();
+    return () => {
+      setEditorConfig({ ...defaultEditorConfig });
+    };
   }, [router.isReady, user]);
 
   return (

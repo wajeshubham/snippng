@@ -36,4 +36,5 @@ export interface SnippngEditorContextInterface {
   >(
     key: K
   ) => (value: V) => void;
+  setEditorConfig: (config: SnippngEditorConfigInterface) => void;
 }

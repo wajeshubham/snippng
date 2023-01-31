@@ -154,7 +154,14 @@ const UserProfile = () => {
                                         >
                                           Delete
                                         </Button>
-                                        <Button EndIcon={FolderOpenIcon}>
+                                        <Button
+                                          EndIcon={FolderOpenIcon}
+                                          onClick={() => {
+                                            router.push(
+                                              `/snippet/${snippet.uid}`
+                                            );
+                                          }}
+                                        >
                                           Open
                                         </Button>
                                       </div>

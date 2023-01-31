@@ -13,6 +13,7 @@ import React, {
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },
+  setEditorConfig: (config: SnippngEditorConfigInterface) => {},
   handleConfigChange:
     <
       K extends keyof SnippngEditorConfigInterface,
@@ -61,7 +62,9 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [editorConfig.lineHeight, handleLineHeight]);
 
   return (
-    <SnippngEditorContext.Provider value={{ editorConfig, handleConfigChange }}>
+    <SnippngEditorContext.Provider
+      value={{ editorConfig, handleConfigChange, setEditorConfig }}
+    >
       {children}
     </SnippngEditorContext.Provider>
   );

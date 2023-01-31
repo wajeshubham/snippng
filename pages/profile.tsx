@@ -1,5 +1,5 @@
 import { Button } from "@/components";
-import GithubIcon from "@/components/icons/GithubIcon";
+import SigninButton from "@/components/SigninButton";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import Layout from "@/layout/Layout";
@@ -21,7 +21,7 @@ const UserProfile = () => {
   const [loadingSnippets, setLoadingSnippets] = useState(true);
   const [deletingSnippet, setDeletingSnippet] = useState(false);
 
-  const { user, loginWithGithub } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
   const fetchCodeSnippets = async () => {
@@ -68,10 +68,7 @@ const UserProfile = () => {
     <Layout>
       {!user ? (
         <div className="w-full h-full flex justify-center items-center py-32">
-          <Button onClick={loginWithGithub}>
-            <GithubIcon className="inline-flex mr-1" />
-            Signin
-          </Button>
+          <SigninButton />
         </div>
       ) : (
         <div>

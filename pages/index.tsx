@@ -2,7 +2,7 @@ import { Button, SnippngCodeArea, SnippngWindowControls } from "@/components";
 import GithubIcon from "@/components/icons/GithubIcon";
 import Layout from "@/layout/Layout";
 import { LANGUAGES, THEMES } from "@/lib/constants";
-import { PlusCircleIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   const focusOnGenerate = () => {

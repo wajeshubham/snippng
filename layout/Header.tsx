@@ -1,12 +1,12 @@
 import { Button, Logo, ThemeToggle } from "@/components";
-import GithubIcon from "@/components/icons/GithubIcon";
+import SigninButton from "@/components/SigninButton";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Header = () => {
-  const { loginWithGithub, user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
   return (
     <header data-testid="header" className="w-full">
@@ -37,10 +37,7 @@ const Header = () => {
               </Button>
             </>
           ) : (
-            <Button onClick={loginWithGithub}>
-              <GithubIcon className="inline-flex mr-1" />
-              Signin
-            </Button>
+            <SigninButton />
           )}
         </div>
       </nav>

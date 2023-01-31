@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SnippngCodeArea } from "@/components";
+import { Button, SnippngCodeArea } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
@@ -8,6 +8,8 @@ import { SnippngEditorConfigInterface } from "@/types";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { defaultEditorConfig } from "@/lib/constants";
+import GithubIcon from "@/components/icons/GithubIcon";
+import SigninButton from "@/components/SigninButton";
 
 const SavedSnippet = () => {
   const router = useRouter();
@@ -51,7 +53,11 @@ const SavedSnippet = () => {
 
   return (
     <Layout>
-      {!notFound ? (
+      {!user ? (
+        <div className="w-full h-full flex justify-center items-center py-32">
+          <SigninButton />
+        </div>
+      ) : !notFound ? (
         loadingConfig ? (
           <p className="text-white">Loading...</p>
         ) : (

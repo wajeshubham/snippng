@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 const modeScript = `
   let darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -55,6 +56,10 @@ const faviconScript = `
   onUpdate();
 `;
 
+const adSenseScript = `
+(adsbygoogle = (window.adsbygoogle || [])).push({});
+`;
+
 export default function Document() {
   return (
     <Html lang="en">
@@ -75,6 +80,18 @@ export default function Document() {
         />
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
         <script dangerouslySetInnerHTML={{ __html: faviconScript }} />
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+        ></script>
+        <script dangerouslySetInnerHTML={{ __html: adSenseScript }} />
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client={`ca-pub-${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+          data-ad-slot={`${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+          data-full-width-responsive="true"
+        ></ins>
       </Head>
       <body className="!min-h-screen bg-zinc-50 dark:bg-black">
         <Main />

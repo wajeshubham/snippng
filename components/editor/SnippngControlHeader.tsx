@@ -37,6 +37,7 @@ const SnippngControlHeader = () => {
     lineHeight,
     gradients,
     gradientAngle,
+    snippetsName,
   } = editorConfig;
 
   const downloadImage = () => {
@@ -48,7 +49,9 @@ const SnippngControlHeader = () => {
       .then((dataUrl) => {
         const a = document.createElement("a");
         a.href = dataUrl;
-        a.download = dataUrl;
+        a.download = snippetsName
+          ? `${snippetsName.split(" ").join("_").toLowerCase()}.png`
+          : "snippng.png";
         a.click();
       })
       .catch((error) => {

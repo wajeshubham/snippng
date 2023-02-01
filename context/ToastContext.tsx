@@ -22,7 +22,7 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     if (toasts.length <= 0) return;
     const timer = setTimeout(() => {
       setToasts((toasts) => toasts.slice(1));
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(timer);

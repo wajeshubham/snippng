@@ -185,6 +185,8 @@ const UserProfile = () => {
                                                 .then(() => {
                                                   addToast({
                                                     message: "Link copied!",
+                                                    description:
+                                                      "You can share this link to anyone. So that, they can copy or fork this code snippet and can use it anywhere.",
                                                   });
                                                 });
                                             }}

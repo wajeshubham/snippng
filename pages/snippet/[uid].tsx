@@ -1,6 +1,5 @@
-import { ErrorText, Loader, SigninButton, SnippngCodeArea } from "@/components";
+import { ErrorText, Loader, SnippngCodeArea } from "@/components";
 import { db } from "@/config/firebase";
-import { useAuth } from "@/context/AuthContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import Layout from "@/layout/Layout";

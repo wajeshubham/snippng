@@ -1,4 +1,4 @@
-import { createRef, use, useState } from "react";
+import { createRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
@@ -17,12 +17,12 @@ import SnippngWindowControls from "./SnippngWindowControls";
 
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import {
   ArrowDownOnSquareStackIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { useToast } from "@/context/ToastContext";
 
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();

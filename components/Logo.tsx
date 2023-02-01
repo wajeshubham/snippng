@@ -2,6 +2,8 @@ import { clsx } from "@/utils";
 import { CommandLineIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
+const isBeta = true;
+
 const Logo: React.FC<{ size?: "xs" | "sm" | "xl" | "2xl" }> = ({
   size = "xl",
 }) => {
@@ -45,7 +47,14 @@ const Logo: React.FC<{ size?: "xs" | "sm" | "xl" | "2xl" }> = ({
       <CommandLineIcon
         className={clsx("inset-0 mr-2", getIconClassesBySize() || "")}
       />
-      <span className="">Snippng</span>
+      {isBeta ? (
+        <span className="inline-flex items-center">
+          Snippng
+          <span className="inline-flex items-center ml-1.5 rounded-sm dark:bg-indigo-600 bg-indigo-100 h-[15px] py-1.5 px-1 text-[10px] dark:text-indigo-100 text-indigo-600 border-[1px] border-indigo-600">
+            Beta
+          </span>
+        </span>
+      ) : null}
     </h1>
   );
 };

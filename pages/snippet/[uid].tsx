@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
 import { ErrorText, Loader, SigninButton, SnippngCodeArea } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
+import { useToast } from "@/context/ToastContext";
 import Layout from "@/layout/Layout";
+import { defaultEditorConfig } from "@/lib/constants";
 import { SnippngEditorConfigInterface } from "@/types";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { defaultEditorConfig } from "@/lib/constants";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 
 const SavedSnippet = () => {
   const router = useRouter();
@@ -19,6 +20,8 @@ const SavedSnippet = () => {
   const [loadingConfig, setLoadingConfig] = useState(true);
 
   const { uid } = router.query as { uid: string };
+
+  const { addToast } = useToast();
 
   const fetchCodeSnippet = async () => {
     if (!user || !db) {
@@ -50,6 +53,15 @@ const SavedSnippet = () => {
       setEditorConfig({ ...defaultEditorConfig });
     };
   }, [router.isReady, user]);
+
+  useEffect(() => {
+    if (!notFound) return;
+    addToast({
+      message: "404 Snippet not found",
+      description: "Snippet that you are looking for does not exist.",
+      type: "error",
+    });
+  }, [notFound]);
 
   if (notFound)
     return (

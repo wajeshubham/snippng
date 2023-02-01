@@ -22,6 +22,7 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { useToast } from "@/context/ToastContext";
 
 const SnippngCodeArea = () => {
   const editorRef = createRef<HTMLDivElement>();
@@ -30,6 +31,7 @@ const SnippngCodeArea = () => {
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const { user } = useAuth();
+  const { addToast } = useToast();
   const {
     code,
     snippetsName,
@@ -56,7 +58,16 @@ const SnippngCodeArea = () => {
     if (!user) return;
     setSaving(true);
     try {
-      await addDoc(collection(db, "user", user.uid, "snippets"), editorConfig);
+      const savedDoc = await addDoc(
+        collection(db, "user", user.uid, "snippets"),
+        editorConfig
+      );
+      if (savedDoc.id) {
+        addToast({
+          message: "Snippet saved successfully",
+          description: "You can view your saved snippets in your profile page",
+        });
+      }
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {
@@ -66,12 +77,15 @@ const SnippngCodeArea = () => {
 
   const updateSnippet = async () => {
     if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-
     if (!user || !uid) return;
     setUpdating(true);
     try {
       await updateDoc(doc(db, "user", user.uid, "snippets", uid), {
         ...editorConfig,
+      });
+      addToast({
+        message: "Snippet updated successfully",
+        description: "You can view your updated snippets in your profile page",
       });
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -180,9 +194,18 @@ const SnippngCodeArea = () => {
                   disabled={saving}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (!user) return alert("Please login first");
+                    if (!user)
+                      return addToast({
+                        message: "Please login first",
+                        type: "error",
+                        description:
+                          "You need to login before saving the snippet",
+                      });
                     if (!snippetsName)
-                      return alert("Please give snippet a name");
+                      return addToast({
+                        message: "Snippet name is required",
+                        type: "error",
+                      });
                     else saveSnippet();
                   }}
                 >
@@ -198,9 +221,18 @@ const SnippngCodeArea = () => {
                     disabled={updating}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!user) return alert("Please login first");
+                      if (!user)
+                        return addToast({
+                          message: "Please login first",
+                          type: "error",
+                          description:
+                            "You need to login before saving the snippet",
+                        });
                       if (!snippetsName)
-                        return alert("Please give snippet a name");
+                        return addToast({
+                          message: "Snippet name is required",
+                          type: "error",
+                        });
                       updateSnippet();
                     }}
                   >

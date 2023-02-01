@@ -11,8 +11,10 @@ import Logo from "./Logo";
 import NoSSRWrapper from "./NoSSRWrapper";
 import SigninButton from "./SigninButton";
 import ThemeToggle from "./ThemeToggle";
+import Toast from "./Toast";
 
 export {
+  Toast,
   ThemeToggle,
   SnippngCodeArea,
   NoSSRWrapper,

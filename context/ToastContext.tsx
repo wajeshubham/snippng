@@ -29,7 +29,6 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [toasts]);
 
-  console.log(toasts);
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}

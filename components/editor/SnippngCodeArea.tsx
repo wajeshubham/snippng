@@ -58,7 +58,16 @@ const SnippngCodeArea = () => {
     if (!user) return;
     setSaving(true);
     try {
-      await addDoc(collection(db, "user", user.uid, "snippets"), editorConfig);
+      const savedDoc = await addDoc(
+        collection(db, "user", user.uid, "snippets"),
+        editorConfig
+      );
+      if (savedDoc.id) {
+        addToast({
+          message: "Snippet saved successfully",
+          description: "You can view your saved snippets in your profile page",
+        });
+      }
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {
@@ -73,6 +82,10 @@ const SnippngCodeArea = () => {
     try {
       await updateDoc(doc(db, "user", user.uid, "snippets", uid), {
         ...editorConfig,
+      });
+      addToast({
+        message: "Snippet updated successfully",
+        description: "You can view your updated snippets in your profile page",
       });
     } catch (e) {
       console.error("Error adding document: ", e);

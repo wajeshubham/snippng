@@ -1,6 +1,7 @@
 import { Button, ErrorText, Loader, SigninButton } from "@/components";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import Layout from "@/layout/Layout";
 import { SnippngEditorConfigInterface } from "@/types";
 import {
@@ -23,6 +24,7 @@ const UserProfile = () => {
   const [deletingSnippet, setDeletingSnippet] = useState(false);
 
   const { user } = useAuth();
+  const { addToast } = useToast();
   const router = useRouter();
 
   const fetchCodeSnippets = async () => {
@@ -56,6 +58,9 @@ const UserProfile = () => {
       setSavedSnippets(
         savedSnippets.filter((snippet) => snippet.uid !== snippetId)
       );
+      addToast({
+        message: "Snippet deleted successfully",
+      });
     } catch (error) {
       console.log("Error fetching snippets", error);
     } finally {
@@ -152,11 +157,16 @@ const UserProfile = () => {
                                             className="!text-red-500"
                                             disabled={deletingSnippet}
                                             StartIcon={TrashIcon}
-                                            onClick={() =>
-                                              deleteCodeSnippet(
-                                                snippet.uid ?? ""
-                                              )
-                                            }
+                                            onClick={() => {
+                                              const confirm = window.confirm(
+                                                "Are you sure you want to delete this snippet?"
+                                              );
+                                              if (confirm) {
+                                                deleteCodeSnippet(
+                                                  snippet.uid ?? ""
+                                                );
+                                              }
+                                            }}
                                           >
                                             Delete
                                           </Button>

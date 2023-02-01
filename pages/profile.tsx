@@ -99,7 +99,7 @@ const UserProfile = () => {
                   <div className="flex-shrink-0">
                     <div className="relative">
                       <img
-                        className="h-16 w-16 rounded-full"
+                        className="h-16 w-16 rounded-full border-[1px] dark:border-white border-zinc-900"
                         src={user.photoURL || ""}
                         alt=""
                       />

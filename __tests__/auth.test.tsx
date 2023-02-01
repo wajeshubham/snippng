@@ -1,8 +1,5 @@
 import { AuthContext } from "@/context/AuthContext";
-import { SnippngEditorContext } from "@/context/SnippngEditorContext";
-import { defaultEditorConfig } from "@/lib/constants";
 import Home from "@/pages";
-import UserProfile from "@/pages/profile";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 

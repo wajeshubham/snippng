@@ -1,5 +1,6 @@
 import { Button, Logo, SigninButton, ThemeToggle } from "@/components";
 import { useAuth } from "@/context/AuthContext";
+import { clsx } from "@/utils";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,16 +28,33 @@ const Header = () => {
                 <img
                   src={user.photoURL || ""}
                   alt="profile_image"
-                  className="h-5 w-5 rounded-full object-cover inline-flex mr-2"
+                  className="md:w-5 h-6 md:h-5 w-6 rounded-full object-cover inline-flex md:mr-2 border-[1px] dark:border-white border-zinc-900"
                 />
-                {user.displayName || "Snippng user"}
+                <span className="md:block hidden">
+                  {user.displayName || "Snippng user"}
+                </span>
               </Button>
               <Button
                 data-testid="logout-btn"
-                StartIcon={ArrowLeftOnRectangleIcon}
-                onClick={logout}
+                StartIcon={(props) => (
+                  <ArrowLeftOnRectangleIcon
+                    {...props}
+                    className={clsx(
+                      "md:mr-2 md:!w-4 md:!h-4 !w-6 !h-6 mr-0",
+                      props.className ?? ""
+                    )}
+                  />
+                )}
+                onClick={() => {
+                  const confirm = window.confirm(
+                    "Are you sure you want to logout?"
+                  );
+                  if (confirm) {
+                    logout();
+                  }
+                }}
               >
-                Logout
+                <span className="md:block hidden">Logout</span>
               </Button>
             </>
           ) : (

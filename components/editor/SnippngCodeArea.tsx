@@ -21,6 +21,7 @@ import { useToast } from "@/context/ToastContext";
 import {
   ArrowDownOnSquareStackIcon,
   ArrowPathIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
@@ -238,6 +239,19 @@ const SnippngCodeArea = () => {
               </div>
             </div>
           </div>
+          {uid ? (
+            <small className="dark:text-zinc-300 text-left text-zinc-600 py-2 inline-block">
+              <InformationCircleIcon className="w-4 h-4 inline-block mr-1 mb-1" />{" "}
+              <strong>Note:</strong> clicking{" "}
+              <em>
+                <strong>Fork snippet</strong>
+              </em>{" "}
+              button will create a copy of the current snippet in your profile
+              with exact same configuration of{" "}
+              <strong>theme, language, code and other settings</strong> that are
+              visible to you right now
+            </small>
+          ) : null}
         </NoSSRWrapper>
       </section>
     </>

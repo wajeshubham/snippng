@@ -22,7 +22,7 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     if (toasts.length <= 0) return;
     const timer = setTimeout(() => {
       setToasts((toasts) => toasts.slice(1));
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(timer);
@@ -34,7 +34,7 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
       <div
         aria-live="assertive"
-        className="pointer-events-none z-50 fixed inset-0 flex flex-col gap-4 items-end px-4 py-6 sm:items-start sm:p-6"
+        className="pointer-events-none z-50 fixed right-0 bottom-0 w-full flex flex-col gap-4 items-end px-4 py-6 sm:items-start sm:p-6"
       >
         {toasts.map((toast, index) => {
           return (

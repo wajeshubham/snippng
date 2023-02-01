@@ -99,7 +99,7 @@ const UserProfile = () => {
                   <div className="flex-shrink-0">
                     <div className="relative">
                       <img
-                        className="h-16 w-16 rounded-full"
+                        className="h-16 w-16 rounded-full border-[1px] dark:border-white border-zinc-900"
                         src={user.photoURL || ""}
                         alt=""
                       />
@@ -185,6 +185,8 @@ const UserProfile = () => {
                                                 .then(() => {
                                                   addToast({
                                                     message: "Link copied!",
+                                                    description:
+                                                      "You can share this link to anyone. So that, they can copy or fork this code snippet and can use it anywhere.",
                                                   });
                                                 });
                                             }}

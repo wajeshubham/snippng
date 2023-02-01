@@ -12,7 +12,7 @@ const Header = () => {
     <header data-testid="header" className="w-full">
       <nav className="w-full h-20 flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex justify-start items-center w-1/2 flex-shrink-0">
-          <Link href={"/"}>
+          <Link className="inline-flex items-center" href={"/"}>
             <Logo />
           </Link>
         </div>

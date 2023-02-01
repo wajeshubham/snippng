@@ -1,4 +1,5 @@
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
+import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { getEditorWrapperBg } from "@/utils";
@@ -8,6 +9,7 @@ import {
   CloudArrowDownIcon,
   Cog6ToothIcon,
   CommandLineIcon,
+  DocumentDuplicateIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
@@ -21,8 +23,10 @@ const SnippngControlHeader = () => {
   const [downloadingSnippet, setDownloadingSnippet] = useState(false);
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
+  const { addToast } = useToast();
 
   const {
+    code,
     selectedLang,
     selectedTheme,
     showLineNumbers,
@@ -123,6 +127,18 @@ const SnippngControlHeader = () => {
           ></button>
         </ColorPicker>
       </div>
+      <Button
+        onClick={() => {
+          if (!navigator) return;
+          navigator.clipboard.writeText(code).then(() => {
+            addToast({
+              message: "Code snippet copied!",
+            });
+          });
+        }}
+      >
+        <DocumentDuplicateIcon className="h-5 w-5 dark:text-white text-zinc-900" />
+      </Button>
       <div className="ml-auto">
         <Menu as="div" className="relative inline-block text-left">
           <div>

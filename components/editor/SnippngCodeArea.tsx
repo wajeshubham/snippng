@@ -1,4 +1,4 @@
-import { createRef, useState } from "react";
+import { createRef, use, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
@@ -33,6 +33,7 @@ const SnippngCodeArea = () => {
   const { user } = useAuth();
   const { addToast } = useToast();
   const {
+    ownerUid,
     code,
     snippetsName,
     selectedLang,
@@ -58,10 +59,12 @@ const SnippngCodeArea = () => {
     if (!user) return;
     setSaving(true);
     try {
-      const savedDoc = await addDoc(
-        collection(db, "user", user.uid, "snippets"),
-        editorConfig
-      );
+      const dataToBeAdded = { ...structuredClone(editorConfig) }; // deep clone the editor config to avoid mutation
+      delete dataToBeAdded.uid; // delete existing uid if exists
+      const savedDoc = await addDoc(collection(db, "snippets"), {
+        ...dataToBeAdded,
+        ownerUid: user.uid,
+      });
       if (savedDoc.id) {
         addToast({
           message: "Snippet saved successfully",
@@ -80,7 +83,7 @@ const SnippngCodeArea = () => {
     if (!user || !uid) return;
     setUpdating(true);
     try {
-      await updateDoc(doc(db, "user", user.uid, "snippets", uid), {
+      await updateDoc(doc(db, "snippets", uid), {
         ...editorConfig,
       });
       addToast({
@@ -211,23 +214,16 @@ const SnippngCodeArea = () => {
                 >
                   {saving
                     ? "Saving..."
-                    : uid
-                    ? "Save separately"
+                    : uid // if there is a uid, we are on snippet details page where user can copy the snippet
+                    ? "Fork snippet"
                     : "Save snippet"}
                 </Button>
-                {uid ? (
+                {user && user.uid === ownerUid ? (
                   <Button
                     StartIcon={ArrowPathIcon}
                     disabled={updating}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!user)
-                        return addToast({
-                          message: "Please login first",
-                          type: "error",
-                          description:
-                            "You need to login before saving the snippet",
-                        });
                       if (!snippetsName)
                         return addToast({
                           message: "Snippet name is required",

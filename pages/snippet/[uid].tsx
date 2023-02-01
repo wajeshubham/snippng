@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 
 const SavedSnippet = () => {
   const router = useRouter();
-  const { user } = useAuth();
   const { setEditorConfig } = useSnippngEditor();
 
   const [notFound, setNotFound] = useState(false);
@@ -24,13 +23,12 @@ const SavedSnippet = () => {
   const { addToast } = useToast();
 
   const fetchCodeSnippet = async () => {
-    if (!user || !db) {
+    if (!db) {
       setLoadingConfig(false);
-      if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-      return;
+      return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
     }
     try {
-      const docRef = await getDoc(doc(db, "user", user.uid, "snippets", uid));
+      const docRef = await getDoc(doc(db, "snippets", uid));
       if (docRef.exists()) {
         setEditorConfig({
           ...docRef.data(),
@@ -47,12 +45,12 @@ const SavedSnippet = () => {
   };
 
   useEffect(() => {
-    if (!router.isReady || !user) return;
+    if (!router.isReady) return;
     fetchCodeSnippet();
     return () => {
       setEditorConfig({ ...defaultEditorConfig });
     };
-  }, [router.isReady, user]);
+  }, [router.isReady]);
 
   useEffect(() => {
     if (!notFound) return;
@@ -80,19 +78,7 @@ const SavedSnippet = () => {
       </Layout>
     );
 
-  return (
-    <Layout>
-      {!user ? (
-        <div className="w-full h-full flex justify-center items-center py-32">
-          <SigninButton />
-        </div>
-      ) : loadingConfig ? (
-        <Loader />
-      ) : (
-        <SnippngCodeArea />
-      )}
-    </Layout>
-  );
+  return <Layout>{loadingConfig ? <Loader /> : <SnippngCodeArea />}</Layout>;
 };
 
 export default SavedSnippet;

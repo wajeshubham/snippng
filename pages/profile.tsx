@@ -7,11 +7,19 @@ import { SnippngEditorConfigInterface } from "@/types";
 import {
   CommandLineIcon,
   FolderOpenIcon,
+  LinkIcon,
   PlusCircleIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { collection, deleteDoc, doc, getDocs, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -33,7 +41,7 @@ const UserProfile = () => {
     try {
       const snippets: SnippngEditorConfigInterface[] = [];
       const docRef = await getDocs(
-        query(collection(db, "user", user.uid, "snippets"))
+        query(collection(db, "snippets"), where("ownerUid", "==", user.uid))
       );
       docRef.forEach((doc) => {
         snippets.push({
@@ -54,7 +62,7 @@ const UserProfile = () => {
     if (!user || !snippetId) return;
     setDeletingSnippet(true);
     try {
-      await deleteDoc(doc(db, "user", user.uid, "snippets", snippetId));
+      await deleteDoc(doc(db, "snippets", snippetId));
       setSavedSnippets(
         savedSnippets.filter((snippet) => snippet.uid !== snippetId)
       );
@@ -141,20 +149,50 @@ const UserProfile = () => {
                                     {savedSnippets.map((snippet) => (
                                       <li
                                         key={snippet.uid}
-                                        className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                                        className="flex items-center md:justify-between md:flex-row flex-col py-3 pl-3 pr-4 text-sm"
                                       >
-                                        <div className="flex w-0 flex-1 items-center dark:text-white text-zinc-900">
+                                        <div className="flex flex-shrink-0 flex-1 text-left md:w-fit w-full md:py-0 py-4 items-center dark:text-white text-zinc-900">
                                           <CommandLineIcon
                                             className="h-5 w-5 flex-shrink-0x"
                                             aria-hidden="true"
                                           />
-                                          <span className="ml-2 w-0 flex-1 truncate">
+                                          <span className="ml-2 flex-1 truncate">
                                             {snippet.snippetsName}
                                           </span>
                                         </div>
-                                        <div className="ml-4 flex-shrink-0 gap-3 inline-flex items-center">
+                                        <div className="md:w-fit w-full md:flex-row flex-col flex-shrink-0 gap-3 inline-flex items-center">
                                           <Button
-                                            className="!text-red-500"
+                                            className="md:w-[unset] w-full"
+                                            StartIcon={FolderOpenIcon}
+                                            onClick={() => {
+                                              router.push(
+                                                `/snippet/${snippet.uid}`
+                                              );
+                                            }}
+                                          >
+                                            Open
+                                          </Button>
+
+                                          <Button
+                                            className="md:w-[unset] w-full"
+                                            StartIcon={LinkIcon}
+                                            onClick={() => {
+                                              if (!navigator) return;
+                                              navigator.clipboard
+                                                .writeText(
+                                                  `${window.location.host}/snippet/${snippet.uid}`
+                                                )
+                                                .then(() => {
+                                                  addToast({
+                                                    message: "Link copied!",
+                                                  });
+                                                });
+                                            }}
+                                          >
+                                            Copy link
+                                          </Button>
+                                          <Button
+                                            className="!text-red-500 md:w-[unset] w-full"
                                             disabled={deletingSnippet}
                                             StartIcon={TrashIcon}
                                             onClick={() => {
@@ -169,16 +207,6 @@ const UserProfile = () => {
                                             }}
                                           >
                                             Delete
-                                          </Button>
-                                          <Button
-                                            EndIcon={FolderOpenIcon}
-                                            onClick={() => {
-                                              router.push(
-                                                `/snippet/${snippet.uid}`
-                                              );
-                                            }}
-                                          >
-                                            Open
                                           </Button>
                                         </div>
                                       </li>

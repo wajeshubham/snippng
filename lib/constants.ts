@@ -438,6 +438,12 @@ export const LANGUAGES = [
   },
 ];
 
+export const DOWNLOAD_OPTIONS = [
+  { label: "PNG", id: "png" },
+  { label: "JPEG", id: "jpeg" },
+  { label: "SVG", id: "svg" },
+];
+
 export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
   let timeout: NodeJS.Timeout | null = null;
 

@@ -106,7 +106,7 @@ const SnippngCodeArea = () => {
         data-testid="snippng-code-area"
       >
         <NoSSRWrapper>
-          <div className="rounded-md bg-white dark:bg-zinc-900 p-8 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
+          <div className="rounded-md bg-white dark:bg-zinc-900 md:p-8 p-4 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
             <div className="w-full">
               <SnippngControlHeader />
             </div>

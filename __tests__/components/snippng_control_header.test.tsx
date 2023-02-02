@@ -28,7 +28,6 @@ describe("SnippngControlHeader", () => {
       render(<SnippngControlHeader />);
     });
     await waitFor(() => {
-      screen.getByTestId("download-cta");
       screen.getByTestId("wrapper-color-picker");
       screen.getByTestId("settings-cta");
     });

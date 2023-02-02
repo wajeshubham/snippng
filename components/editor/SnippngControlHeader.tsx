@@ -1,7 +1,8 @@
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
-import { LANGUAGES, THEMES } from "@/lib/constants";
+import { DOWNLOAD_OPTIONS, LANGUAGES, THEMES } from "@/lib/constants";
+import { SelectOptionInterface } from "@/types";
 import { getEditorWrapperBg } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
@@ -20,8 +21,6 @@ import Range from "../form/Range";
 import Select from "../form/Select";
 
 const SnippngControlHeader = () => {
-  const [downloadingSnippet, setDownloadingSnippet] = useState(false);
-
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const { addToast } = useToast();
 
@@ -44,39 +43,48 @@ const SnippngControlHeader = () => {
     snippetsName,
   } = editorConfig;
 
-  const downloadImage = () => {
+  const downloadImage = (type: SelectOptionInterface) => {
     var node = document.getElementById("code-wrapper");
     if (!node) return;
-    setDownloadingSnippet(true);
-    htmlToImage
-      .toPng(node)
+    (() => {
+      switch (type.id) {
+        case "png":
+          return htmlToImage.toPng(node);
+        case "jpeg":
+          return htmlToImage.toJpeg(node);
+        case "svg":
+          return htmlToImage.toSvg(node);
+        default:
+          return htmlToImage.toPng(node);
+      }
+    })()
       .then((dataUrl) => {
         const a = document.createElement("a");
         a.href = dataUrl;
         a.download = snippetsName
-          ? `${snippetsName.split(" ").join("_").toLowerCase()}.png`
-          : "snippng.png";
+          ? `${snippetsName.split(" ").join("_").toLowerCase()}.${
+              type.id || "png"
+            }`
+          : "snippng." + (type.id || "png");
         a.click();
       })
       .catch((error) => {
         console.error("oops, something went wrong!", error);
-      })
-      .finally(() => {
-        setDownloadingSnippet(false);
+        addToast({
+          message: "Error while downloading the image",
+          type: "error",
+        });
       });
   };
 
   return (
     <div className="mb-4 flex flex-wrap w-full justify-start items-center gap-2">
-      <Button
-        className="md:w-fit w-full"
-        data-testid="download-cta"
-        disabled={downloadingSnippet}
-        StartIcon={CloudArrowDownIcon}
-        onClick={downloadImage}
-      >
-        {downloadingSnippet ? "Downloading..." : "Download"}
-      </Button>
+      <Select
+        Icon={CloudArrowDownIcon}
+        value={{ label: "Download", id: "download" }}
+        onChange={downloadImage}
+        options={[...DOWNLOAD_OPTIONS]}
+      />
 
       <Select
         Icon={SparklesIcon}
@@ -98,7 +106,7 @@ const SnippngControlHeader = () => {
       />
       <div
         data-testid="wrapper-color-picker"
-        className="relative md:w-fit w-full"
+        className="relative lg:w-fit w-full flex lg:justify-start justify-end items-center gap-2"
       >
         <ColorPicker
           color={wrapperBg}
@@ -126,19 +134,20 @@ const SnippngControlHeader = () => {
             }}
           ></button>
         </ColorPicker>
-      </div>
-      <Button
-        onClick={() => {
-          if (!navigator) return;
-          navigator.clipboard.writeText(code).then(() => {
-            addToast({
-              message: "Code snippet copied!",
+        <Button
+          onClick={() => {
+            if (!navigator) return;
+            navigator.clipboard.writeText(code).then(() => {
+              addToast({
+                message: "Code snippet copied!",
+              });
             });
-          });
-        }}
-      >
-        <DocumentDuplicateIcon className="h-5 w-5 dark:text-white text-zinc-900" />
-      </Button>
+          }}
+        >
+          <DocumentDuplicateIcon className="h-5 w-5 dark:text-white text-zinc-900" />
+        </Button>
+      </div>
+
       <div className="ml-auto">
         <Menu as="div" className="relative inline-block text-left">
           <div>

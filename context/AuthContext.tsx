@@ -9,6 +9,8 @@ import {
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useToast } from "./ToastContext";
+import Layout from "@/layout/Layout";
+import { Loader } from "@/components";
 
 const GithubProvider = new GithubAuthProvider();
 const GoogleProvider = new GoogleAuthProvider();
@@ -40,6 +42,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { addToast } = useToast();
+  const [signingIn, setSigningIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   /**
@@ -66,6 +69,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const loginWithGoogle = async () => {
     if (!auth) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+    setSigningIn(true);
     try {
       await signInWithPopup(auth, GoogleProvider);
       addToast({
@@ -74,6 +78,12 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     } catch (error) {
       console.log("Error while logging in", error);
+      addToast({
+        message: "Error occurred while signing in!",
+        type: "error",
+      });
+    } finally {
+      setSigningIn(false);
     }
   };
 
@@ -100,7 +110,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     <AuthContext.Provider
       value={{ user, loginWithGithub, loginWithGoogle, logout }}
     >
-      {children}
+      {signingIn ? (
+        <Layout>
+          <Loader />
+        </Layout>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

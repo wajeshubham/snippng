@@ -55,7 +55,7 @@ const SavedSnippet = () => {
     if (!notFound) return;
     addToast({
       message: "404 Snippet not found",
-      description: "Snippet that you are looking for does not exist.",
+      description: "The snippet you are looking for does not exist.",
       type: "error",
     });
   }, [notFound]);
@@ -66,7 +66,7 @@ const SavedSnippet = () => {
         <div className="w-full py-32">
           <ErrorText
             errorTitle="Invalid snippet ID"
-            errorSubTitle="The snippet that you are looking for does not exist"
+            errorSubTitle="The snippet you are looking for does not exist."
             errorActionProps={{
               children: "Go Back",
               StartIcon: ArrowLeftIcon,

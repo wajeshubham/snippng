@@ -11,8 +11,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Layout: React.FC<Props> = ({
-  title = "Snippng | snippets to png",
-  description = "Create and share beautiful images of your source code.",
+  title = "Snippng | code snippets to image",
+  description = "Write, customize and download gorgeous images of your code snippet.",
   className,
   ...props
 }) => {

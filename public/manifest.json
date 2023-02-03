@@ -21,8 +21,8 @@
   ],
   "theme_color": "#121212",
   "background_color": "#121212",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "https://snippng-git-pwa-wajeshubham.vercel.app/",
+  "start_url": "https://snippng-git-pwa-wajeshubham.vercel.app/",
   "display": "standalone",
   "orientation": "portrait"
 }

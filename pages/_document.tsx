@@ -64,8 +64,19 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <meta
+          property="og:image"
+          content="https://wajeshubham-portfolio.s3.ap-south-1.amazonaws.com/snippng-cover.png"
+        />
         <meta property="og:url" content="https://snippng.wajeshubham.in/" />
         <meta property="og:type" content="website" />
+
+        <meta
+          name="twitter:image"
+          content="https://wajeshubham-portfolio.s3.ap-south-1.amazonaws.com/snippng-cover.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://snippng.wajeshubham.in" />
         <link
           rel="icon"
           id="dark-scheme-icon"
@@ -78,6 +89,27 @@ export default function Document() {
           href="/logo.svg"
           type="image/svg+xml"
         />
+        <meta name="application-name" content="Snippng" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Snippng" />
+        <meta
+          name="description"
+          content="Create and share beautiful images of your source code."
+        />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="theme-color" content="#000000" />
+
+        <link rel="apple-touch-icon" href="/logo-512x512.svg" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/logo-196x196.png" />
+        <link rel="apple-touch-icon" sizes="256x256" href="/logo-256x256.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/logo-512x512.png" />
+
+        <link rel="manifest" href="/manifest.json" />
+
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
         <script dangerouslySetInnerHTML={{ __html: faviconScript }} />
         {/* TODO: Configure adsense */}

@@ -1,0 +1,28 @@
+{
+  "name": "Snippng",
+  "short_name": "Snippng",
+  "description": "Create and share beautiful images of your source code.",
+  "icons": [
+    {
+      "src": "/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#121212",
+  "background_color": "#121212",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

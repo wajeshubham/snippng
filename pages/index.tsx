@@ -3,8 +3,12 @@ import GithubIcon from "@/components/icons/GithubIcon";
 import Layout from "@/layout/Layout";
 import { LANGUAGES, THEMES } from "@/lib/constants";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+
   const focusOnGenerate = () => {
     let codeArea = document.getElementById("snippng-code-area");
     if (codeArea) {
@@ -13,6 +17,21 @@ export default function Home() {
       });
     }
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    let timer: NodeJS.Timeout;
+    let goToEditor = router.asPath.split("#").includes("snippng-code-area");
+    if (goToEditor) {
+      timer = setTimeout(() => {
+        focusOnGenerate();
+      }, 200);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [router.isReady]);
+
   return (
     <Layout>
       <div data-testid="landing-container" className="bg-transparent">
@@ -43,7 +62,7 @@ export default function Home() {
           </svg>
         </div>
         <div className="relative isolate overflow-hidden">
-          <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:py-20">
+          <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:py-12">
             <div className="lg:pt-4">
               <div className="mx-auto max-w-2xl">
                 <div className="max-w-lg">
@@ -81,9 +100,10 @@ export default function Home() {
                     Snippng
                   </h1>
                   <p className="mt-6 md:text-lg text-sm dark:text-zinc-300 text-zinc-600">
-                    Create and share beautiful images of your source code. Start
-                    typing or paste a code snippet into the text area to get
-                    started.
+                    Write, customize and download gorgeous images of your code
+                    snippet. Beautifully designed application that helps you
+                    generate beautiful and customizable images of your code
+                    snippets.
                   </p>
                   <div className="mt-10 flex md:flex-row flex-col md:items-center items-start gap-6 ml-1">
                     <Button

@@ -14,7 +14,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
 import Range from "../form/Range";

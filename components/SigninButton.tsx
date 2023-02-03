@@ -10,7 +10,7 @@ const SigninButton = () => {
     <>
       <Button data-testid="signin-btn" onClick={loginWithGoogle}>
         <GoogleIcon className="inline-flex mr-2" />
-        Signin
+        Sign in/up
       </Button>
     </>
   );

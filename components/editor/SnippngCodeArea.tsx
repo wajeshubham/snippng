@@ -242,14 +242,14 @@ const SnippngCodeArea = () => {
           {uid ? (
             <small className="dark:text-zinc-300 text-left text-zinc-600 py-2 inline-block">
               <InformationCircleIcon className="w-4 h-4 inline-block mr-1 mb-1" />{" "}
-              <strong>Note:</strong> clicking{" "}
-              <em>
-                <strong>Fork snippet</strong>
-              </em>{" "}
-              button will create a copy of the current snippet in your profile
-              with exact same configuration of{" "}
-              <strong>theme, language, code and other settings</strong> that are
-              visible to you right now
+              <strong>Note:</strong> When you click the{" "}
+              <strong>
+                <em>Fork snippet</em>
+              </strong>{" "}
+              button, a copy of the current snippet will be created in your
+              profile <strong>with the same settings</strong>. As a result, if
+              you change something and then forked, the snippet will include the
+              changes you made.
             </small>
           ) : null}
         </NoSSRWrapper>

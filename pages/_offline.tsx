@@ -2,7 +2,6 @@ import { ErrorText } from "@/components";
 import Layout from "@/layout/Layout";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import React from "react";
 
 const OfflinePage = () => {
   const router = useRouter();

@@ -81,7 +81,9 @@ const UserProfile = () => {
   }, [user]);
 
   return (
-    <Layout>
+    <Layout
+      title={`${user?.displayName || "Snippng"} | code snippets to image`}
+    >
       {!user ? (
         <div
           data-testid="signin-btn-container"
@@ -121,7 +123,7 @@ const UserProfile = () => {
                 <div className="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
                   <Button
                     StartIcon={PlusCircleIcon}
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push("/#snippng-code-area")}
                   >
                     Generate snippet
                   </Button>
@@ -226,7 +228,8 @@ const UserProfile = () => {
                                     errorActionProps={{
                                       children: "Generate",
                                       StartIcon: PlusIcon,
-                                      onClick: () => router.push("/"),
+                                      onClick: () =>
+                                        router.push("/#snippng-code-area"),
                                     }}
                                   />
                                 )

@@ -1,10 +1,11 @@
+import { BugAntIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
   return (
     <footer className="w-full bg-transparent">
-      <div className="w-full h-16 gap-4 text-xs dark:text-zinc-400 text-zinc-600 flex justify-center items-center max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="w-full py-10 gap-5 text-xs dark:text-zinc-400 text-zinc-600 flex justify-center items-center flex-wrap max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         <Link
           className="hover:underline hover:dark:text-white hover:text-zinc-900"
           href="https://www.github.com/wajeshubham"
@@ -35,6 +36,18 @@ const Footer = () => {
         >
           Blogs
         </Link>
+        <Link
+          className="inline-flex hover:underline hover:dark:text-white hover:text-zinc-900"
+          href="https://github.com/wajeshubham/snippng/issues/new"
+        >
+          <BugAntIcon className="w-4 h-4 mr-1" /> Report a bug
+        </Link>
+        <Link
+          className="inline-flex hover:underline hover:dark:text-white hover:text-zinc-900"
+          href="https://github.com/wajeshubham/snippng/issues/new"
+        >
+          <RocketLaunchIcon className="w-4 h-4 mr-1" /> Request a feature
+        </Link>{" "}
       </div>
     </footer>
   );

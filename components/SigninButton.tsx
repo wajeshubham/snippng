@@ -1,16 +1,18 @@
 import { useAuth } from "@/context/AuthContext";
 import React from "react";
 import Button from "./form/Button";
-import GithubIcon from "./icons/GithubIcon";
+import GoogleIcon from "./icons/GoogleIcon";
 
 const SigninButton = () => {
-  const { loginWithGithub } = useAuth();
+  const { loginWithGoogle } = useAuth();
 
   return (
-    <Button data-testid="signin-btn" onClick={loginWithGithub}>
-      <GithubIcon className="inline-flex mr-1" />
-      Signin
-    </Button>
+    <>
+      <Button data-testid="signin-btn" onClick={loginWithGoogle}>
+        <GoogleIcon className="inline-flex mr-2" />
+        Signin
+      </Button>
+    </>
   );
 };
 

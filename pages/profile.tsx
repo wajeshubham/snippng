@@ -177,9 +177,14 @@ const UserProfile = () => {
                                             className="md:w-[unset] w-full"
                                             StartIcon={LinkIcon}
                                             onClick={() => {
-                                              if (!navigator) return;
+                                              if (!navigator?.clipboard)
+                                                return addToast({
+                                                  message:
+                                                    "navigator unavailable",
+                                                  type: "error",
+                                                });
                                               navigator.clipboard
-                                                .writeText(
+                                                ?.writeText(
                                                   `${window.location.host}/snippet/${snippet.uid}`
                                                 )
                                                 .then(() => {

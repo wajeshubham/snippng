@@ -136,8 +136,12 @@ const SnippngControlHeader = () => {
         </ColorPicker>
         <Button
           onClick={() => {
-            if (!navigator) return;
-            navigator.clipboard.writeText(code).then(() => {
+            if (!navigator?.clipboard)
+              return addToast({
+                message: "navigator unavailable",
+                type: "error",
+              });
+            navigator.clipboard?.writeText(code).then(() => {
               addToast({
                 message: "Code snippet copied!",
               });

@@ -12,7 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const Layout: React.FC<Props> = ({
   title = "Snippng | snippets to png",
-  description = " Create and share beautiful images of your source code.",
+  description = "Create and share beautiful images of your source code.",
   className,
   ...props
 }) => {
@@ -24,19 +24,8 @@ const Layout: React.FC<Props> = ({
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
 
-        <meta
-          property="og:image"
-          content="https://wajeshubham-portfolio.s3.ap-south-1.amazonaws.com/snippng-cover.png"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://snippng.wajeshubham.in" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta
-          name="twitter:image"
-          content="https://wajeshubham-portfolio.s3.ap-south-1.amazonaws.com/snippng-cover.png"
-        />
       </Head>
       <Header />
       <div

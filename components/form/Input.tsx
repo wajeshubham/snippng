@@ -8,7 +8,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<Props> = ({ label, containerClassName, ...props }) => {
   return (
-    <div className="flex flex-col">
+    <div className={clsx("flex flex-col", containerClassName || "")}>
       {label ? (
         <label
           className="text-sm my-0.5 dark:text-white text-zinc-900"

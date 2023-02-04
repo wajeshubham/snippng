@@ -458,6 +458,44 @@ export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args
   return debounced as (...args: Parameters<F>) => ReturnType<F>;
 };`;
 
+export const PEXELS_QUERY_STRINGS = [
+  "background",
+  "gradient",
+  "landscape",
+  "sky",
+  "night-sky",
+  "galaxy",
+  "coding",
+  "abstract",
+  "texture",
+  "beautiful-zoom-backgrounds",
+  "colors",
+  "rainbow",
+  "programming",
+  "gray",
+  "teal",
+  "blue",
+  "red",
+  "fruits",
+  "orange",
+  "shine",
+  "stars",
+  "green",
+  "food",
+  "coffee",
+  "ice",
+  "ocean",
+  "plane",
+  "seascapes",
+  "art",
+  "creative",
+  "summer",
+  "tea",
+  "water",
+  "juice",
+  "ice-cream",
+];
+
 export const defaultEditorConfig: SnippngEditorConfigInterface = {
   code: DEFAULT_CODE_SNIPPET,
   snippetsName: "",
@@ -479,6 +517,8 @@ export const defaultEditorConfig: SnippngEditorConfigInterface = {
   gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
   gradientAngle: 140,
   editorWidth: 0,
+  bgImageVisiblePatch: null,
+  bgBlur: 0,
 };
 
 export const DEFAULT_BASE_SETUP = {

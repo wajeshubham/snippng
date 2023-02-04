@@ -8,7 +8,7 @@ import ReactCrop, {
   PixelCrop,
 } from "react-image-crop";
 
-import { Button, Input, Range } from "@/components";
+import { Button, Input } from "@/components";
 import { useToast } from "@/context/ToastContext";
 import {
   CursorArrowRaysIcon,
@@ -175,6 +175,7 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
 
   useEffect(() => {
     getBase64FromCanvas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completedCrop]);
 
   return (
@@ -192,25 +193,6 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute md:w-96 w-72 p-3 right-0 z-30 top-full mt-2 origin-top-right dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
-            <div className="flex md:flex-row flex-col justify-start items-end w-full gap-2 mb-3">
-              <Input
-                label="Image url"
-                className="w-full"
-                containerClassName="w-full"
-                placeholder="Enter image url..."
-                value={imageLink}
-                onChange={(e) => {
-                  setImageLink(e.target.value);
-                }}
-              />
-              <Button
-                disabled={fetchingImage}
-                className="mb-[1px]"
-                onClick={() => getBase64FromUrl()}
-              >
-                Upload
-              </Button>
-            </div>
             <label
               role={"button"}
               className="w-full inline-flex items-center text-center dark:border-zinc-400 border-zinc-400 rounded-sm px-2 py-1 border-[1px] text-zinc-900 dark:text-white"
@@ -230,8 +212,27 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
               onClick={fetchImageFromPexels}
               className="w-full disabled:opacity-40 mt-3 inline-flex items-center text-center dark:border-zinc-400 border-zinc-400 rounded-sm px-2 py-1 border-[1px] text-zinc-900 dark:text-white"
             >
-              <PhotoIcon className="h-4 w-4 mr-2" /> Random img (pexels)
+              <PhotoIcon className="h-4 w-4 mr-2" /> Random image (pexels)
             </button>
+            <div className="flex flex-col justify-start items-end w-full gap-2 mt-3">
+              <Input
+                label="Image url"
+                className="w-full"
+                containerClassName="w-full"
+                placeholder="Enter image url from unsplash/pexels"
+                value={imageLink}
+                onChange={(e) => {
+                  setImageLink(e.target.value);
+                }}
+              />
+              <Button
+                disabled={fetchingImage}
+                className="mb-[1px]"
+                onClick={() => getBase64FromUrl()}
+              >
+                Upload
+              </Button>
+            </div>
             {!!src && (
               <div className="w-full flex flex-col justify-start items-end">
                 <button onClick={resetImageSelection}>

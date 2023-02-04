@@ -1,11 +1,36 @@
+import { analytics } from "@/config/firebase";
 import { AuthProvider } from "@/context/AuthContext";
 import { SnippngContextProvider } from "@/context/SnippngEditorContext";
 import { ToastProvider } from "@/context/ToastContext";
 import "@/styles/globals.css";
+import { logEvent } from "firebase/analytics";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (analytics && process.env.NODE_ENV === "production") {
+      const _logEvent = (path: string) => {
+        if (!analytics) return;
+        logEvent(analytics, "page_view", {
+          screen_name: path,
+        });
+      };
+      router.events.on("routeChangeComplete", (path) => {
+        _logEvent(path);
+      });
+
+      _logEvent(window.location.pathname);
+      return () => {
+        router.events.off("routeChangeComplete", _logEvent);
+      };
+    }
+  }, [router.events]);
+
   return (
     <>
       <Head>

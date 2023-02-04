@@ -1,9 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { Auth, getAuth } from "firebase/auth";
+import { Analytics, getAnalytics } from "firebase/analytics";
 
 let auth: Auth | undefined;
 let db: Firestore | undefined;
+let analytics: Analytics | undefined;
 
 try {
   const firebaseConfig = {
@@ -20,6 +22,7 @@ try {
 
   auth = getAuth(app);
   db = getFirestore(app);
+  if (typeof window !== "undefined") analytics = getAnalytics(app);
 } catch (error) {
   console.log(
     Error(
@@ -28,4 +31,4 @@ try {
   );
 }
 
-export { auth, db };
+export { auth, db, analytics };

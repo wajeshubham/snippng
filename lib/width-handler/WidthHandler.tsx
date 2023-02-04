@@ -6,14 +6,18 @@ interface Props {
   onChange: (width: number) => void;
 }
 
-const edgeCase = (value: number, min: number, max: number) => {
+const edgeCase = (
+  value: number,
+  min: number,
+  max: number
+): [number, boolean] => {
   if (value < min) {
-    return min;
+    return [min, false];
   }
   if (value > max) {
-    return max;
+    return [max, false];
   }
-  return value;
+  return [value, true];
 };
 
 const WidthHandler: React.FC<Props> = ({ innerRef, onChange }) => {
@@ -27,8 +31,10 @@ const WidthHandler: React.FC<Props> = ({ innerRef, onChange }) => {
       if (!startX.current || !startWidth.current) return;
       const delta = e.pageX - startX.current; // leftOrRight === 'left' ? startX - e.pageX : (startX - e.pageX) * -1
       const calculated = startWidth.current + delta * window.devicePixelRatio;
-      const newWidth = edgeCase(calculated, minWidth, maxWidth);
-      onChange(newWidth);
+      const [newWidth, isChanging] = edgeCase(calculated, minWidth, maxWidth);
+      if (isChanging) {
+        onChange(newWidth);
+      }
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);

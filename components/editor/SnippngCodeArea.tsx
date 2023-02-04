@@ -1,4 +1,4 @@
-import { createRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
@@ -26,7 +26,7 @@ import {
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
 const SnippngCodeArea = () => {
-  const editorRef = createRef<HTMLDivElement>();
+  const editorRef = useRef<HTMLDivElement>(null); // useRef to persist existing ref. Might be useful when dealing with background image in future
   const [saving, setSaving] = useState(false);
   const [updating, setUpdating] = useState(false);
 

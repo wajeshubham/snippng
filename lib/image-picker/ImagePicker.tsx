@@ -8,7 +8,7 @@ import ReactCrop, {
   PixelCrop,
 } from "react-image-crop";
 
-import { Button, Input } from "@/components";
+import { Button, Input, Range } from "@/components";
 import { useToast } from "@/context/ToastContext";
 import {
   CursorArrowRaysIcon,
@@ -35,6 +35,8 @@ const centerAspectCrop = (
       {
         unit: "%",
         width: 100,
+        x: 0,
+        y: 0,
       },
       aspect,
       mediaWidth,
@@ -140,6 +142,7 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
 
   const fetchImageFromPexels = async () => {
     try {
+      setFetchingImage(true);
       const headers = new Headers();
       headers.append(
         "Authorization",
@@ -158,10 +161,15 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
       );
       const pictures = await res.json();
       if (pictures?.photos.length) {
-        getBase64FromUrl(pictures?.photos[0]?.src?.medium);
+        await getBase64FromUrl(
+          pictures?.photos[0]?.src?.medium +
+            "?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        );
       }
     } catch (error) {
       console.log("Error while fetching images from pexels ", error);
+    } finally {
+      setFetchingImage(false);
     }
   };
 
@@ -218,16 +226,18 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
               onChange={onSelectFile}
             />
             <button
+              disabled={fetchingImage}
               onClick={fetchImageFromPexels}
-              className="w-full mt-3 inline-flex items-center text-center dark:border-zinc-400 border-zinc-400 rounded-sm px-2 py-1 border-[1px] text-zinc-900 dark:text-white"
+              className="w-full disabled:opacity-40 mt-3 inline-flex items-center text-center dark:border-zinc-400 border-zinc-400 rounded-sm px-2 py-1 border-[1px] text-zinc-900 dark:text-white"
             >
-              <PhotoIcon className="h-4 w-4 mr-2" /> From pexels
+              <PhotoIcon className="h-4 w-4 mr-2" /> Random img (pexels)
             </button>
             {!!src && (
               <div className="w-full flex flex-col justify-start items-end">
                 <button onClick={resetImageSelection}>
-                  <XCircleIcon className="h-6 w-6 my-2 dark:text-white text-zinc-900" />
+                  <XCircleIcon className="h-6 my-2 w-6 dark:text-white text-zinc-900" />
                 </button>
+
                 <ReactCrop
                   crop={crop}
                   onChange={(_, percentCrop) => setCrop(percentCrop)}

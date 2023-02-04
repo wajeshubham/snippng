@@ -1,7 +1,12 @@
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
-import { DOWNLOAD_OPTIONS, LANGUAGES, THEMES } from "@/lib/constants";
+import {
+  defaultEditorConfig,
+  DOWNLOAD_OPTIONS,
+  LANGUAGES,
+  THEMES,
+} from "@/lib/constants";
 import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
 import { getEditorWrapperBg } from "@/utils";
@@ -45,6 +50,8 @@ const SnippngControlHeader: React.FC<{
     gradients,
     gradientAngle,
     snippetsName,
+    bgBlur = 0,
+    bgImageVisiblePatch,
   } = editorConfig;
 
   const downloadImage = (type: SelectOptionInterface) => {
@@ -235,6 +242,51 @@ const SnippngControlHeader: React.FC<{
                   checked={showFileName}
                   onChange={() => {
                     handleConfigChange("showFileName")(!showFileName);
+                  }}
+                />
+              </div>
+              <div className="py-1 px-2">
+                <Checkbox
+                  label="Remove background"
+                  id="remove-bg"
+                  data-testid="remove-bg"
+                  checked={
+                    wrapperBg === "transparent" &&
+                    !gradients.length &&
+                    !bgBlur &&
+                    !bgImageVisiblePatch
+                  }
+                  onChange={(e) => {
+                    if (!e.target.checked) {
+                      handleConfigChange("bgImageVisiblePatch")(
+                        defaultEditorConfig.bgImageVisiblePatch
+                      );
+                      handleConfigChange("bgBlur")(defaultEditorConfig.bgBlur);
+                      handleConfigChange("gradients")(
+                        defaultEditorConfig.gradients
+                      );
+                      handleConfigChange("wrapperBg")(
+                        defaultEditorConfig.wrapperBg
+                      );
+                    } else {
+                      handleConfigChange("bgImageVisiblePatch")(null);
+                      handleConfigChange("bgBlur")(0);
+                      handleConfigChange("gradients")([]);
+                      handleConfigChange("wrapperBg")("transparent");
+                    }
+                  }}
+                />
+              </div>
+              <div className="py-1 px-2 z-30">
+                <Range
+                  label={`Bg blur (${bgBlur}px)`}
+                  value={bgBlur}
+                  max={20}
+                  min={0}
+                  rangeMax="20"
+                  rangeMin="0"
+                  onChange={(e) => {
+                    handleConfigChange("bgBlur")(+e.target.value);
                   }}
                 />
               </div>

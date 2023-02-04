@@ -28,6 +28,7 @@ export interface SnippngEditorConfigInterface {
   snippetsName: string;
   wrapperBg: string;
   bgImageVisiblePatch: string | null;
+  bgBlur: number;
 }
 
 export interface SnippngEditorContextInterface {

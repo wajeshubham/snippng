@@ -55,6 +55,7 @@ const SnippngCodeArea = () => {
     editorWidth,
     uid,
     bgImageVisiblePatch,
+    bgBlur,
   } = editorConfig;
 
   const saveSnippet = async () => {
@@ -100,19 +101,6 @@ const SnippngCodeArea = () => {
     }
   };
 
-  const getEditorBackground = () => {
-    if (bgImageVisiblePatch) {
-      return {
-        backgroundImage: `url(${bgImageVisiblePatch})`,
-        backgroundSize: "cover",
-      };
-    } else {
-      return {
-        background: getEditorWrapperBg(wrapperBg, gradients, gradientAngle),
-      };
-    }
-  };
-
   return (
     <>
       <section
@@ -139,14 +127,26 @@ const SnippngCodeArea = () => {
               id="code-wrapper"
               ref={wrapperRef}
               className={clsx(
-                "overflow-auto p-16 max-w-full",
+                "overflow-auto p-16 max-w-full relative",
                 editorWidth ? "w-fit" : "w-full"
               )}
               style={{
-                ...getEditorBackground(),
+                background: bgImageVisiblePatch
+                  ? "none"
+                  : getEditorWrapperBg(wrapperBg, gradients, gradientAngle),
                 padding: `${paddingVertical}px ${paddingHorizontal}px`,
               }}
             >
+              {bgImageVisiblePatch ? (
+                <img
+                  src={bgImageVisiblePatch}
+                  alt="bg-image"
+                  className="w-full h-full object-cover z-0 absolute inset-0"
+                  style={{
+                    filter: `blur(${bgBlur || 0}px)`,
+                  }}
+                />
+              ) : null}
               <div
                 ref={editorRef}
                 data-testid="editor-container"

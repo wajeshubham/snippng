@@ -27,6 +27,7 @@ import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 
 const SnippngCodeArea = () => {
   const editorRef = useRef<HTMLDivElement>(null); // useRef to persist existing ref. Might be useful when dealing with background image in future
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [saving, setSaving] = useState(false);
   const [updating, setUpdating] = useState(false);
 
@@ -53,6 +54,8 @@ const SnippngCodeArea = () => {
     gradientAngle,
     editorWidth,
     uid,
+    bgImageVisiblePatch,
+    bgBlur,
   } = editorConfig;
 
   const saveSnippet = async () => {
@@ -108,23 +111,42 @@ const SnippngCodeArea = () => {
         <NoSSRWrapper>
           <div className="rounded-md bg-white dark:bg-zinc-900 md:p-8 p-4 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
             <div className="w-full">
-              <SnippngControlHeader />
+              <SnippngControlHeader wrapperRef={wrapperRef} />
             </div>
+            {bgImageVisiblePatch ? (
+              <button
+                className="dark:text-white text-zinc-900 ml-auto text-xs py-1 px-1.5 mb-1 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                onClick={() => {
+                  handleConfigChange("bgImageVisiblePatch")(null);
+                }}
+              >
+                Remove bg image
+              </button>
+            ) : null}
             <div
               id="code-wrapper"
+              ref={wrapperRef}
               className={clsx(
-                "overflow-auto p-16 max-w-full",
+                "overflow-auto p-16 max-w-full relative",
                 editorWidth ? "w-fit" : "w-full"
               )}
               style={{
-                background: getEditorWrapperBg(
-                  wrapperBg,
-                  gradients,
-                  gradientAngle
-                ),
+                background: bgImageVisiblePatch
+                  ? "none"
+                  : getEditorWrapperBg(wrapperBg, gradients, gradientAngle),
                 padding: `${paddingVertical}px ${paddingHorizontal}px`,
               }}
             >
+              {bgImageVisiblePatch ? (
+                <img
+                  src={bgImageVisiblePatch}
+                  alt="bg-image"
+                  className="w-full h-full object-cover z-0 absolute inset-0"
+                  style={{
+                    filter: `blur(${bgBlur || 0}px)`,
+                  }}
+                />
+              ) : null}
               <div
                 ref={editorRef}
                 data-testid="editor-container"
@@ -238,6 +260,7 @@ const SnippngCodeArea = () => {
                 ) : null}
               </div>
             </div>
+            {/* TODO: Add CTA to remove background image */}
           </div>
           {uid ? (
             <small className="dark:text-zinc-300 text-left text-zinc-600 py-2 inline-block">

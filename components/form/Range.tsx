@@ -8,7 +8,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 const Range: React.FC<Props> = ({ rangeMax, rangeMin, label, ...props }) => {
   return (
-    <div className="w-full my-2">
+    <div className="w-full my-2 dark:text-white text-zinc-900">
       <div>
         <p>{label}</p>
       </div>

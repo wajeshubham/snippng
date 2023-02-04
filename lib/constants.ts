@@ -479,6 +479,7 @@ export const defaultEditorConfig: SnippngEditorConfigInterface = {
   gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
   gradientAngle: 140,
   editorWidth: 0,
+  bgImageVisiblePatch: null,
 };
 
 export const DEFAULT_BASE_SETUP = {

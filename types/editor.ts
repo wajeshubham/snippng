@@ -27,6 +27,7 @@ export interface SnippngEditorConfigInterface {
   showLineNumbers: boolean;
   snippetsName: string;
   wrapperBg: string;
+  bgImageVisiblePatch: string | null;
 }
 
 export interface SnippngEditorContextInterface {

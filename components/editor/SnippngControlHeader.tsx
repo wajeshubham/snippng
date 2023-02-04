@@ -2,6 +2,7 @@ import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
 import { DOWNLOAD_OPTIONS, LANGUAGES, THEMES } from "@/lib/constants";
+import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
 import { getEditorWrapperBg } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
@@ -11,16 +12,19 @@ import {
   Cog6ToothIcon,
   CommandLineIcon,
   DocumentDuplicateIcon,
+  PhotoIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
-import { Fragment } from "react";
+import { Fragment, RefObject } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
 import Range from "../form/Range";
 import Select from "../form/Select";
 
-const SnippngControlHeader = () => {
+const SnippngControlHeader: React.FC<{
+  wrapperRef: RefObject<HTMLDivElement>;
+}> = ({ wrapperRef }) => {
   const { editorConfig, handleConfigChange } = useSnippngEditor();
   const { addToast } = useToast();
 
@@ -108,6 +112,22 @@ const SnippngControlHeader = () => {
         data-testid="wrapper-color-picker"
         className="relative lg:w-fit w-full flex lg:justify-start justify-end items-center gap-2"
       >
+        <Button
+          onClick={() => {
+            if (!navigator?.clipboard)
+              return addToast({
+                message: "navigator unavailable",
+                type: "error",
+              });
+            navigator.clipboard?.writeText(code).then(() => {
+              addToast({
+                message: "Code snippet copied!",
+              });
+            });
+          }}
+        >
+          <DocumentDuplicateIcon className="h-5 w-5 dark:text-white text-zinc-900" />
+        </Button>
         <ColorPicker
           color={wrapperBg}
           gradientColors={gradients}
@@ -134,22 +154,18 @@ const SnippngControlHeader = () => {
             }}
           ></button>
         </ColorPicker>
-        <Button
-          onClick={() => {
-            if (!navigator?.clipboard)
-              return addToast({
-                message: "navigator unavailable",
-                type: "error",
-              });
-            navigator.clipboard?.writeText(code).then(() => {
-              addToast({
-                message: "Code snippet copied!",
-              });
-            });
-          }}
+        <ImagePicker
+          aspect={
+            wrapperRef?.current
+              ? wrapperRef.current.clientWidth / wrapperRef.current.clientHeight
+              : 1
+          }
+          onChange={(src) => handleConfigChange("bgImageVisiblePatch")(src)}
         >
-          <DocumentDuplicateIcon className="h-5 w-5 dark:text-white text-zinc-900" />
-        </Button>
+          <button className="h-8 cursor-pointer rounded-sm outline justify-center items-center outline-1 dark:outline-white outline-zinc-400 flex aspect-square ">
+            <PhotoIcon className="h-4 w-4 mx-auto dark:text-white text-zinc-900" />
+          </button>
+        </ImagePicker>
       </div>
 
       <div className="ml-auto">

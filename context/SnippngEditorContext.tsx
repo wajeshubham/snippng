@@ -42,10 +42,10 @@ const SnippngContextProvider: React.FC<{ children: React.ReactNode }> = ({
       key: K
     ) =>
     (value: V) => {
-      setEditorConfig({
-        ...editorConfig,
+      setEditorConfig((prevConfig) => ({
+        ...prevConfig,
         [key]: value,
-      });
+      }));
     };
 
   const handleLineHeight = useCallback(() => {

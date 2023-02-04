@@ -1,4 +1,4 @@
-import Input from "@/components/form/Input";
+import { Input } from "@/components";
 import { Menu, Transition } from "@headlessui/react";
 import React, { Fragment, useCallback, useMemo } from "react";
 import {

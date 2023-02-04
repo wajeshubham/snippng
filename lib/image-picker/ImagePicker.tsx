@@ -10,9 +10,14 @@ import ReactCrop, {
 
 import { Button, Input } from "@/components";
 import { useToast } from "@/context/ToastContext";
-import { CursorArrowRaysIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  CursorArrowRaysIcon,
+  PhotoIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import "react-image-crop/dist/ReactCrop.css";
 import { getCroppedImage, isValidHttpUrl } from "./utils";
+import { PEXELS_QUERY_STRINGS } from "../constants";
 
 interface Props {
   aspect: number;
@@ -74,11 +79,11 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
   };
 
   // function to fetch image data from image link
-  const getBase64FromUrl = async () => {
-    if (isValidHttpUrl(imageLink)) {
+  const getBase64FromUrl = async (link?: string) => {
+    if (isValidHttpUrl(link ?? imageLink)) {
       try {
         setFetchingImage(true);
-        let blob = await fetch(imageLink).then((r) => r.blob());
+        let blob = await fetch(link ?? imageLink).then((r) => r.blob());
 
         let dataUrl = await new Promise((resolve) => {
           let reader = new FileReader();
@@ -133,6 +138,33 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
     onChange(null);
   };
 
+  const fetchImageFromPexels = async () => {
+    try {
+      const headers = new Headers();
+      headers.append(
+        "Authorization",
+        process.env.NEXT_PUBLIC_PEXELS_API_KEY ?? ""
+      );
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_PEXELS_QUERY_URL}/search?query=${
+          PEXELS_QUERY_STRINGS[
+            Math.floor(Math.random() * PEXELS_QUERY_STRINGS.length)
+          ]
+        }&per_page=1`,
+        {
+          method: "GET",
+          headers,
+        }
+      );
+      const pictures = await res.json();
+      if (pictures?.photos.length) {
+        getBase64FromUrl(pictures?.photos[0]?.src?.medium);
+      }
+    } catch (error) {
+      console.log("Error while fetching images from pexels ", error);
+    }
+  };
+
   useEffect(() => {
     getBase64FromCanvas();
   }, [completedCrop]);
@@ -152,7 +184,7 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute md:w-96 w-72 p-3 right-0 z-30 top-full mt-2 origin-top-right dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
-            <div className="flex md:flex-row flex-col justify-start items-end w-full gap-2 mb-4">
+            <div className="flex md:flex-row flex-col justify-start items-end w-full gap-2 mb-3">
               <Input
                 label="Image url"
                 className="w-full"
@@ -166,9 +198,9 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
               <Button
                 disabled={fetchingImage}
                 className="mb-[1px]"
-                onClick={getBase64FromUrl}
+                onClick={() => getBase64FromUrl()}
               >
-                {fetchingImage ? "Fetching..." : "Upload"}
+                Upload
               </Button>
             </div>
             <label
@@ -185,6 +217,12 @@ const ImagePicker: React.FC<Props> = ({ aspect, children, onChange }) => {
               accept="image/*"
               onChange={onSelectFile}
             />
+            <button
+              onClick={fetchImageFromPexels}
+              className="w-full mt-3 inline-flex items-center text-center dark:border-zinc-400 border-zinc-400 rounded-sm px-2 py-1 border-[1px] text-zinc-900 dark:text-white"
+            >
+              <PhotoIcon className="h-4 w-4 mr-2" /> From pexels
+            </button>
             {!!src && (
               <div className="w-full flex flex-col justify-start items-end">
                 <button onClick={resetImageSelection}>

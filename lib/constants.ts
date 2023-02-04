@@ -458,6 +458,17 @@ export const DEFAULT_CODE_SNIPPET = `export const debounce = <F extends (...args
   return debounced as (...args: Parameters<F>) => ReturnType<F>;
 };`;
 
+export const PEXELS_QUERY_STRINGS = [
+  "background",
+  "gradient",
+  "landscape",
+  "sky",
+  "nightsky",
+  "galaxy",
+  "coding",
+  "abstract",
+];
+
 export const defaultEditorConfig: SnippngEditorConfigInterface = {
   code: DEFAULT_CODE_SNIPPET,
   snippetsName: "",

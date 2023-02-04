@@ -61,9 +61,11 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
+
   </ol>
 </details>
 
@@ -157,6 +159,18 @@ OR
    ```sh
    docker-compose up --build
    ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Roadmap
+
+- [x] Inject images in the background from url and pexels
+- [ ] Custom theme configuration
+- [ ] Publish your themes
+- [ ] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
+- [ ] Build more themes to choose from
+- [ ] Add theme presets to choose from 
+- [ ] Option to create/save single default editor config for user
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

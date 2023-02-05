@@ -20,15 +20,26 @@ body {
   @apply pt-8;
 }
 
+.CodeMirror__Config__Editor {
+  @apply relative text-lg;
+}
+
+.CodeMirror__Config__Editor div {
+  @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
+}
+
 .cm-scroller {
   position: relative;
   overflow: hidden !important;
 }
 
 .cm-content {
-  border-right-width: 70px;
   border-color: transparent;
   max-width: 100%;
+}
+
+.CodeMirror__Main__Editor .cm-content {
+  border-right-width: 70px;
 }
 
 .cm-gutters {

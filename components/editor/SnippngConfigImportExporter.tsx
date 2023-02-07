@@ -1,10 +1,14 @@
-import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ClipboardDocumentIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ClipboardDocumentIcon,
+  CloudArrowDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { Fragment, useState } from "react";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
-import { clsx } from "@/utils";
 import { useToast } from "@/context/ToastContext";
+import { clsx, copyJSONText, getExportableConfig } from "@/utils";
 
 interface Props {
   open: boolean;
@@ -17,6 +21,29 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
 
   const { addToast } = useToast();
 
+  const getJsxByDatatype = (value: string | number | boolean) => {
+    switch (typeof value) {
+      case "string":
+        return (
+          <code className="dark:text-green-300 text-green-700">
+            {`"${value}"` || <>&quot;&quot;</>}
+          </code>
+        );
+      case "number":
+        return (
+          <code className="dark:text-orange-400 text-orange-600">{+value}</code>
+        );
+      case "boolean":
+        return (
+          <code className="dark:text-orange-400 text-orange-600">
+            {value.toString()}
+          </code>
+        );
+      default:
+        return <code className="dark:text-zinc-300 text-zinc-600">null</code>;
+    }
+  };
+
   const getEditorConfigJsx = (
     object: object | Array<any>,
     isArray: boolean = false
@@ -26,11 +53,13 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
       .sort()
       .map((key) => {
         if (key === "code") return;
+
         const val = object[key as keyof typeof object] as
           | string
           | number
           | boolean
           | { [key: string]: string | number };
+
         return (
           <pre
             key={key}
@@ -48,21 +77,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
               </>
             ) : (
               <>
-                {typeof val === "string" ? (
-                  <code className="dark:text-green-300 text-green-700">
-                    {`"${val}"` || <>&quot;&quot;</>}
-                  </code>
-                ) : typeof val === "number" ? (
-                  <code className="dark:text-orange-400 text-orange-600">
-                    {+val}
-                  </code>
-                ) : typeof val === "boolean" ? (
-                  <code className="dark:text-orange-400 text-orange-600">
-                    {val?.toString()}
-                  </code>
-                ) : (
-                  <code className="dark:text-zinc-300 text-zinc-600">null</code>
-                )}
+                {getJsxByDatatype(val)}
                 ,
                 <br />
               </>
@@ -74,7 +89,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
+      <Dialog as="div" className="relative z-40" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-200"
@@ -163,50 +178,82 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                       <div className="flex flex-1 flex-col justify-between">
                         <div className="divide-y dark:bg-zinc-700 dark:divide-zinc-600 px-4 sm:px-6">
                           <div className="space-y-6 pt-6 pb-5">
-                            <div>
-                              <label
-                                htmlFor="project-name"
-                                className="block text-sm font-medium dark:text-white text-zinc-900"
-                              >
-                                Current config
-                              </label>
-                              <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-2">
-                                Paste your config and click import to apply
-                                changes or Export the following config by
-                                clicking export button
-                              </p>
-
-                              <div className="relative overflow-hidden mt-1 text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
-                                <button
-                                  onClick={() => {
-                                    if (!navigator?.clipboard)
-                                      return addToast({
-                                        message: "navigator unavailable",
-                                        type: "error",
-                                      });
-                                    navigator.clipboard
-                                      ?.writeText(JSON.stringify(editorConfig))
-                                      .then(() => {
-                                        addToast({
-                                          message: "Editor config copied",
-                                          description:
-                                            "You can share this config to anyone and they can import it to configure the editor.",
-                                        });
-                                      });
-                                  }}
-                                  className="h-6 absolute top-2 right-2 w-6 flex justify-center items-center rounded-[4px] border-[1px] border-zinc-900/70 dark:border-white/70 text-zinc-900/70 dark:text-white/70 hover:border-zinc-900 hover:dark:border-white hover:text-zinc-900 hover:dark:text-white"
+                            {isExport ? (
+                              <div>
+                                <label
+                                  htmlFor="project-name"
+                                  className="block text-sm font-medium dark:text-white text-zinc-900"
                                 >
-                                  <ClipboardDocumentIcon className="h-4 w-4" />
-                                </button>
-                                <pre>
-                                  {"{"}
-                                  {getEditorConfigJsx({
-                                    ...editorConfig,
-                                  })}
-                                  {"}"}
-                                </pre>
+                                  Current config
+                                </label>
+                                <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-2">
+                                  Paste your config and click import to apply
+                                  changes or Export the following config by
+                                  clicking export button
+                                </p>
+
+                                <div className="relative overflow-hidden mt-1 text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
+                                  <div className="absolute top-2 right-2 flex justify-end items-center gap-x-1">
+                                    <button
+                                      onClick={() => {
+                                        const dataToBeDownloaded =
+                                          getExportableConfig(editorConfig);
+                                        var dataStr =
+                                          "data:text/json;charset=utf-8," +
+                                          encodeURIComponent(
+                                            JSON.stringify(dataToBeDownloaded)
+                                          );
+
+                                        let anchor =
+                                          document.createElement("a");
+                                        anchor.setAttribute("href", dataStr);
+                                        anchor.setAttribute(
+                                          "download",
+                                          "snippngConfig.json"
+                                        );
+                                        anchor.click();
+                                      }}
+                                      className="h-6 w-6 flex justify-center items-center rounded-[4px] border-[1px] border-zinc-900/70 dark:border-white/70 text-zinc-900/70 dark:text-white/70 hover:border-zinc-900 hover:dark:border-white hover:text-zinc-900 hover:dark:text-white"
+                                    >
+                                      <CloudArrowDownIcon className="h-4 w-4" />
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        if (!navigator?.clipboard)
+                                          return addToast({
+                                            message: "navigator unavailable",
+                                            type: "error",
+                                          });
+                                        const dataToBeCopied =
+                                          getExportableConfig(editorConfig);
+                                        copyJSONText(dataToBeCopied).then(
+                                          () => {
+                                            debugger;
+                                            addToast({
+                                              message: "Configuration copied",
+                                            });
+                                          }
+                                        );
+                                      }}
+                                      className="h-6 w-6 flex justify-center items-center rounded-[4px] border-[1px] border-zinc-900/70 dark:border-white/70 text-zinc-900/70 dark:text-white/70 hover:border-zinc-900 hover:dark:border-white hover:text-zinc-900 hover:dark:text-white"
+                                    >
+                                      <ClipboardDocumentIcon className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                  <pre>
+                                    {"{"}
+                                    {getEditorConfigJsx({
+                                      ...editorConfig,
+                                    })}
+                                    {"}"}
+                                  </pre>
+                                </div>
                               </div>
-                            </div>
+                            ) : (
+                              <>
+                                <p>Import config</p>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>

@@ -60,3 +60,7 @@ export const getExportableConfig = (
   const exportableConfig: SnippngExportableConfig = deepClonedConfig;
   return exportableConfig;
 };
+
+export const copyJSONText = async <T extends object>(data: T) => {
+  return navigator.clipboard?.writeText(JSON.stringify(data));
+};

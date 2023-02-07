@@ -25,7 +25,7 @@ export const getEditorWrapperBg = (
     : `linear-gradient(${angle}deg, ${selectedGradients.join(", ")})`;
 };
 
-export const deepClone = <T extends object>(obj: T) => {
+export const deepClone = <T extends object>(obj: T): T | any => {
   if (typeof obj !== "object" || obj === null) {
     return obj;
   }
@@ -55,6 +55,7 @@ export const getExportableConfig = (
 ): SnippngExportableConfig => {
   const deepClonedConfig = { ...deepClone(editorConfig) };
   deepClonedConfig.code = "";
+  deepClonedConfig.bgImageVisiblePatch = null;
   delete deepClonedConfig.uid;
   delete deepClonedConfig.ownerUid;
   const exportableConfig: SnippngExportableConfig = deepClonedConfig;

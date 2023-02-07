@@ -52,14 +52,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
     return Object.keys(object)
       .sort()
       .map((key) => {
-        if (key === "code") return;
-
-        const val = object[key as keyof typeof object] as
-          | string
-          | number
-          | boolean
-          | { [key: string]: string | number };
-
+        const val = object[key as keyof typeof object];
         return (
           <pre
             key={key}
@@ -68,7 +61,6 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
             <code className="dark:text-yellow-500 text-red-500">
               {isArray ? "" : <>&quot;{key}&quot;: </>}
             </code>
-
             {val && typeof val === "object" ? (
               <>
                 <code>{Array.isArray(val) ? "[" : "{"}</code>
@@ -77,8 +69,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
               </>
             ) : (
               <>
-                {getJsxByDatatype(val)}
-                ,
+                {getJsxByDatatype(val)},
                 <br />
               </>
             )}
@@ -242,12 +233,18 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                                   </div>
                                   <pre>
                                     {"{"}
-                                    {getEditorConfigJsx({
-                                      ...editorConfig,
-                                    })}
+                                    {getEditorConfigJsx(
+                                      getExportableConfig({
+                                        ...editorConfig,
+                                      })
+                                    )}
                                     {"}"}
                                   </pre>
                                 </div>
+                                <small className="text-zinc-500 dark:text-zinc-400 text-[10px]">
+                                  code and background image are empty while
+                                  exporting
+                                </small>
                               </div>
                             ) : (
                               <>

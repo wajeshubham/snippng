@@ -1,14 +1,16 @@
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ArrowDownTrayIcon,
+  CheckCircleIcon,
   ClipboardDocumentIcon,
   CloudArrowDownIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
+import { SnippngEditorConfigInterface } from "@/types";
 import {
   clsx,
   copyJSONText,
@@ -17,7 +19,6 @@ import {
   validateSnippngConfig,
 } from "@/utils";
 import Button from "../form/Button";
-import { SnippngEditorConfigInterface } from "@/types";
 
 interface Props {
   open: boolean;
@@ -25,12 +26,13 @@ interface Props {
 }
 
 const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
-  const { editorConfig } = useSnippngEditor();
+  const { editorConfig, setEditorConfig } = useSnippngEditor();
+  const { addToast } = useToast();
+
   const [isExport, setIsExport] = useState(true);
+  const [configError, setConfigError] = useState("");
   const [configToBeImport, setConfigToBeImport] =
     useState<SnippngEditorConfigInterface | null>(null);
-  const [isConfigValid, setIsConfigValid] = useState(false);
-  const { addToast } = useToast();
 
   const getJsxByDatatype = (value: string | number | boolean) => {
     switch (typeof value) {
@@ -96,9 +98,24 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
     const file = e.target.files[0];
     let reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      let jsonData = JSON.parse(e.target!.result! as string);
-      setConfigToBeImport(jsonData);
-      setIsConfigValid(validateSnippngConfig(jsonData));
+      try {
+        let jsonData = JSON.parse(e.target!.result! as string);
+        let error = validateSnippngConfig(jsonData);
+        if (!error) setConfigToBeImport(jsonData);
+        else {
+          addToast({
+            message: error,
+            type: "error",
+          });
+          setConfigToBeImport(null);
+        }
+        setConfigError(error);
+      } catch (error) {
+        addToast({
+          message: "Invalid json file",
+          type: "error",
+        });
+      }
     });
     reader.readAsText(file);
     e.target.value = "";
@@ -106,9 +123,16 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
     reader.removeEventListener("load", () => {});
   };
 
+  const cleanUpOnClose = () => {
+    setConfigError("");
+    setIsExport(true);
+    setConfigToBeImport(null);
+    onClose();
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" onClose={onClose}>
+      <Dialog as="div" className="relative z-40" onClose={cleanUpOnClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-200"
@@ -145,7 +169,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                             <button
                               type="button"
                               className="rounded-md bg-zinc-700 dark:bg-zinc-800 text-zinc-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                              onClick={() => onClose()}
+                              onClick={() => cleanUpOnClose()}
                             >
                               <span className="sr-only">Close panel</span>
                               <XMarkIcon
@@ -214,6 +238,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                                 <div className="relative overflow-hidden mt-1 text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
                                   <div className="absolute top-2 right-2 flex justify-end items-center gap-x-1">
                                     <button
+                                      title="download config"
                                       onClick={() => {
                                         const dataToBeDownloaded =
                                           getExportableConfig(editorConfig);
@@ -237,6 +262,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                                       <CloudArrowDownIcon className="h-4 w-4" />
                                     </button>
                                     <button
+                                      title="copy config"
                                       onClick={() => {
                                         if (!navigator?.clipboard)
                                           return addToast({
@@ -247,7 +273,6 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                                           getExportableConfig(editorConfig);
                                         copyJSONText(dataToBeCopied).then(
                                           () => {
-                                            debugger;
                                             addToast({
                                               message: "Configuration copied",
                                             });
@@ -277,34 +302,54 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                             ) : (
                               <>
                                 <Button
-                                  StartIcon={ArrowDownTrayIcon}
                                   className="w-full"
+                                  StartIcon={ArrowDownTrayIcon}
+                                  onClick={() => {
+                                    const input =
+                                      document.getElementById("json-picker");
+                                    input?.click();
+                                  }}
                                 >
                                   Import config
                                 </Button>
                                 <input
+                                  className="hidden"
+                                  id="json-picker"
                                   type="file"
                                   accept="application/json"
                                   onChange={parseAndValidateImportedJson}
                                 />
-                                {configToBeImport ? (
-                                  <div className="w-full flex flex-col gap-y-1 !mt-2">
-                                    {!isConfigValid ? (
-                                      <small className="text-red-500 text-[10px]">
-                                        Imported config is invalid
-                                      </small>
-                                    ) : null}
-                                    <div className="relative overflow-hidden text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
-                                      <pre className="text-white">
-                                        {"{"}
-                                        {getEditorConfigJsx({
-                                          ...deepClone(configToBeImport),
-                                        })}
-                                        {"}"}
-                                      </pre>
+                                <div className="w-full flex flex-col gap-y-1 !mt-2">
+                                  {configError ? (
+                                    <small className="bg-red-500 px-2 py-1.5 rounded-sm text-white text-xs mb-2">
+                                      Error: {configError}
+                                    </small>
+                                  ) : null}
+                                  {configToBeImport ? (
+                                    <div className="w-full gap-y-2 flex flex-col">
+                                      <div className="relative overflow-hidden text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
+                                        <pre className="dark:text-white text-zinc-900">
+                                          {"{"}
+                                          {getEditorConfigJsx({
+                                            ...deepClone(configToBeImport),
+                                          })}
+                                          {"}"}
+                                        </pre>
+                                      </div>
+                                      <Button
+                                        StartIcon={CheckCircleIcon}
+                                        onClick={() => {
+                                          setEditorConfig({
+                                            ...editorConfig,
+                                            ...configToBeImport,
+                                          });
+                                        }}
+                                      >
+                                        Apply config
+                                      </Button>
                                     </div>
-                                  </div>
-                                ) : null}
+                                  ) : null}
+                                </div>
                               </>
                             )}
                           </div>

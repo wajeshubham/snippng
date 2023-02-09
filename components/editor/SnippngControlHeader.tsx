@@ -3,6 +3,7 @@ import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
 import {
   defaultEditorConfig,
+  DEFAULT_RANGES,
   DOWNLOAD_OPTIONS,
   LANGUAGES,
   THEMES,
@@ -213,7 +214,7 @@ const SnippngControlHeader: React.FC<{
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute right-0 max-h-[500px] z-30 mt-2 w-72 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
-                <button
+                <Menu.Button
                   className="w-full text-left p-2 inline-flex items-center"
                   onClick={() => {
                     setOpenImportExportSidebar(true);
@@ -221,7 +222,7 @@ const SnippngControlHeader: React.FC<{
                 >
                   <ArrowsUpDownIcon className="h-5 w-5 mr-2" /> Import or export
                   config
-                </button>
+                </Menu.Button>
                 <div className="py-1 px-2">
                   <Checkbox
                     label="Line count"
@@ -303,12 +304,11 @@ const SnippngControlHeader: React.FC<{
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="px"
                     label={`Bg blur (${bgBlur}px)`}
                     value={bgBlur}
-                    max={20}
-                    min={0}
-                    rangeMax="20"
-                    rangeMin="0"
+                    max={DEFAULT_RANGES.max.BLUR}
+                    min={DEFAULT_RANGES.min.BLUR}
                     onChange={(e) => {
                       handleConfigChange("bgBlur")(+e.target.value);
                     }}
@@ -316,67 +316,62 @@ const SnippngControlHeader: React.FC<{
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="px"
                     label={`Font size (${editorFontSize}px)`}
                     value={editorFontSize}
                     onChange={(e) => {
                       handleConfigChange("editorFontSize")(+e.target.value);
                     }}
-                    max={32}
-                    min={10}
-                    rangeMin={"10px"}
-                    rangeMax={"32px"}
+                    max={DEFAULT_RANGES.max.FONT_SIZE}
+                    min={DEFAULT_RANGES.min.FONT_SIZE}
                   />
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="px"
                     label={`Padding vertical (${paddingVertical}px)`}
                     value={paddingVertical}
                     onChange={(e) => {
                       handleConfigChange("paddingVertical")(+e.target.value);
                     }}
-                    max={100}
-                    min={0}
-                    rangeMin={"0px"}
-                    rangeMax={"100px"}
+                    max={DEFAULT_RANGES.max.PADDING_VERTICAL}
+                    min={DEFAULT_RANGES.min.PADDING_VERTICAL}
                   />
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="px"
                     label={`Padding horizontal (${paddingHorizontal}px)`}
                     value={paddingHorizontal}
                     onChange={(e) => {
                       handleConfigChange("paddingHorizontal")(+e.target.value);
                     }}
-                    max={100}
-                    min={0}
-                    rangeMin={"0px"}
-                    rangeMax={"100px"}
+                    max={DEFAULT_RANGES.max.PADDING_HORIZONTAL}
+                    min={DEFAULT_RANGES.min.PADDING_HORIZONTAL}
                   />
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="px"
                     label={`Line height (${lineHeight}px)`}
                     value={lineHeight}
                     onChange={(e) => {
                       handleConfigChange("lineHeight")(+e.target.value);
                     }}
-                    max={40}
-                    min={10}
-                    rangeMin={"10px"}
-                    rangeMax={"40px"}
+                    max={DEFAULT_RANGES.max.LINE_HEIGHT}
+                    min={DEFAULT_RANGES.min.LINE_HEIGHT}
                   />
                 </div>
                 <div className="py-1 px-2 z-30">
                   <Range
+                    unit="deg"
                     label={`Gradient angle (${gradientAngle}deg)`}
                     value={gradientAngle}
                     onChange={(e) => {
                       handleConfigChange("gradientAngle")(+e.target.value);
                     }}
-                    max={360}
-                    min={0}
-                    rangeMin={"0deg"}
-                    rangeMax={"360deg"}
+                    max={DEFAULT_RANGES.max.GRADIENT_ANGLE}
+                    min={DEFAULT_RANGES.min.GRADIENT_ANGLE}
                   />
                 </div>
                 <div className="py-3 px-2 gap-2 flex flex-col">

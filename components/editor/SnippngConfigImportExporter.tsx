@@ -39,7 +39,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
       case "string":
         return (
           <code className="dark:text-green-300 text-green-700">
-            {`"${value}"` || <>&quot;&quot;</>}
+            {value ? `"${value}"` : <>&quot;&quot;</>}
           </code>
         );
       case "number":

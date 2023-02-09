@@ -1,6 +1,7 @@
 import { SnippngEditorConfigInterface, SnippngExportableConfig } from "@/types";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import * as themes from "@uiw/codemirror-themes-all";
+import { defaultEditorConfig } from "@/lib/constants";
 
 export const clsx = (...classNames: string[]) =>
   classNames.filter(Boolean).join(" ");
@@ -60,6 +61,15 @@ export const getExportableConfig = (
   delete deepClonedConfig.ownerUid;
   const exportableConfig: SnippngExportableConfig = deepClonedConfig;
   return exportableConfig;
+};
+
+export const validateSnippngConfig = (config: SnippngEditorConfigInterface) => {
+  return Object.keys(config).every((key) => {
+    return (
+      typeof config[key as keyof typeof config] ===
+      typeof defaultEditorConfig[key as keyof typeof defaultEditorConfig]
+    );
+  });
 };
 
 export const copyJSONText = async <T extends object>(data: T) => {

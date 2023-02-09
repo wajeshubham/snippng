@@ -1,14 +1,23 @@
 import { Dialog, Transition } from "@headlessui/react";
 import {
+  ArrowDownTrayIcon,
   ClipboardDocumentIcon,
   CloudArrowDownIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
-import { clsx, copyJSONText, getExportableConfig } from "@/utils";
+import {
+  clsx,
+  copyJSONText,
+  deepClone,
+  getExportableConfig,
+  validateSnippngConfig,
+} from "@/utils";
+import Button from "../form/Button";
+import { SnippngEditorConfigInterface } from "@/types";
 
 interface Props {
   open: boolean;
@@ -18,7 +27,9 @@ interface Props {
 const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
   const { editorConfig } = useSnippngEditor();
   const [isExport, setIsExport] = useState(true);
-
+  const [configToBeImport, setConfigToBeImport] =
+    useState<SnippngEditorConfigInterface | null>(null);
+  const [isConfigValid, setIsConfigValid] = useState(false);
   const { addToast } = useToast();
 
   const getJsxByDatatype = (value: string | number | boolean) => {
@@ -76,6 +87,23 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
           </pre>
         );
       });
+  };
+
+  const parseAndValidateImportedJson = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    let reader = new FileReader();
+    reader.addEventListener("load", (e) => {
+      let jsonData = JSON.parse(e.target!.result! as string);
+      setConfigToBeImport(jsonData);
+      setIsConfigValid(validateSnippngConfig(jsonData));
+    });
+    reader.readAsText(file);
+    e.target.value = "";
+    e.target.files = null;
+    reader.removeEventListener("load", () => {});
   };
 
   return (
@@ -248,7 +276,35 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                               </div>
                             ) : (
                               <>
-                                <p>Import config</p>
+                                <Button
+                                  StartIcon={ArrowDownTrayIcon}
+                                  className="w-full"
+                                >
+                                  Import config
+                                </Button>
+                                <input
+                                  type="file"
+                                  accept="application/json"
+                                  onChange={parseAndValidateImportedJson}
+                                />
+                                {configToBeImport ? (
+                                  <div className="w-full flex flex-col gap-y-1 !mt-2">
+                                    {!isConfigValid ? (
+                                      <small className="text-red-500 text-[10px]">
+                                        Imported config is invalid
+                                      </small>
+                                    ) : null}
+                                    <div className="relative overflow-hidden text-xs text-zinc-900 rounded-md border-[1px] border-zinc-300 dark:border-zinc-600 dark:text-white bg-zinc-100 dark:bg-zinc-800 p-3">
+                                      <pre className="text-white">
+                                        {"{"}
+                                        {getEditorConfigJsx({
+                                          ...deepClone(configToBeImport),
+                                        })}
+                                        {"}"}
+                                      </pre>
+                                    </div>
+                                  </div>
+                                ) : null}
                               </>
                             )}
                           </div>

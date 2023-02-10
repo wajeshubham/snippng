@@ -197,9 +197,6 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                             }}
                             className={clsx(
                               "dark:text-white inline-flex items-center justify-center text-zinc-900 w-1/2 flex-shrink-0 py-2"
-                              // isExport
-                              //   ? "border-b-2 border-zinc-900 dark:border-white"
-                              //   : ""
                             )}
                           >
                             <ArrowUpTrayIcon className="w-5 h-5 mr-2" /> Export
@@ -210,9 +207,6 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                             }}
                             className={clsx(
                               "dark:text-white inline-flex items-center justify-center text-zinc-900 w-1/2 flex-shrink-0 py-2"
-                              // isExport
-                              //   ? ""
-                              //   : "border-b-2 border-zinc-900 dark:border-white"
                             )}
                           >
                             <ArrowDownTrayIcon className="w-5 h-5 mr-2" />{" "}
@@ -220,7 +214,7 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                           </button>
                           <div
                             className={clsx(
-                              "w-1/2 h-[2px] bg-white absolute bottom-0 transition-all ease-in-out transform duration-200 left-0",
+                              "w-1/2 h-0.5 rounded-t-md dark:bg-white bg-zinc-700 absolute bottom-0 transition-all ease-in-out transform duration-200 left-0",
                               isExport ? "translate-x-0" : "translate-x-full"
                             )}
                           />

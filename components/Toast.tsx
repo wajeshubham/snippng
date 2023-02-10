@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import { Fragment, useState } from "react";
+import { ToastInterface } from "@/types";
 import { Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import {
   CheckCircleIcon,
   InformationCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { XMarkIcon } from "@heroicons/react/20/solid";
-import { ToastInterface, ToastVariantType } from "@/types";
+import React, { Fragment, useEffect, useState } from "react";
 
 interface Props extends ToastInterface {
   onClose: () => void;

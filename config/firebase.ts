@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { Auth, getAuth } from "firebase/auth";
-import { Analytics, getAnalytics, isSupported } from "firebase/analytics";
+import { Analytics, getAnalytics } from "firebase/analytics";
 
 let auth: Auth | undefined;
 let db: Firestore | undefined;
@@ -22,7 +22,9 @@ try {
 
   auth = getAuth(app);
   db = getFirestore(app);
-  if (typeof window !== "undefined") analytics = getAnalytics(app);
+  if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+    analytics = getAnalytics(app);
+  }
 } catch (error) {
   console.log(
     Error(

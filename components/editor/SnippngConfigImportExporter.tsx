@@ -347,9 +347,13 @@ const SnippngConfigImportExporter: React.FC<Props> = ({ open, onClose }) => {
                                       <Button
                                         StartIcon={CheckCircleIcon}
                                         onClick={() => {
+                                          // ignore code if it is empty
+                                          const { code, ...rest } =
+                                            configToBeImport;
                                           setEditorConfig({
                                             ...editorConfig,
-                                            ...configToBeImport,
+                                            ...rest,
+                                            code: code || editorConfig.code,
                                           });
                                         }}
                                       >

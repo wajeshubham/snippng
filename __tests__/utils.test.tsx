@@ -6,7 +6,7 @@ const mockJSON = {
   snippetsName: "",
   editorFontSize: 16,
   editorWindowControlsType: "mac-left" as const,
-  fileName: "@utils/wfwfer.ts",
+  fileName: "@utils/debounce.ts",
   hasDropShadow: true,
   lineHeight: 19,
   paddingHorizontal: 70,

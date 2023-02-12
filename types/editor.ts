@@ -31,6 +31,13 @@ export interface SnippngEditorConfigInterface {
   bgBlur: number;
 }
 
+type CustomOmit<I, F extends keyof I> = Omit<I, F>; // Omit not throwing type error for some reason
+
+export type SnippngExportableConfig = CustomOmit<
+  SnippngEditorConfigInterface,
+  "uid" | "ownerUid"
+>;
+
 export interface SnippngEditorContextInterface {
   editorConfig: SnippngEditorConfigInterface;
   handleConfigChange: <

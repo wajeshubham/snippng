@@ -22,9 +22,21 @@ beforeAll(() => {
   };
 });
 
+beforeEach(() => {
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null,
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
+});
+
 describe("SnippngControlHeader", () => {
   it("renders all CTA and inputs", async () => {
     await act(async () => {
+      //@ts-ignore
       render(<SnippngControlHeader />);
     });
     await waitFor(() => {
@@ -51,6 +63,7 @@ describe("SnippngControlHeader", () => {
               },
             }}
           >
+            {/* @ts-ignore */}
             <SnippngControlHeader />
           </SnippngEditorContext.Provider>
         );
@@ -62,6 +75,7 @@ describe("SnippngControlHeader", () => {
 
     it("renders with TypeScript as a default language", async () => {
       await act(async () => {
+        //@ts-ignore
         render(<SnippngControlHeader />);
       });
       await waitFor(() => {

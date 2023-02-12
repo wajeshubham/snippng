@@ -4,6 +4,17 @@ import { defaultEditorConfig } from "@/lib/constants";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
+beforeEach(() => {
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null,
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
+});
+
 beforeAll(() => {
   document.createRange = () => {
     const range = new Range();
@@ -192,6 +203,8 @@ describe("SnippngCodeArea", () => {
             <SnippngCodeArea />
           </SnippngEditorContext.Provider>
         );
+
+        // @ts-ignore
         render(<SnippngControlHeader />);
       });
       const colorPicker = document.getElementById(

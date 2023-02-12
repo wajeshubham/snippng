@@ -581,3 +581,22 @@ export const DEFAULT_WIDTHS = {
   minWidth: 320,
   maxWidth: 1200,
 };
+
+export const DEFAULT_RANGES = {
+  min: {
+    BLUR: 0,
+    FONT_SIZE: 10,
+    PADDING_VERTICAL: 0,
+    PADDING_HORIZONTAL: 0,
+    LINE_HEIGHT: 10,
+    GRADIENT_ANGLE: 0,
+  },
+  max: {
+    BLUR: 20,
+    FONT_SIZE: 32,
+    PADDING_VERTICAL: 100,
+    PADDING_HORIZONTAL: 100,
+    LINE_HEIGHT: 40,
+    GRADIENT_ANGLE: 360,
+  },
+};

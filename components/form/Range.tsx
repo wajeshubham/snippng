@@ -2,11 +2,12 @@ import { clsx } from "@/utils";
 import React from "react";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  rangeMin: string;
-  rangeMax: string;
+  unit: string;
   label: string;
+  min: number;
+  max: number;
 }
-const Range: React.FC<Props> = ({ rangeMax, rangeMin, label, ...props }) => {
+const Range: React.FC<Props> = ({ unit = "px", label, ...props }) => {
   return (
     <div className="w-full my-2 dark:text-white text-zinc-900">
       <div>
@@ -22,8 +23,8 @@ const Range: React.FC<Props> = ({ rangeMax, rangeMin, label, ...props }) => {
           )}
         />
         <div className="flex justify-between w-full items-center my-2">
-          <span className="text-xs">{rangeMin}</span>
-          <span className="text-xs">{rangeMax}</span>
+          <span className="text-xs">{`${props.min}${unit}`}</span>
+          <span className="text-xs">{`${props.max}${unit}`}</span>
         </div>
       </div>
     </div>

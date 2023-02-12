@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
-import { clsx, getEditorWrapperBg, getLanguage, getTheme } from "@/utils";
+import {
+  clsx,
+  deepClone,
+  getEditorWrapperBg,
+  getLanguage,
+  getTheme,
+} from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
 import * as themes from "@uiw/codemirror-themes-all";
@@ -63,7 +69,7 @@ const SnippngCodeArea = () => {
     if (!user) return;
     setSaving(true);
     try {
-      const dataToBeAdded = { ...structuredClone(editorConfig) }; // deep clone the editor config to avoid mutation
+      const dataToBeAdded = { ...deepClone(editorConfig) }; // deep clone the editor config to avoid mutation
       delete dataToBeAdded.uid; // delete existing uid if exists
       const savedDoc = await addDoc(collection(db, "snippets"), {
         ...dataToBeAdded,

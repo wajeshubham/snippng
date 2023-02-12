@@ -1,6 +1,6 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
-export const ThemeToggle = () => {
+const ThemeToggle = () => {
   const disableTransitionsTemporarily = () => {
     document.documentElement.classList.add("[&_*]:!transition-none");
     window.setTimeout(() => {

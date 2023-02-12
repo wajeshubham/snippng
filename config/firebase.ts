@@ -22,7 +22,9 @@ try {
 
   auth = getAuth(app);
   db = getFirestore(app);
-  if (typeof window !== "undefined") analytics = getAnalytics(app);
+  if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+    analytics = getAnalytics(app);
+  }
 } catch (error) {
   console.log(
     Error(

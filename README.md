@@ -112,7 +112,7 @@ You need `NodeJs` and `yarn` installed on your machine.
 
 Firebase is used in this project for authentications and to store snippets. In order to contribute in the part requiring Firebase, create a file called `.env` inside the root folder and add the following credentials in it once you create a Firebase app.
 
-```.env
+```bash
 NEXT_PUBLIC_FIREBASE_API_KEY=<your_FIREBASE_APP_API_KEY>
 
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<your_FIREBASE_APP_AUTH_DOMAIN>
@@ -126,6 +126,11 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=<your_FIREBASE_APP_MESSAGING_SENDER_ID>
 NEXT_PUBLIC_FIREBASE_APP_ID=<your_FIREBASE_APP_APP_ID>
 
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=<your_FIREBASE_APP_MEASUREMENT_ID>
+
+NEXT_PUBLIC_PEXELS_API_KEY=<your_NEXT_PUBLIC_PEXELS_API_KEY>
+
+# don't change the following env var
+NEXT_PUBLIC_PEXELS_QUERY_URL=https://api.pexels.com/v1
 
 ```
 
@@ -165,12 +170,12 @@ OR
 ## Roadmap
 
 - [x] Inject images in the background from url and pexels
+- [x] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
+- [ ] Add theme presets to choose from
+- [ ] Option to create/save single default editor config for user
 - [ ] Custom theme configuration
 - [ ] Publish your themes
-- [ ] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
 - [ ] Build more themes to choose from
-- [ ] Add theme presets to choose from 
-- [ ] Option to create/save single default editor config for user
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

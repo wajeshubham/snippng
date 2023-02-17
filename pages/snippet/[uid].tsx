@@ -47,7 +47,8 @@ const SavedSnippet = () => {
     if (!router.isReady) return;
     fetchCodeSnippet();
     return () => {
-      setEditorConfig({ ...defaultEditorConfig });
+      // set uid to undefined because we are leaving the snippet details page, the only page where uid is required
+      setEditorConfig({ ...defaultEditorConfig, uid: undefined });
     };
   }, [router.isReady]);
 

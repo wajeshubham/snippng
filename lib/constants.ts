@@ -1,4 +1,7 @@
 import { SnippngEditorConfigInterface } from "@/types";
+import { LocalStorage } from "@/utils";
+
+export const isBrowser = typeof window !== "undefined";
 
 export const THEMES = [
   {
@@ -514,30 +517,39 @@ export const PEXELS_QUERY_STRINGS = [
   "technology",
 ];
 
-export const defaultEditorConfig: SnippngEditorConfigInterface = {
-  code: DEFAULT_CODE_SNIPPET,
-  snippetsName: "",
-  editorFontSize: 16,
-  editorWindowControlsType: "mac-left",
-  fileName: "@utils/debounce.ts",
-  hasDropShadow: true,
-  lineHeight: 19,
-  paddingHorizontal: 70,
-  paddingVertical: 70,
-  rounded: true,
-  selectedLang:
-    LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
-  selectedTheme:
-    THEMES.find((theme) => theme.id === "tokyoNightStorm") || THEMES[0],
-  showFileName: true,
-  showLineNumbers: true,
-  wrapperBg: "#eee811",
-  gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
-  gradientAngle: 140,
-  editorWidth: 0,
-  bgImageVisiblePatch: null,
-  bgBlur: 0,
+const getConfig = (): SnippngEditorConfigInterface => {
+  let persistedConfig = LocalStorage.get(
+    "config"
+  ) as SnippngEditorConfigInterface;
+  if (persistedConfig) return persistedConfig;
+  return {
+    code: DEFAULT_CODE_SNIPPET,
+    snippetsName: "",
+    editorFontSize: 16,
+    editorWindowControlsType: "mac-left",
+    fileName: "@utils/debounce.ts",
+    hasDropShadow: true,
+    lineHeight: 19,
+    paddingHorizontal: 70,
+    paddingVertical: 70,
+    rounded: true,
+    selectedLang:
+      LANGUAGES.find((language) => language.id === "typescript") ||
+      LANGUAGES[0],
+    selectedTheme:
+      THEMES.find((theme) => theme.id === "tokyoNightStorm") || THEMES[0],
+    showFileName: true,
+    showLineNumbers: true,
+    wrapperBg: "#eee811",
+    gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
+    gradientAngle: 140,
+    editorWidth: 0,
+    bgImageVisiblePatch: null,
+    bgBlur: 0,
+  };
 };
+
+export const defaultEditorConfig: SnippngEditorConfigInterface = getConfig();
 
 export const DEFAULT_BASE_SETUP = {
   foldGutter: false,

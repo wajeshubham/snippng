@@ -112,7 +112,11 @@ const SnippngCodeArea = () => {
     // if there is a uid means we are on edit page where we want to avoid persisting the editor config
     if (uid) return;
     // persist the editor config changes only when user is creating new snippet
-    LocalStorage.set("config", { ...editorConfig, uid: undefined });
+    LocalStorage.set("config", {
+      ...editorConfig,
+      uid: undefined,
+      ownerUid: undefined,
+    });
   }, [editorConfig, uid]);
 
   return (
@@ -255,7 +259,7 @@ const SnippngCodeArea = () => {
                     ? "Fork snippet"
                     : "Save snippet"}
                 </Button>
-                {user && user.uid === ownerUid ? (
+                {uid && user && user.uid === ownerUid ? (
                   <Button
                     StartIcon={ArrowPathIcon}
                     disabled={updating}

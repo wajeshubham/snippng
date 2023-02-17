@@ -1,6 +1,7 @@
 import { SnippngCodeArea, SnippngControlHeader } from "@/components";
 import { SnippngEditorContext } from "@/context/SnippngEditorContext";
 import { defaultEditorConfig } from "@/lib/constants";
+import { getEditorWrapperBg } from "@/utils";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
@@ -220,6 +221,21 @@ describe("SnippngCodeArea", () => {
       let selectedBackgroundColor = container.style.backgroundColor;
       await waitFor(() => {
         expect(selectedBackgroundColor).toBe(wrapperBackgroundColor);
+      });
+    });
+
+    describe("Gradients property", () => {
+      it("renders wrapper with gradient equals to the gradient array", async () => {
+        let renderedBackground = getEditorWrapperBg(
+          "#eee811",
+          ["#ba68c8", "#ffa7c4", "#e57373"],
+          140
+        );
+        await waitFor(() => {
+          expect(renderedBackground).toBe(
+            `linear-gradient(140deg, #ba68c8, #ffa7c4, #e57373)`
+          );
+        });
       });
     });
   });

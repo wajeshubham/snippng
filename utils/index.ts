@@ -1,4 +1,4 @@
-import { DEFAULT_RANGES, DEFAULT_WIDTHS } from "@/lib/constants";
+import { DEFAULT_RANGES, DEFAULT_WIDTHS, isBrowser } from "@/lib/constants";
 import {
   exportedTypeSuite,
   SnippngEditorConfigInterface,
@@ -137,3 +137,32 @@ export const validateSnippngConfig = (config: SnippngEditorConfigInterface) => {
 export const copyJSONText = async <T extends object>(data: T) => {
   return navigator.clipboard?.writeText(JSON.stringify(data));
 };
+
+export class LocalStorage {
+  static get(key: string) {
+    if (!isBrowser) return;
+    let value = localStorage.getItem(key);
+    if (value) {
+      try {
+        return JSON.parse(value);
+      } catch (err) {
+        return null;
+      }
+    }
+    return null;
+  }
+  static set(key: string, value: any) {
+    if (!isBrowser) return;
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  static remove(key: string) {
+    if (!isBrowser) return;
+    localStorage.removeItem(key);
+  }
+
+  static clear() {
+    if (!isBrowser) return;
+    localStorage.clear();
+  }
+}

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP } from "@/lib/constants";
 import {
@@ -7,6 +7,7 @@ import {
   getEditorWrapperBg,
   getLanguage,
   getTheme,
+  LocalStorage,
 } from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
@@ -106,6 +107,17 @@ const SnippngCodeArea = () => {
       setUpdating(false);
     }
   };
+
+  useEffect(() => {
+    // if there is a uid means we are on edit page where we want to avoid persisting the editor config
+    if (uid) return;
+    // persist the editor config changes only when user is creating new snippet
+    LocalStorage.set("config", {
+      ...editorConfig,
+      uid: undefined,
+      ownerUid: undefined,
+    });
+  }, [editorConfig, uid]);
 
   return (
     <>
@@ -247,7 +259,7 @@ const SnippngCodeArea = () => {
                     ? "Fork snippet"
                     : "Save snippet"}
                 </Button>
-                {user && user.uid === ownerUid ? (
+                {uid && user && user.uid === ownerUid ? (
                   <Button
                     StartIcon={ArrowPathIcon}
                     disabled={updating}

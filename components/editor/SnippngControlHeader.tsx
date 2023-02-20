@@ -213,7 +213,7 @@ const SnippngControlHeader: React.FC<{
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 max-h-[500px] z-30 mt-2 w-72 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
+              <Menu.Items className="absolute right-0 max-h-[500px] z-30 mt-2 w-96 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:text-white text-zinc-900">
                 <Menu.Button
                   className="w-full text-left p-2 inline-flex items-center"
                   onClick={() => {

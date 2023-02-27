@@ -1,4 +1,7 @@
-import { SelectOptionInterface } from "./tsx";
+export interface SelectOptionInterface {
+  id: string;
+  label: string;
+}
 
 export type SnippngWindowControlsType =
   | "mac-left"
@@ -9,6 +12,7 @@ export type SnippngWindowControlsType =
 export interface SnippngEditorConfigInterface {
   ownerUid?: string;
   uid?: string;
+  watermark?: boolean;
   code: string;
   editorFontSize: number;
   editorWidth: number;

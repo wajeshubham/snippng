@@ -14,6 +14,7 @@ export const SnippngWindowControlsType = t.union(t.lit("mac-left"), t.lit("mac-r
 export const SnippngEditorConfigInterface = t.iface([], {
   "ownerUid": t.opt("string"),
   "uid": t.opt("string"),
+  "watermark": t.opt("boolean"),
   "code": "string",
   "editorFontSize": "number",
   "editorWidth": "number",

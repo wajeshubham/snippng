@@ -25,15 +25,15 @@ const Logo: React.FC<{ size?: "xs" | "sm" | "xl" | "2xl" }> = ({
   const getIconClassesBySize = () => {
     switch (size) {
       case "xs":
-        return "h-3 w-3";
+        return "h-4 w-4 mr-1";
       case "sm":
-        return "h-5 w-5";
+        return "h-5 w-5 mr-1";
       case "xl":
-        return "h-7 w-7";
+        return "h-7 w-7 mr-2";
       case "2xl":
-        return "h-9 w-9";
+        return "h-9 w-9 mr-2";
       default:
-        return "h-7 w-7";
+        return "h-7 w-7 mr-2";
     }
   };
 
@@ -45,7 +45,7 @@ const Logo: React.FC<{ size?: "xs" | "sm" | "xl" | "2xl" }> = ({
       )}
     >
       <CommandLineIcon
-        className={clsx("inset-0 mr-2", getIconClassesBySize() || "")}
+        className={clsx("inset-0", getIconClassesBySize() || "")}
       />
       <span className="inline-flex items-center">
         Snippng

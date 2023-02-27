@@ -31,6 +31,7 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import Logo from "../Logo";
 
 const SnippngCodeArea = () => {
   const editorRef = useRef<HTMLDivElement>(null); // useRef to persist existing ref. Might be useful when dealing with background image in future
@@ -63,6 +64,7 @@ const SnippngCodeArea = () => {
     uid,
     bgImageVisiblePatch,
     bgBlur,
+    watermark,
   } = editorConfig;
 
   const saveSnippet = async () => {
@@ -219,6 +221,15 @@ const SnippngCodeArea = () => {
                     <SnippngWindowControls type={editorWindowControlsType} />
                   </div>
                 </CodeMirror>
+                {watermark ? (
+                  <div
+                    title="Remove watermark from the settings"
+                    className="absolute bottom-1 text-white drop-shadow-[0_1px_1.2px_rgba(0,0,0,0.8)] opacity-50 right-2 text-[10px] inline-flex items-center"
+                  >
+                    <span className="mr-1">created using</span>{" "}
+                    <Logo size="xs" />
+                  </div>
+                ) : null}
               </div>
             </div>
             <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">

@@ -546,6 +546,7 @@ const getConfig = (): SnippngEditorConfigInterface => {
     editorWidth: 0,
     bgImageVisiblePatch: null,
     bgBlur: 0,
+    watermark: true,
   };
 };
 

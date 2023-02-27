@@ -57,6 +57,7 @@ const SnippngControlHeader: React.FC<{
     snippetsName,
     bgBlur = 0,
     bgImageVisiblePatch,
+    watermark,
   } = editorConfig;
 
   const downloadImage = (type: SelectOptionInterface) => {
@@ -223,6 +224,17 @@ const SnippngControlHeader: React.FC<{
                   <ArrowsUpDownIcon className="h-5 w-5 mr-2" /> Import or export
                   config
                 </Menu.Button>
+                <div className="py-1 px-2">
+                  <Checkbox
+                    label="Watermark"
+                    id="watermark"
+                    data-testid="watermark"
+                    checked={watermark}
+                    onChange={() => {
+                      handleConfigChange("watermark")(!watermark);
+                    }}
+                  />
+                </div>
                 <div className="py-1 px-2">
                   <Checkbox
                     label="Line count"

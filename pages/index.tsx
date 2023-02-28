@@ -1,4 +1,9 @@
-import { Button, SnippngCodeArea, SnippngWindowControls } from "@/components";
+import {
+  Button,
+  NoSSRWrapper,
+  SnippngCodeArea,
+  SnippngWindowControls,
+} from "@/components";
 import GithubIcon from "@/components/icons/GithubIcon";
 import Layout from "@/layout/Layout";
 import { getAvailableThemes, LANGUAGES } from "@/lib/constants";
@@ -71,9 +76,11 @@ export default function Home() {
                       href="#"
                       className="inline-flex flex-wrap ms:space-x-4 space-x-2 md:text-sm text-xs"
                     >
-                      <span className="inline-flex items-center font-medium leading-6">
-                        {getAvailableThemes().length} themes
-                      </span>
+                      <NoSSRWrapper>
+                        <span className="inline-flex items-center font-medium leading-6">
+                          {getAvailableThemes().length} themes
+                        </span>
+                      </NoSSRWrapper>
                       <svg
                         viewBox="0 0 2 2"
                         aria-hidden="true"

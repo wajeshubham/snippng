@@ -151,9 +151,11 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
       >
         <NoSSRWrapper>
           <div className="rounded-md bg-white dark:bg-zinc-900 md:p-8 p-4 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
-            <div className="w-full">
-              <SnippngControlHeader wrapperRef={wrapperRef} />
-            </div>
+            {!underConstructionTheme ? (
+              <div className="w-full">
+                <SnippngControlHeader wrapperRef={wrapperRef} />
+              </div>
+            ) : null}
             {bgImageVisiblePatch ? (
               <button
                 className="dark:text-white text-zinc-900 ml-auto text-xs py-1 px-1.5 mb-1 hover:bg-zinc-100 dark:hover:bg-zinc-700"
@@ -253,64 +255,65 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
                 ) : null}
               </div>
             </div>
-            <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">
-              <div className="w-full">
-                <Input
-                  value={snippetsName}
-                  onChange={(e) =>
-                    handleConfigChange("snippetsName")(e.target.value)
-                  }
-                  placeholder="Snippet name..."
-                />
-              </div>
-              <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
-                <Button
-                  id="save-snippet-btn"
-                  StartIcon={ArrowDownOnSquareStackIcon}
-                  disabled={saving}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!user)
-                      return addToast({
-                        message: "Please login first",
-                        type: "error",
-                        description:
-                          "You need to login before saving the snippet",
-                      });
-                    if (!snippetsName)
-                      return addToast({
-                        message: "Snippet name is required",
-                        type: "error",
-                      });
-                    else saveSnippet();
-                  }}
-                >
-                  {saving
-                    ? "Saving..."
-                    : uid // if there is a uid, we are on snippet details page where user can copy the snippet
-                    ? "Fork snippet"
-                    : "Save snippet"}
-                </Button>
-                {uid && user && user.uid === ownerUid ? (
+            {!underConstructionTheme ? (
+              <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">
+                <div className="w-full">
+                  <Input
+                    value={snippetsName}
+                    onChange={(e) =>
+                      handleConfigChange("snippetsName")(e.target.value)
+                    }
+                    placeholder="Snippet name..."
+                  />
+                </div>
+                <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
                   <Button
-                    StartIcon={ArrowPathIcon}
-                    disabled={updating}
+                    id="save-snippet-btn"
+                    StartIcon={ArrowDownOnSquareStackIcon}
+                    disabled={saving}
                     onClick={(e) => {
                       e.stopPropagation();
+                      if (!user)
+                        return addToast({
+                          message: "Please login first",
+                          type: "error",
+                          description:
+                            "You need to login before saving the snippet",
+                        });
                       if (!snippetsName)
                         return addToast({
                           message: "Snippet name is required",
                           type: "error",
                         });
-                      updateSnippet();
+                      else saveSnippet();
                     }}
                   >
-                    {updating ? "Updating..." : "Update snippet"}
+                    {saving
+                      ? "Saving..."
+                      : uid // if there is a uid, we are on snippet details page where user can copy the snippet
+                      ? "Fork snippet"
+                      : "Save snippet"}
                   </Button>
-                ) : null}
+                  {uid && user && user.uid === ownerUid ? (
+                    <Button
+                      StartIcon={ArrowPathIcon}
+                      disabled={updating}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!snippetsName)
+                          return addToast({
+                            message: "Snippet name is required",
+                            type: "error",
+                          });
+                        updateSnippet();
+                      }}
+                    >
+                      {updating ? "Updating..." : "Update snippet"}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
-            </div>
-            {/* TODO: Add CTA to remove background image */}
+            ) : null}
           </div>
           {uid ? (
             <small className="dark:text-zinc-300 text-left text-zinc-600 py-2 inline-block">

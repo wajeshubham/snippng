@@ -1,9 +1,16 @@
-import { SnippngEditorConfigInterface } from "@/types";
+import {
+  SnippngEditorConfigInterface,
+  SnippngThemeAttributesInterface,
+} from "@/types";
 import { LocalStorage } from "@/utils";
 
 export const isBrowser = typeof window !== "undefined";
 
 export const THEMES = [
+  {
+    id: "create_new",
+    label: "+ Create new",
+  },
   {
     id: "abcdef",
     label: "ABCDEF",
@@ -122,6 +129,31 @@ export const THEMES = [
     label: "xCode Light",
   },
 ];
+
+/**
+ *
+ * @returns Merged list of predefined and custom themes created by user
+ */
+export const getAvailableThemes = () => {
+  // retrieve the locally saved themes
+  let localThemes = LocalStorage.get("local_themes") as
+    | SnippngThemeAttributesInterface[]
+    | undefined;
+
+  let localThemesToBeMerged: {
+    id: string;
+    label: string;
+  }[] = [];
+
+  if (localThemes?.length) {
+    // if there are locally retrieved themes then map them in correct format
+    localThemesToBeMerged = localThemes?.map((x) => ({
+      id: x.id,
+      label: x.label,
+    }));
+  }
+  return [...THEMES, ...localThemesToBeMerged];
+};
 
 export const LANGUAGES = [
   {

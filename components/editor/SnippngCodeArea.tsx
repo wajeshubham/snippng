@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import { DEFAULT_BASE_SETUP } from "@/lib/constants";
+import { DEFAULT_BASE_SETUP, THEMES } from "@/lib/constants";
 import {
   clsx,
+  constructTheme,
   deepClone,
   getEditorWrapperBg,
   getLanguage,
@@ -25,6 +26,7 @@ import SnippngWindowControls from "./SnippngWindowControls";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
+import { SnippngThemeAttributesInterface } from "@/types";
 import {
   ArrowDownOnSquareStackIcon,
   ArrowPathIcon,
@@ -33,7 +35,11 @@ import {
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import Logo from "../Logo";
 
-const SnippngCodeArea = () => {
+interface Props {
+  underConstructionTheme?: SnippngThemeAttributesInterface;
+}
+
+const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
   const editorRef = useRef<HTMLDivElement>(null); // useRef to persist existing ref. Might be useful when dealing with background image in future
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [saving, setSaving] = useState(false);
@@ -107,6 +113,21 @@ const SnippngCodeArea = () => {
       console.error("Error adding document: ", e);
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const getSelectedTheme = () => {
+    // If user is configuring the custom theme (SnippngCustomThemeContextProvider modal is mounded)
+    if (underConstructionTheme) return constructTheme(underConstructionTheme);
+    else {
+      // check if selected theme is predefined or locally created
+      let [isPredefined, isLocalCustom] = getTheme(selectedTheme.id);
+
+      if (isPredefined) return themes[isPredefined]; // if it is predefined return the theme configuration from the library
+
+      if (isLocalCustom) return constructTheme(isLocalCustom); // else construct and return the code mirror compatible theme
+
+      return themes[THEMES[0].id as keyof typeof themes]; // this will be returned if theme is not predefined as well as not available locally
     }
   };
 
@@ -200,7 +221,7 @@ const SnippngCodeArea = () => {
                     fontSize: `${editorFontSize}px`,
                   }}
                   // @ts-ignore
-                  theme={themes[getTheme(selectedTheme.id)]}
+                  theme={getSelectedTheme()}
                   indentWithTab
                   onChange={(value) => handleConfigChange("code")(value)}
                 >

@@ -1,7 +1,7 @@
 import { Button, SnippngCodeArea, SnippngWindowControls } from "@/components";
 import GithubIcon from "@/components/icons/GithubIcon";
 import Layout from "@/layout/Layout";
-import { LANGUAGES, THEMES } from "@/lib/constants";
+import { getAvailableThemes, LANGUAGES } from "@/lib/constants";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -72,7 +72,7 @@ export default function Home() {
                       className="inline-flex flex-wrap ms:space-x-4 space-x-2 md:text-sm text-xs"
                     >
                       <span className="inline-flex items-center font-medium leading-6">
-                        {THEMES.length} themes
+                        {getAvailableThemes().length} themes
                       </span>
                       <svg
                         viewBox="0 0 2 2"

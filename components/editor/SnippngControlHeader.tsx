@@ -1,3 +1,4 @@
+import { useCustomTheme } from "@/context/SnippngCustomThemeContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
@@ -5,8 +6,8 @@ import {
   defaultEditorConfig,
   DEFAULT_RANGES,
   DOWNLOAD_OPTIONS,
+  getAvailableThemes,
   LANGUAGES,
-  THEMES,
 } from "@/lib/constants";
 import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
@@ -36,6 +37,8 @@ const SnippngControlHeader: React.FC<{
   const [openImportExportSidebar, setOpenImportExportSidebar] = useState(false);
 
   const { editorConfig, handleConfigChange } = useSnippngEditor();
+  const { open, setOpen } = useCustomTheme();
+
   const { addToast } = useToast();
 
   const {
@@ -111,15 +114,21 @@ const SnippngControlHeader: React.FC<{
           options={[...DOWNLOAD_OPTIONS]}
         />
 
-        <Select
-          Icon={SparklesIcon}
-          value={selectedTheme}
-          onChange={(val) => {
-            if (!val.id) return;
-            handleConfigChange("selectedTheme")(val);
-          }}
-          options={[...THEMES]}
-        />
+        {!open ? (
+          <Select
+            Icon={SparklesIcon}
+            value={selectedTheme}
+            onChange={(val) => {
+              if (!val.id) return;
+              if (val.id === "create_new" && setOpen) {
+                setOpen(true);
+                return;
+              }
+              handleConfigChange("selectedTheme")(val);
+            }}
+            options={getAvailableThemes()}
+          />
+        ) : null}
         <Select
           Icon={CommandLineIcon}
           value={selectedLang}

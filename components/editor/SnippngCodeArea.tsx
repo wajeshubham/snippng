@@ -151,11 +151,9 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
       >
         <NoSSRWrapper>
           <div className="rounded-md bg-white dark:bg-zinc-900 md:p-8 p-4 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
-            {!underConstructionTheme ? (
-              <div className="w-full">
-                <SnippngControlHeader wrapperRef={wrapperRef} />
-              </div>
-            ) : null}
+            <div className="w-full">
+              <SnippngControlHeader wrapperRef={wrapperRef} />
+            </div>
             {bgImageVisiblePatch ? (
               <button
                 className="dark:text-white text-zinc-900 ml-auto text-xs py-1 px-1.5 mb-1 hover:bg-zinc-100 dark:hover:bg-zinc-700"

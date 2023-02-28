@@ -46,6 +46,10 @@ export const constructTheme = (localTheme: SnippngThemeAttributesInterface) => {
       { tag: t.typeName, color: config.typeName },
       { tag: t.tagName, color: config.tagName },
       { tag: t.attributeName, color: config.attributeName },
+      { tag: t.squareBracket, color: config.squareBraces },
+      { tag: t.paren, color: config.roundBraces },
+      { tag: t.brace, color: config.curlyBraces },
+      { tag: t.controlKeyword, color: config.controlFlow },
     ],
   });
   return constructedTheme;

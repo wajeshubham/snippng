@@ -33,6 +33,10 @@ export interface SnippngThemeAttributesInterface {
     typeName: string;
     tagName: string;
     attributeName: string;
+    roundBraces: string;
+    squareBraces: string;
+    curlyBraces: string;
+    controlFlow: string;
   };
 }
 

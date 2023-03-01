@@ -37,7 +37,7 @@ body {
 }
 
 .CodeMirror__Theme__Preview__Editor div.cm-editor {
-  @apply pt-12;
+  @apply pt-3 mb-10 border-[0.1px] dark:border-zinc-400 border-zinc-300 rounded-md;
 }
 
 .cm-scroller {

@@ -11,6 +11,7 @@ import {
 } from "@/types";
 import { LocalStorage } from "@/utils";
 import {
+  CodeBracketIcon,
   PlusCircleIcon,
   PlusIcon,
   SparklesIcon,
@@ -126,10 +127,11 @@ const UserProfile = () => {
                       <div className="px-4 py-5 sm:px-6">
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                           <div className="sm:col-span-2">
-                            <dt className="text-sm mb-4 font-medium dark:text-white text-zinc-900">
-                              Saved snippets
+                            <dt className="text-sm font-medium inline-flex items-center dark:text-white text-zinc-900">
+                              <CodeBracketIcon className="w-5 h-5 mr-2" /> Saved
+                              snippets
                             </dt>
-                            <dd className="mt-1 text-sm text-zinc-900">
+                            <dd className="mt-3 text-sm text-zinc-900">
                               {!loadingSnippets ? (
                                 savedSnippets.length ? (
                                   <ul
@@ -178,8 +180,9 @@ const UserProfile = () => {
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                           <div className="sm:col-span-2">
                             <div className="flex justify-between items-center w-full mb-4">
-                              <dt className="text-sm font-medium items-center dark:text-white text-zinc-900">
-                                Saved themes
+                              <dt className="text-sm font-medium inline-flex items-center dark:text-white text-zinc-900">
+                                <SparklesIcon className="w-5 h-5 mr-2" /> Saved
+                                themes
                               </dt>
                               <Button
                                 StartIcon={SparklesIcon}

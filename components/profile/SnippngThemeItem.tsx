@@ -40,8 +40,8 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
       theme={constructTheme(theme)}
       indentWithTab
     >
-      <div className="absolute top-0 z-20 w-full flex flex-row justify-between items-center text-base dark:text-white text-zinc-900 dark:bg-zinc-800 bg-white left-0 !p-3">
-        <span className="font-semibold inline-flex items-center justify-between w-full text-indigo-500 dark:text-indigo-400">
+      <div className="absolute bottom-0 z-20 w-full flex flex-row justify-between items-center text-base dark:text-white text-zinc-900 dark:bg-zinc-800 bg-white left-0 !p-3">
+        <span className="font-semibold inline-flex items-center justify-between w-full text-indigo-600 dark:text-white">
           <span title={theme.label} className="truncate">
             {theme.label}
           </span>

@@ -14,6 +14,7 @@ import React, {
   useState,
 } from "react";
 import { useSnippngEditor } from "./SnippngEditorContext";
+import { useToast } from "./ToastContext";
 
 const defaultCustomTheme: SnippngThemeAttributesInterface = {
   id: "",
@@ -67,6 +68,7 @@ const SnippngCustomThemeContextProvider: React.FC<{
   });
 
   const { handleConfigChange } = useSnippngEditor();
+  const { addToast } = useToast();
 
   const onConfigChange = (key: keyof typeof theme.config, value: string) => {
     setTheme((prevTheme) => ({
@@ -94,6 +96,10 @@ const SnippngCustomThemeContextProvider: React.FC<{
     LocalStorage.set("local_themes", previousThemes);
     handleConfigChange("selectedTheme")(themeToBeApplied);
     setOpen(false);
+    addToast({
+      message: "Theme saved successfully!",
+      description: "You can view your custom themes in your profile",
+    });
   };
 
   const onClose = () => {

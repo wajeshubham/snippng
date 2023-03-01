@@ -64,3 +64,15 @@ body {
     #ff0000
   );
 }
+
+.sketch-picker .flexbox-fix {
+  @apply !border-none;
+}
+
+.sketch-picker .flexbox-fix label {
+  @apply dark:!text-white;
+}
+
+.sketch-picker .flexbox-fix input {
+  @apply dark:bg-zinc-700 placeholder:dark:text-zinc-400 block px-2 py-1.5 bg-zinc-100 border-[1px] dark:border-zinc-400 border-zinc-300 dark:text-white text-zinc-900 outline-none;
+}

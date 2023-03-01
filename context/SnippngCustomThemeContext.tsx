@@ -1,9 +1,10 @@
 import { Button, Input, SnippngCodeArea } from "@/components";
+import { ColorPicker } from "@/lib/color-picker";
 import {
   SnippngCustomThemeContextInterface,
   SnippngThemeAttributesInterface,
 } from "@/types";
-import { debounce, LocalStorage } from "@/utils";
+import { LocalStorage } from "@/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import React, {
   createContext,
@@ -67,18 +68,15 @@ const SnippngCustomThemeContextProvider: React.FC<{
 
   const { handleConfigChange } = useSnippngEditor();
 
-  const onConfigChange = debounce(
-    (key: keyof typeof theme.config, value: string) => {
-      setTheme((prevTheme) => ({
-        ...prevTheme,
-        config: {
-          ...prevTheme.config,
-          [key]: value,
-        },
-      }));
-    },
-    400
-  );
+  const onConfigChange = (key: keyof typeof theme.config, value: string) => {
+    setTheme((prevTheme) => ({
+      ...prevTheme,
+      config: {
+        ...prevTheme.config,
+        [key]: value,
+      },
+    }));
+  };
 
   const saveAndApplyTheme = () => {
     let previousThemes =
@@ -98,6 +96,15 @@ const SnippngCustomThemeContextProvider: React.FC<{
     setOpen(false);
   };
 
+  const onClose = () => {
+    let confirm = window.confirm(
+      "Are you sure you want to close the theme construction?"
+    );
+    if (confirm) {
+      setOpen(false);
+    }
+  };
+
   useEffect(() => {
     if (!open) {
       setTheme({ ...defaultCustomTheme });
@@ -110,18 +117,7 @@ const SnippngCustomThemeContextProvider: React.FC<{
     >
       {children}
       <Transition.Root show={open} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-40"
-          onClose={(value) => {
-            let confirm = window.confirm(
-              "Are you sure you want to close the theme construction?"
-            );
-            if (confirm) {
-              setOpen(value);
-            }
-          }}
-        >
+        <Dialog as="div" className="relative z-40" onClose={onClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -145,7 +141,7 @@ const SnippngCustomThemeContextProvider: React.FC<{
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative flex xl:flex-row flex-col justify-start items-start gap-8 transform overflow-hidden rounded-lg bg-white dark:bg-zinc-900 md:p-8 p-4 border-[1px] dark:border-zinc-500 border-zinc-200  px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full max-w-[95%] sm:p-6">
+                <Dialog.Panel className="relative flex xl:flex-row flex-col justify-start items-start gap-8 transform overflow-visible rounded-lg bg-white dark:bg-zinc-900 md:p-8 p-4 border-[1px] dark:border-zinc-500 border-zinc-200  px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full max-w-[95%] sm:p-6">
                   <div className="xl:w-4/5 w-full">
                     <SnippngCodeArea underConstructionTheme={theme} />
                   </div>
@@ -170,21 +166,17 @@ const SnippngCustomThemeContextProvider: React.FC<{
                             key={k}
                             title={k}
                           >
-                            <label
-                              className="h-5 w-5 border-[1px] flex flex-shrink-0"
-                              style={{ backgroundColor: theme.config[key] }}
-                              htmlFor={k}
+                            <ColorPicker
+                              color={theme.config[key]}
+                              onChange={(color) => {
+                                onConfigChange(key, color);
+                              }}
                             >
-                              <input
-                                id={k}
-                                className="w-0 h-0 opacity-0"
-                                type={"color"}
-                                value={theme.config[key]}
-                                onChange={(e) => {
-                                  onConfigChange(key, e.target.value);
-                                }}
-                              />
-                            </label>
+                              <div
+                                className="h-5 w-5 border-[1px] flex flex-shrink-0"
+                                style={{ backgroundColor: theme.config[key] }}
+                              ></div>
+                            </ColorPicker>
                             <p className="truncate">{k}</p>
                           </div>
                         );
@@ -195,6 +187,12 @@ const SnippngCustomThemeContextProvider: React.FC<{
                       onClick={saveAndApplyTheme}
                     >
                       Save &amp; apply
+                    </Button>
+                    <Button
+                      className="w-full justify-center -mt-2"
+                      onClick={onClose}
+                    >
+                      Cancel
                     </Button>
                   </div>
                 </Dialog.Panel>

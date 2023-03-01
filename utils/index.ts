@@ -3,10 +3,57 @@ import {
   exportedTypeSuite,
   SnippngEditorConfigInterface,
   SnippngExportableConfig,
+  SnippngThemeAttributesInterface,
 } from "@/types";
+import { tags as t } from "@lezer/highlight";
 import { langs } from "@uiw/codemirror-extensions-langs";
+import { createTheme } from "@uiw/codemirror-themes";
 import * as themes from "@uiw/codemirror-themes-all";
 import { createCheckers } from "ts-interface-checker";
+
+/**
+ *
+ * @param  {SnippngThemeAttributesInterface} localTheme local interface not compatible with code mirror
+ * @returns codemirror compatible theme
+ * @description Accepts object with mixed color configuration and constructs the codemirror compatible theme object
+ */
+export const constructTheme = (localTheme: SnippngThemeAttributesInterface) => {
+  const { config, theme } = localTheme;
+  const constructedTheme = createTheme({
+    theme: theme,
+    settings: {
+      background: config.background,
+      foreground: config.foreground,
+      caret: config.cursor,
+      selection: config.selection,
+      selectionMatch: config.selectionMatch,
+      lineHighlight: config.lineHighlight,
+      gutterBackground: config.gutterBackground,
+      gutterForeground: config.gutterForeground,
+      gutterBorder: config.gutterBorder,
+    },
+    styles: [
+      { tag: t.comment, color: config.comment },
+      { tag: t.variableName, color: config.variableName },
+      { tag: [t.string, t.special(t.brace)], color: config.string },
+      { tag: t.number, color: config.number },
+      { tag: t.bool, color: config.bool },
+      { tag: t.null, color: config.null },
+      { tag: t.keyword, color: config.keyword },
+      { tag: t.operator, color: config.operator },
+      { tag: t.className, color: config.className },
+      { tag: t.definition(t.typeName), color: config.definition },
+      { tag: t.typeName, color: config.typeName },
+      { tag: t.tagName, color: config.tagName },
+      { tag: t.attributeName, color: config.attributeName },
+      { tag: t.squareBracket, color: config.squareBraces },
+      { tag: t.paren, color: config.roundBraces },
+      { tag: t.brace, color: config.curlyBraces },
+      { tag: t.controlKeyword, color: config.controlFlow },
+    ],
+  });
+  return constructedTheme;
+};
 
 export const clsx = (...classNames: string[]) =>
   classNames.filter(Boolean).join(" ");
@@ -15,8 +62,34 @@ export const getLanguage = (lang: string): keyof typeof langs => {
   return lang as keyof typeof langs;
 };
 
-export const getTheme = (lang: string): keyof typeof themes => {
-  return lang as keyof typeof themes;
+/**
+ *
+ * @param selectedTheme - Theme selected by user
+ * @returns `tuple` of length 2
+ * @description returned `tuple` consist of
+ * - index 0: inbuilt `predefined` theme from the `@uiw/codemirror-themes-all` library `||` `null`
+ * - index 1: user configured theme using theme builder `||` `null`
+ * - If both the above conditions are null means the `selectedTheme` is invalid and neither present in the inbuilt library of locally
+ */
+export const getTheme = (
+  selectedTheme: string
+): [keyof typeof themes | null, SnippngThemeAttributesInterface | null] => {
+  let availableThemes = Object.keys(themes);
+
+  if (availableThemes.includes(selectedTheme)) {
+    // if the selected selectedTheme is predefined
+    return [selectedTheme as keyof typeof themes, null];
+  }
+
+  // if not then retrieve the locally saved themes
+  let localThemes = LocalStorage.get("local_themes") as
+    | SnippngThemeAttributesInterface[]
+    | undefined;
+
+  // see if selected selectedTheme is present locally
+  let selectedLocalTheme = localThemes?.find((thm) => thm.id === selectedTheme);
+  // if yes then return the local selectedTheme else return null which means the selected selectedTheme is invalid
+  return [null, selectedLocalTheme ? selectedLocalTheme : null];
 };
 
 export const getEditorWrapperBg = (
@@ -136,6 +209,23 @@ export const validateSnippngConfig = (config: SnippngEditorConfigInterface) => {
 
 export const copyJSONText = async <T extends object>(data: T) => {
   return navigator.clipboard?.writeText(JSON.stringify(data));
+};
+
+export const debounce = <F extends (...args: any[]) => any>(
+  func: F,
+  waitFor: number
+) => {
+  let timeout: NodeJS.Timeout | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
 };
 
 export class LocalStorage {

@@ -15,7 +15,7 @@ export const GradientSelect: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <p className="dark:text-white text-zinc-900 mt-4">Color palette</p>
+      <p className="dark:text-white text-zinc-900 mt-4">Gradient palette</p>
 
       <span className="mb-3 text-xs dark:text-zinc-400 text-zinc-500">
         To create a <strong>gradient</strong>, select multiple. You can control

@@ -4,6 +4,8 @@ import { defaultEditorConfig, LANGUAGES, THEMES } from "@/lib/constants";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 beforeAll(() => {
   document.createRange = () => {
     const range = new Range();

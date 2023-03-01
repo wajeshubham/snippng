@@ -1,6 +1,7 @@
 import SnippngCodeArea from "./editor/SnippngCodeArea";
 import SnippngConfigImportExporter from "./editor/SnippngConfigImportExporter";
 import SnippngControlHeader from "./editor/SnippngControlHeader";
+import SnippngThemeBuilder from "./editor/SnippngThemeBuilder";
 import SnippngWindowControls from "./editor/SnippngWindowControls";
 import ErrorText from "./ErrorText";
 import Button from "./form/Button";
@@ -29,6 +30,7 @@ export {
   SnippngCodeArea,
   SnippngControlHeader,
   SnippngConfigImportExporter,
+  SnippngThemeBuilder,
   SnippngWindowControls,
   ThemeToggle,
   Toast,

@@ -10,6 +10,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+// TODO: implement SSR
 const SavedSnippet = () => {
   const router = useRouter();
   const { setEditorConfig } = useSnippngEditor();

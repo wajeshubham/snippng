@@ -1,5 +1,8 @@
-import { SnippngEditorConfigInterface } from "@/types";
-import { LocalStorage } from "@/utils";
+import {
+  SnippngEditorConfigInterface,
+  SnippngThemeAttributesInterface,
+} from "@/types";
+import { deepClone, LocalStorage } from "@/utils";
 
 export const isBrowser = typeof window !== "undefined";
 
@@ -122,6 +125,38 @@ export const THEMES = [
     label: "xCode Light",
   },
 ];
+
+/**
+ *
+ * @returns Merged list of predefined and custom themes created by user
+ */
+export const getAvailableThemes = () => {
+  // retrieve the locally saved themes
+  let localThemes = LocalStorage.get("local_themes") as
+    | SnippngThemeAttributesInterface[]
+    | undefined;
+
+  let localThemesToBeMerged: {
+    id: string;
+    label: string;
+  }[] = [];
+
+  if (localThemes?.length) {
+    // if there are locally retrieved themes then map them in correct format
+    localThemesToBeMerged = localThemes?.map((x) => ({
+      id: x.id,
+      label: x.label,
+    }));
+  }
+  return [
+    {
+      id: "create_new",
+      label: "+ Create new",
+    },
+    ...localThemesToBeMerged,
+    ...THEMES,
+  ];
+};
 
 export const LANGUAGES = [
   {
@@ -517,39 +552,77 @@ export const PEXELS_QUERY_STRINGS = [
   "technology",
 ];
 
+export const defaultCustomTheme: SnippngThemeAttributesInterface = {
+  id: "",
+  label: "Custom theme",
+  theme: "light",
+  config: {
+    attributeName: "#24a507",
+    background: "#181e24",
+    bool: "#3f91f1",
+    className: "#d8ff84",
+    comment: "#66a159",
+    controlFlow: "#ff8800",
+    curlyBraces: "#f394ff",
+    cursor: "#f394ff",
+    definition: "#49c5ee",
+    foreground: "#d1d1d1",
+    gutterBackground: "#181e24",
+    gutterBorder: "#404040",
+    gutterForeground: "#525252",
+    keyword: "#ff8800",
+    lineHighlight: "#ffffff",
+    null: "#ff8800",
+    number: "#f63f05",
+    operator: "#ff7b00",
+    roundBraces: "#3f91f1",
+    selection: "#3d3d3d",
+    selectionMatch: "#707070",
+    squareBraces: "#ffd500",
+    string: "#2be937",
+    tagName: "#d80450",
+    typeName: "#49c5ee",
+    variableName: "#ffd500",
+  },
+};
+
+export const predefinedConfig: SnippngEditorConfigInterface = {
+  code: DEFAULT_CODE_SNIPPET,
+  snippetsName: "",
+  editorFontSize: 16,
+  editorWindowControlsType: "mac-left",
+  fileName: "@utils/debounce.ts",
+  hasDropShadow: true,
+  lineHeight: 19,
+  paddingHorizontal: 70,
+  paddingVertical: 70,
+  rounded: true,
+  selectedLang:
+    LANGUAGES.find((language) => language.id === "typescript") || LANGUAGES[0],
+  selectedTheme:
+    THEMES.find((theme) => theme.id === "tokyoNightStorm") || THEMES[0],
+  showFileName: true,
+  showLineNumbers: true,
+  wrapperBg: "#eee811",
+  gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
+  gradientAngle: 140,
+  editorWidth: 0,
+  bgImageVisiblePatch: null,
+  bgBlur: 0,
+  watermark: true,
+};
+
 const getConfig = (): SnippngEditorConfigInterface => {
   let persistedConfig = LocalStorage.get(
     "config"
   ) as SnippngEditorConfigInterface;
   if (persistedConfig) return persistedConfig;
-  return {
-    code: DEFAULT_CODE_SNIPPET,
-    snippetsName: "",
-    editorFontSize: 16,
-    editorWindowControlsType: "mac-left",
-    fileName: "@utils/debounce.ts",
-    hasDropShadow: true,
-    lineHeight: 19,
-    paddingHorizontal: 70,
-    paddingVertical: 70,
-    rounded: true,
-    selectedLang:
-      LANGUAGES.find((language) => language.id === "typescript") ||
-      LANGUAGES[0],
-    selectedTheme:
-      THEMES.find((theme) => theme.id === "tokyoNightStorm") || THEMES[0],
-    showFileName: true,
-    showLineNumbers: true,
-    wrapperBg: "#eee811",
-    gradients: ["#ba68c8", "#ffa7c4", "#e57373"],
-    gradientAngle: 140,
-    editorWidth: 0,
-    bgImageVisiblePatch: null,
-    bgBlur: 0,
-    watermark: true,
-  };
+  return { ...deepClone(predefinedConfig) };
 };
 
+/**
+ * gives persisted config else the predefined one
+ */
 export const defaultEditorConfig: SnippngEditorConfigInterface = getConfig();
 
 export const DEFAULT_BASE_SETUP = {

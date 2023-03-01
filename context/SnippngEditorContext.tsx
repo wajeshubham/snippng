@@ -13,15 +13,8 @@ import React, {
 
 const SnippngEditorContext = createContext<SnippngEditorContextInterface>({
   editorConfig: { ...defaultEditorConfig },
-  setEditorConfig: (config: SnippngEditorConfigInterface) => {},
-  handleConfigChange:
-    <
-      K extends keyof SnippngEditorConfigInterface,
-      V extends SnippngEditorConfigInterface[K]
-    >(
-      key: K
-    ) =>
-    (value: V) => {},
+  setEditorConfig: (config) => {},
+  handleConfigChange: (key) => (value) => {},
 });
 
 const useSnippngEditor = () => useContext(SnippngEditorContext);

@@ -28,6 +28,18 @@ body {
   @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
 }
 
+.CodeMirror__Theme__Preview__Editor {
+  @apply relative text-lg dark:bg-zinc-800 border-[1px] dark:border-zinc-400 border-zinc-300 p-3 rounded-md overflow-auto;
+}
+
+.CodeMirror__Theme__Preview__Editor div {
+  @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
+}
+
+.CodeMirror__Theme__Preview__Editor div.cm-editor {
+  @apply pt-3 mb-10 border-[0.1px] dark:border-zinc-400 border-zinc-300 rounded-md;
+}
+
 .cm-scroller {
   position: relative;
   overflow: hidden !important;
@@ -63,4 +75,16 @@ body {
     #ff00ff,
     #ff0000
   );
+}
+
+.sketch-picker .flexbox-fix {
+  @apply !border-none;
+}
+
+.sketch-picker .flexbox-fix label {
+  @apply dark:!text-white;
+}
+
+.sketch-picker .flexbox-fix input {
+  @apply dark:bg-zinc-700 placeholder:dark:text-zinc-400 block px-2 py-1.5 bg-zinc-100 border-[1px] dark:border-zinc-400 border-zinc-300 dark:text-white text-zinc-900 outline-none;
 }

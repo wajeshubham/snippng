@@ -1,4 +1,3 @@
-import { useCustomTheme } from "@/context/SnippngCustomThemeContext";
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
@@ -8,12 +7,14 @@ import {
   DOWNLOAD_OPTIONS,
   getAvailableThemes,
   LANGUAGES,
+  predefinedConfig,
 } from "@/lib/constants";
 import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
-import { getEditorWrapperBg } from "@/utils";
+import { getEditorWrapperBg, LocalStorage } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
+  ArrowPathIcon,
   ArrowsUpDownIcon,
   ChevronDownIcon,
   CloudArrowDownIcon,
@@ -24,6 +25,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
+import { useRouter } from "next/router";
 import { Fragment, RefObject, useState } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
@@ -33,13 +35,15 @@ import SnippngConfigImportExporter from "./SnippngConfigImportExporter";
 
 const SnippngControlHeader: React.FC<{
   wrapperRef: RefObject<HTMLDivElement>;
-}> = ({ wrapperRef }) => {
+  creatingTheme?: boolean;
+}> = ({ wrapperRef, creatingTheme }) => {
   const [openImportExportSidebar, setOpenImportExportSidebar] = useState(false);
 
-  const { editorConfig, handleConfigChange } = useSnippngEditor();
-  const { open, setOpen } = useCustomTheme();
+  const { editorConfig, handleConfigChange, setEditorConfig } =
+    useSnippngEditor();
 
   const { addToast } = useToast();
+  const router = useRouter();
 
   const {
     code,
@@ -99,7 +103,6 @@ const SnippngControlHeader: React.FC<{
 
   return (
     <>
-      {/* headless ui renders this sidebar in portal */}
       <SnippngConfigImportExporter
         open={openImportExportSidebar}
         onClose={() => {
@@ -114,14 +117,14 @@ const SnippngControlHeader: React.FC<{
           options={[...DOWNLOAD_OPTIONS]}
         />
 
-        {!open ? (
+        {!creatingTheme ? (
           <Select
             Icon={SparklesIcon}
             value={selectedTheme}
             onChange={(val) => {
               if (!val.id) return;
-              if (val.id === "create_new" && setOpen) {
-                setOpen(true);
+              if (val.id === "create_new") {
+                router.push("/theme/create");
                 return;
               }
               handleConfigChange("selectedTheme")(val);
@@ -232,6 +235,14 @@ const SnippngControlHeader: React.FC<{
                 >
                   <ArrowsUpDownIcon className="h-5 w-5 mr-2" /> Import or export
                   config
+                </Menu.Button>
+                <Menu.Button
+                  className="w-full text-left p-2 inline-flex items-center"
+                  onClick={() => {
+                    setEditorConfig({ ...predefinedConfig });
+                  }}
+                >
+                  <ArrowPathIcon className="h-5 w-5 mr-2" /> Reset settings
                 </Menu.Button>
                 <div className="py-1 px-2">
                   <Checkbox

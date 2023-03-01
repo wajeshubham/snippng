@@ -3,7 +3,6 @@ import SnippngListItem from "@/components/profile/SnippngListItem";
 import SnippngThemeItem from "@/components/profile/SnippngThemeItem";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
-import { useCustomTheme } from "@/context/SnippngCustomThemeContext";
 import Layout from "@/layout/Layout";
 import {
   SnippngEditorConfigInterface,
@@ -28,10 +27,10 @@ const UserProfile = () => {
   const [savedThemes, setSavedThemes] = useState<
     SnippngThemeAttributesInterface[]
   >([]);
+
   const [loadingSnippets, setLoadingSnippets] = useState(true);
 
   const { user } = useAuth();
-  const { setOpen, open } = useCustomTheme();
   const router = useRouter();
 
   const fetchCodeSnippets = async () => {
@@ -61,14 +60,11 @@ const UserProfile = () => {
   }, [user]);
 
   useEffect(() => {
-    if (!open) {
-      let localThemes =
-        (LocalStorage.get(
-          "local_themes"
-        ) as SnippngThemeAttributesInterface[]) || [];
-      setSavedThemes(localThemes);
-    }
-  }, [open]);
+    let localThemes =
+      (LocalStorage.get("local_themes") as SnippngThemeAttributesInterface[]) ||
+      [];
+    setSavedThemes(localThemes);
+  }, []);
 
   return (
     <Layout
@@ -82,7 +78,7 @@ const UserProfile = () => {
           <SigninButton />
         </div>
       ) : (
-        <div>
+        <>
           <div className="min-h-full">
             <main className="py-10">
               {/* Page header */}
@@ -187,7 +183,7 @@ const UserProfile = () => {
                               <Button
                                 StartIcon={SparklesIcon}
                                 onClick={() => {
-                                  setOpen(true);
+                                  router.push("/theme/create");
                                 }}
                               >
                                 Create theme
@@ -221,7 +217,7 @@ const UserProfile = () => {
                                     children: "Construct",
                                     StartIcon: SparklesIcon,
                                     onClick: () => {
-                                      setOpen(true);
+                                      router.push("/theme/create");
                                     },
                                   }}
                                 />
@@ -236,7 +232,7 @@ const UserProfile = () => {
               </div>
             </main>
           </div>
-        </div>
+        </>
       )}
     </Layout>
   );

@@ -1,6 +1,5 @@
 import { analytics } from "@/config/firebase";
 import { AuthProvider } from "@/context/AuthContext";
-import { SnippngCustomThemeContextProvider } from "@/context/SnippngCustomThemeContext";
 import { SnippngContextProvider } from "@/context/SnippngEditorContext";
 import { ToastProvider } from "@/context/ToastContext";
 import "@/styles/globals.css";
@@ -44,9 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ToastProvider>
         <AuthProvider>
           <SnippngContextProvider>
-            <SnippngCustomThemeContextProvider>
-              <Component {...pageProps} />
-            </SnippngCustomThemeContextProvider>
+            <Component {...pageProps} />
           </SnippngContextProvider>
         </AuthProvider>
       </ToastProvider>

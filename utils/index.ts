@@ -62,6 +62,15 @@ export const getLanguage = (lang: string): keyof typeof langs => {
   return lang as keyof typeof langs;
 };
 
+/**
+ *
+ * @param selectedTheme - Theme selected by user
+ * @returns `tuple` of length 2
+ * @description returned `tuple` consist of
+ * - index 0: inbuilt `predefined` theme from the `@uiw/codemirror-themes-all` library `||` `null`
+ * - index 1: user configured theme using theme builder `||` `null`
+ * - If both the above conditions are null means the `selectedTheme` is invalid and neither present in the inbuilt library of locally
+ */
 export const getTheme = (
   selectedTheme: string
 ): [keyof typeof themes | null, SnippngThemeAttributesInterface | null] => {

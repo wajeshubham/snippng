@@ -1,25 +1,21 @@
 import { Button, ErrorText, Loader, SigninButton } from "@/components";
+import SnippngListItem from "@/components/profile/SnippngListItem";
+import SnippngThemeItem from "@/components/profile/SnippngThemeItem";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
-import { useToast } from "@/context/ToastContext";
+import { useCustomTheme } from "@/context/SnippngCustomThemeContext";
 import Layout from "@/layout/Layout";
-import { SnippngEditorConfigInterface } from "@/types";
 import {
-  CommandLineIcon,
-  FolderOpenIcon,
-  LinkIcon,
+  SnippngEditorConfigInterface,
+  SnippngThemeAttributesInterface,
+} from "@/types";
+import { LocalStorage } from "@/utils";
+import {
   PlusCircleIcon,
   PlusIcon,
-  TrashIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/outline";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -28,11 +24,13 @@ const UserProfile = () => {
   const [savedSnippets, setSavedSnippets] = useState<
     SnippngEditorConfigInterface[]
   >([]);
+  const [savedThemes, setSavedThemes] = useState<
+    SnippngThemeAttributesInterface[]
+  >([]);
   const [loadingSnippets, setLoadingSnippets] = useState(true);
-  const [deletingSnippet, setDeletingSnippet] = useState(false);
 
   const { user } = useAuth();
-  const { addToast } = useToast();
+  const { setOpen, open } = useCustomTheme();
   const router = useRouter();
 
   const fetchCodeSnippets = async () => {
@@ -57,28 +55,19 @@ const UserProfile = () => {
     }
   };
 
-  const deleteCodeSnippet = async (snippetId: string) => {
-    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-    if (!user || !snippetId) return;
-    setDeletingSnippet(true);
-    try {
-      await deleteDoc(doc(db, "snippets", snippetId));
-      setSavedSnippets(
-        savedSnippets.filter((snippet) => snippet.uid !== snippetId)
-      );
-      addToast({
-        message: "Snippet deleted successfully",
-      });
-    } catch (error) {
-      console.log("Error fetching snippets", error);
-    } finally {
-      setDeletingSnippet(false);
-    }
-  };
-
   useEffect(() => {
     fetchCodeSnippets();
   }, [user]);
+
+  useEffect(() => {
+    if (!open) {
+      let localThemes =
+        (LocalStorage.get(
+          "local_themes"
+        ) as SnippngThemeAttributesInterface[]) || [];
+      setSavedThemes(localThemes);
+    }
+  }, [open]);
 
   return (
     <Layout
@@ -132,8 +121,7 @@ const UserProfile = () => {
 
               <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
                 <div className="space-y-6 lg:col-span-3 lg:col-start-1">
-                  {/* Description list*/}
-                  <section aria-labelledby="applicant-information-title">
+                  <section aria-labelledby="saved-snippets-section">
                     <div className="dark:bg-zinc-800 bg-white border-[1px] dark:border-zinc-500 border-zinc-200 shadow sm:rounded-lg">
                       <div className="px-4 py-5 sm:px-6">
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
@@ -149,76 +137,17 @@ const UserProfile = () => {
                                     className="divide-y dark:divide-zinc-500 divide-zinc-200 rounded-md border-[1px] dark:border-zinc-500 border-zinc-200"
                                   >
                                     {savedSnippets.map((snippet) => (
-                                      <li
+                                      <SnippngListItem
                                         key={snippet.uid}
-                                        className="flex items-center md:justify-between md:flex-row flex-col py-3 pl-3 pr-4 text-sm"
-                                      >
-                                        <div className="flex flex-shrink-0 flex-1 text-left md:w-fit w-full md:py-0 py-4 items-center dark:text-white text-zinc-900">
-                                          <CommandLineIcon
-                                            className="h-5 w-5 flex-shrink-0x"
-                                            aria-hidden="true"
-                                          />
-                                          <span className="ml-2 flex-1 truncate">
-                                            {snippet.snippetsName}
-                                          </span>
-                                        </div>
-                                        <div className="md:w-fit w-full md:flex-row flex-col flex-shrink-0 gap-3 inline-flex items-center">
-                                          <Button
-                                            className="md:w-[unset] w-full"
-                                            StartIcon={FolderOpenIcon}
-                                            onClick={() => {
-                                              router.push(
-                                                `/snippet/${snippet.uid}`
-                                              );
-                                            }}
-                                          >
-                                            Open
-                                          </Button>
-
-                                          <Button
-                                            className="md:w-[unset] w-full"
-                                            StartIcon={LinkIcon}
-                                            onClick={() => {
-                                              if (!navigator?.clipboard)
-                                                return addToast({
-                                                  message:
-                                                    "navigator unavailable",
-                                                  type: "error",
-                                                });
-                                              navigator.clipboard
-                                                ?.writeText(
-                                                  `${window.location.host}/snippet/${snippet.uid}`
-                                                )
-                                                .then(() => {
-                                                  addToast({
-                                                    message: "Link copied!",
-                                                    description:
-                                                      "You can share this link to anyone. So that, they can copy or fork this code snippet and can use it anywhere.",
-                                                  });
-                                                });
-                                            }}
-                                          >
-                                            Copy link
-                                          </Button>
-                                          <Button
-                                            className="!text-red-500 md:w-[unset] w-full"
-                                            disabled={deletingSnippet}
-                                            StartIcon={TrashIcon}
-                                            onClick={() => {
-                                              const confirm = window.confirm(
-                                                "Are you sure you want to delete this snippet?"
-                                              );
-                                              if (confirm) {
-                                                deleteCodeSnippet(
-                                                  snippet.uid ?? ""
-                                                );
-                                              }
-                                            }}
-                                          >
-                                            Delete
-                                          </Button>
-                                        </div>
-                                      </li>
+                                        snippet={snippet}
+                                        onDelete={(uid) => {
+                                          setSavedSnippets((prevSnippets) =>
+                                            [...prevSnippets].filter(
+                                              (snippet) => snippet.uid !== uid
+                                            )
+                                          );
+                                        }}
+                                      />
                                     ))}
                                   </ul>
                                 ) : (
@@ -235,6 +164,64 @@ const UserProfile = () => {
                                 )
                               ) : (
                                 <Loader />
+                              )}
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section aria-labelledby="saved-themes-section">
+                    <div className="dark:bg-zinc-800 bg-white border-[1px] dark:border-zinc-500 border-zinc-200 shadow sm:rounded-lg">
+                      <div className="px-4 py-5 sm:px-6">
+                        <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                          <div className="sm:col-span-2">
+                            <div className="flex justify-between items-center w-full mb-4">
+                              <dt className="text-sm font-medium items-center dark:text-white text-zinc-900">
+                                Saved themes
+                              </dt>
+                              <Button
+                                StartIcon={SparklesIcon}
+                                onClick={() => {
+                                  setOpen(true);
+                                }}
+                              >
+                                Create theme
+                              </Button>
+                            </div>
+                            <dd className="mt-1 text-sm text-zinc-900">
+                              {savedThemes.length ? (
+                                <ul
+                                  role="list"
+                                  className="grid md:grid-cols-2 grid-cols-1 gap-4"
+                                >
+                                  {savedThemes.map((theme) => (
+                                    <SnippngThemeItem
+                                      key={theme.id}
+                                      theme={theme}
+                                      onDelete={(themeId) => {
+                                        setSavedThemes(
+                                          [...savedThemes].filter(
+                                            (thm) => thm.id !== themeId
+                                          )
+                                        );
+                                      }}
+                                    />
+                                  ))}
+                                </ul>
+                              ) : (
+                                <ErrorText
+                                  errorTitle="No themes found"
+                                  errorSubTitle="Please construct some themes to list them here"
+                                  errorActionProps={{
+                                    children: "Construct",
+                                    StartIcon: SparklesIcon,
+                                    onClick: () => {
+                                      setOpen(true);
+                                    },
+                                  }}
+                                />
                               )}
                             </dd>
                           </div>

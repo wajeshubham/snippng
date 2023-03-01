@@ -28,6 +28,18 @@ body {
   @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
 }
 
+.CodeMirror__Theme__Preview__Editor {
+  @apply relative text-lg dark:bg-zinc-800 border-[1px] dark:border-zinc-400 border-zinc-300 p-3 rounded-md overflow-auto;
+}
+
+.CodeMirror__Theme__Preview__Editor div {
+  @apply block px-1 pb-1 whitespace-pre-wrap break-normal break-words;
+}
+
+.CodeMirror__Theme__Preview__Editor div.cm-editor {
+  @apply pt-12;
+}
+
 .cm-scroller {
   position: relative;
   overflow: hidden !important;

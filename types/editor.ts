@@ -10,6 +10,7 @@ export interface SnippngThemeAttributesInterface {
   id: string;
   label: string;
   theme: "light" | "dark";
+  isPublic?: boolean;
   config: {
     background: string;
     foreground: string;

@@ -11,12 +11,12 @@ const Header = () => {
   return (
     <header data-testid="header" className="w-full">
       <nav className="w-full h-20 flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
-        <div className="flex justify-start items-center w-1/2 flex-shrink-0">
+        <div className="flex z-40 justify-start items-center w-1/2 flex-shrink-0">
           <Link className="inline-flex items-center" href={"/"}>
             <Logo />
           </Link>
         </div>
-        <div className="flex justify-end gap-4 items-center w-1/2 flex-shrink-0">
+        <div className="flex z-40 justify-end gap-4 items-center w-1/2 flex-shrink-0">
           <ThemeToggle />
           {user?.uid ? (
             <>

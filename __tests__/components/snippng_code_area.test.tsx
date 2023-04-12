@@ -5,6 +5,8 @@ import { getEditorWrapperBg } from "@/utils";
 import { render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
+jest.mock("next/router", () => require("next-router-mock"));
+
 beforeEach(() => {
   // IntersectionObserver isn't available in test environment
   const mockIntersectionObserver = jest.fn();

@@ -8,7 +8,11 @@ const SigninButton = () => {
 
   return (
     <>
-      <Button data-testid="signin-btn" onClick={loginWithGoogle}>
+      <Button
+        className="z-20"
+        data-testid="signin-btn"
+        onClick={loginWithGoogle}
+      >
         <GoogleIcon className="inline-flex mr-2" />
         Sign in/up
       </Button>

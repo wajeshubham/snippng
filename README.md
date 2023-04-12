@@ -173,7 +173,7 @@ OR
 - [x] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
 - [ ] Add theme presets to choose from
 - [ ] Option to create/save single default editor config for user
-- [ ] Custom theme configuration
+- [x] Custom theme configuration
 - [ ] Publish your themes
 - [ ] Build more themes to choose from
 

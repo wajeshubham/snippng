@@ -1,6 +1,44 @@
+import { createTheme } from "@uiw/codemirror-themes";
+
 export interface SelectOptionInterface {
   id: string;
   label: string;
+}
+
+export type CustomTheme = ReturnType<typeof createTheme>;
+export interface SnippngThemeAttributesInterface {
+  id: string;
+  label: string;
+  theme: "light" | "dark";
+  isPublic?: boolean;
+  config: {
+    background: string;
+    foreground: string;
+    cursor: string;
+    selection: string;
+    selectionMatch: string;
+    lineHighlight: string;
+    gutterBackground: string;
+    gutterForeground: string;
+    gutterBorder: string;
+    comment: string;
+    variableName: string;
+    string: string;
+    number: string;
+    bool: string;
+    null: string;
+    keyword: string;
+    operator: string;
+    className: string;
+    definition: string;
+    typeName: string;
+    tagName: string;
+    attributeName: string;
+    roundBraces: string;
+    squareBraces: string;
+    curlyBraces: string;
+    controlFlow: string;
+  };
 }
 
 export type SnippngWindowControlsType =
@@ -51,4 +89,10 @@ export interface SnippngEditorContextInterface {
     key: K
   ) => (value: V) => void;
   setEditorConfig: (config: SnippngEditorConfigInterface) => void;
+}
+
+export interface SnippngCustomThemeContextInterface {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  config: SnippngThemeAttributesInterface;
 }

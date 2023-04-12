@@ -1,22 +1,14 @@
-import { Input } from "@/components";
 import { Menu, Transition } from "@headlessui/react";
-import React, { Fragment, useCallback, useMemo } from "react";
-import {
-  clamp,
-  getHueCoordinates,
-  getSaturationCoordinates,
-  hsvToRgb,
-  parseColor,
-  rgbToHex,
-} from "../utils";
-import { FreeSelector, GradientSelect } from "./variants";
+import React, { Fragment } from "react";
 
+import { SketchPicker } from "react-color";
+import { GradientSelect } from "./variants";
 interface Props {
   color: string;
-  gradientColors: string[];
   onChange: (color: string) => void;
-  onGradientSelect: (color: string) => void;
-  onGradientUnSelect: (color: string) => void;
+  gradientColors?: string[];
+  onGradientSelect?: (color: string) => void;
+  onGradientUnSelect?: (color: string) => void;
   children: React.ReactNode;
 }
 
@@ -28,81 +20,6 @@ export const ColorPicker: React.FC<Props> = ({
   onChange,
   children,
 }) => {
-  const parsedColor = useMemo(() => parseColor(color), [color]);
-  const satCoords = useMemo(
-    () => getSaturationCoordinates(parsedColor),
-    [parsedColor]
-  );
-  const hueCoords = useMemo(
-    () => getHueCoordinates(parsedColor),
-    [parsedColor]
-  );
-
-  const handleHexChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      var val = event.target.value;
-      if (val?.slice(0, 1) !== "#") {
-        val = "#" + val;
-      }
-      onChange(val);
-    },
-    [onChange]
-  );
-
-  const handleRgbChange = useCallback(
-    (component: string, value: string) => {
-      const { r, g, b } = parsedColor.rgb;
-
-      switch (component) {
-        case "r":
-          onChange(rgbToHex({ r: +value ?? 0, g, b }));
-          return;
-        case "g":
-          onChange(rgbToHex({ r, g: +value ?? 0, b }));
-          return;
-        case "b":
-          onChange(rgbToHex({ r, g, b: +value ?? 0 }));
-          return;
-        default:
-          return;
-      }
-    },
-    [parsedColor, onChange]
-  );
-
-  const handleSaturationChange = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      // @ts-ignore
-      const { width, height, left, top } = event.target.getBoundingClientRect();
-
-      const x = clamp(event.clientX - left, 0, width);
-      const y = clamp(event.clientY - top, 0, height);
-
-      const s = (x / width) * 100;
-      const v = 100 - (y / height) * 100;
-
-      const rgb = hsvToRgb({ h: parsedColor?.hsv.h, s, v });
-
-      onChange(rgbToHex(rgb));
-    },
-    [parsedColor, onChange]
-  );
-
-  const handleHueChange = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      // @ts-ignore
-      const { width, left } = event.target.getBoundingClientRect();
-      const x = clamp(event.clientX - left, 0, width);
-      const h = Math.round((x / width) * 360);
-
-      const hsv = { h, s: parsedColor?.hsv.s, v: parsedColor?.hsv.v };
-      const rgb = hsvToRgb(hsv);
-
-      onChange(rgbToHex(rgb));
-    },
-    [parsedColor, onChange]
-  );
-
   return (
     <Menu as="div" className="relative">
       <input
@@ -126,72 +43,22 @@ export const ColorPicker: React.FC<Props> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute md:w-96 w-72 right-0 z-30 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
-          <FreeSelector
-            parsedColor={parsedColor}
-            satCoords={satCoords}
-            hueCoords={hueCoords}
-            onSaturationChange={handleSaturationChange}
-            onHueChange={handleHueChange}
+        <Menu.Items className="absolute md:w-96 w-72 left-0 -translate-x-1/2 z-50 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
+          <SketchPicker
+            className="!w-fit dark:!bg-black !bg-white !shadow-none"
+            color={color}
+            onChange={(color) => onChange(color.hex)}
           />
 
-          <div className="flex justify-between p-3 flex-col">
-            <div
-              className="rounded-full h-10 w-10 border-2 dark:border-white border-zinc-400"
-              style={{
-                background: color,
-              }}
-            />
-            <div className="w-full mt-2">
-              <Input
-                label="Hex"
-                id="cp-input-hex"
-                placeholder="Hex"
-                value={parsedColor?.hex}
-                onChange={handleHexChange}
+          {gradientColors && onGradientSelect && onGradientUnSelect ? (
+            <div className="flex justify-between px-3 pb-3 flex-col">
+              <GradientSelect
+                selectedColors={gradientColors}
+                onSelect={onGradientSelect}
+                onUnSelect={onGradientUnSelect}
               />
             </div>
-
-            <div className="w-full flex justify-start gap-2 mt-3">
-              <Input
-                label="R"
-                id="cp-input-r"
-                placeholder="R"
-                className="w-14"
-                value={parsedColor.rgb.r}
-                onChange={(event) => handleRgbChange("r", event.target.value)}
-                inputMode="numeric"
-                pattern="[0-9]*"
-              />
-
-              <Input
-                label="G"
-                id="cp-input-g"
-                placeholder="G"
-                className="w-14"
-                value={parsedColor.rgb.g}
-                onChange={(event) => handleRgbChange("g", event.target.value)}
-                inputMode="numeric"
-                pattern="[0-9]*"
-              />
-
-              <Input
-                label="B"
-                id="cp-input-b"
-                placeholder="B"
-                className="w-14"
-                value={parsedColor.rgb.b}
-                onChange={(event) => handleRgbChange("b", event.target.value)}
-                inputMode="numeric"
-                pattern="[0-9]*"
-              />
-            </div>
-            <GradientSelect
-              selectedColors={gradientColors}
-              onSelect={onGradientSelect}
-              onUnSelect={onGradientUnSelect}
-            />
-          </div>
+          ) : null}
         </Menu.Items>
       </Transition>
     </Menu>

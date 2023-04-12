@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import { DEFAULT_BASE_SETUP } from "@/lib/constants";
+import { DEFAULT_BASE_SETUP, THEMES } from "@/lib/constants";
 import {
   clsx,
+  constructTheme,
   deepClone,
   getEditorWrapperBg,
   getLanguage,
@@ -25,6 +26,7 @@ import SnippngWindowControls from "./SnippngWindowControls";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
+import { SnippngThemeAttributesInterface } from "@/types";
 import {
   ArrowDownOnSquareStackIcon,
   ArrowPathIcon,
@@ -33,7 +35,11 @@ import {
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import Logo from "../Logo";
 
-const SnippngCodeArea = () => {
+interface Props {
+  underConstructionTheme?: SnippngThemeAttributesInterface;
+}
+
+const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
   const editorRef = useRef<HTMLDivElement>(null); // useRef to persist existing ref. Might be useful when dealing with background image in future
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [saving, setSaving] = useState(false);
@@ -110,16 +116,40 @@ const SnippngCodeArea = () => {
     }
   };
 
+  /**
+   *
+   * @returns editor compatible theme object
+   * @description  Function is responsible for constructing theme based on if it is a
+   * - `predefined` - theme in the `@uiw/codemirror-themes-all` library
+   * - `localCustom` - Build by user and saved locally
+   * - `underConstructionTheme` - user is currently constructing/configuring new theme
+   */
+  const getSelectedTheme = () => {
+    // If user is configuring the custom theme (SnippngCustomThemeContextProvider modal is mounded)
+    if (underConstructionTheme) return constructTheme(underConstructionTheme);
+    else {
+      // check if selected theme is predefined or locally created
+      let [isPredefined, isLocalCustom] = getTheme(selectedTheme.id);
+
+      if (isPredefined) return themes[isPredefined]; // if it is predefined return the theme configuration from the library
+
+      if (isLocalCustom) return constructTheme(isLocalCustom); // else construct and return the code mirror compatible theme
+
+      return themes[THEMES[0].id as keyof typeof themes]; // this will be returned if theme is not predefined as well as not available locally
+    }
+  };
+
   useEffect(() => {
     // if there is a uid means we are on edit page where we want to avoid persisting the editor config
-    if (uid) return;
+    // underConstructionTheme means user is on the theme page which we don't want to persist
+    if (uid || underConstructionTheme) return;
     // persist the editor config changes only when user is creating new snippet
     LocalStorage.set("config", {
       ...editorConfig,
       uid: undefined,
       ownerUid: undefined,
     });
-  }, [editorConfig, uid]);
+  }, [editorConfig, uid, underConstructionTheme]);
 
   return (
     <>
@@ -131,7 +161,10 @@ const SnippngCodeArea = () => {
         <NoSSRWrapper>
           <div className="rounded-md bg-white dark:bg-zinc-900 md:p-8 p-4 flex justify-center border-[1px] flex-col items-center dark:border-zinc-500 border-zinc-200 shadow-md w-full">
             <div className="w-full">
-              <SnippngControlHeader wrapperRef={wrapperRef} />
+              <SnippngControlHeader
+                creatingTheme={!!underConstructionTheme}
+                wrapperRef={wrapperRef}
+              />
             </div>
             {bgImageVisiblePatch ? (
               <button
@@ -200,7 +233,7 @@ const SnippngCodeArea = () => {
                     fontSize: `${editorFontSize}px`,
                   }}
                   // @ts-ignore
-                  theme={themes[getTheme(selectedTheme.id)]}
+                  theme={getSelectedTheme()}
                   indentWithTab
                   onChange={(value) => handleConfigChange("code")(value)}
                 >
@@ -232,64 +265,65 @@ const SnippngCodeArea = () => {
                 ) : null}
               </div>
             </div>
-            <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">
-              <div className="w-full">
-                <Input
-                  value={snippetsName}
-                  onChange={(e) =>
-                    handleConfigChange("snippetsName")(e.target.value)
-                  }
-                  placeholder="Snippet name..."
-                />
-              </div>
-              <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
-                <Button
-                  id="save-snippet-btn"
-                  StartIcon={ArrowDownOnSquareStackIcon}
-                  disabled={saving}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!user)
-                      return addToast({
-                        message: "Please login first",
-                        type: "error",
-                        description:
-                          "You need to login before saving the snippet",
-                      });
-                    if (!snippetsName)
-                      return addToast({
-                        message: "Snippet name is required",
-                        type: "error",
-                      });
-                    else saveSnippet();
-                  }}
-                >
-                  {saving
-                    ? "Saving..."
-                    : uid // if there is a uid, we are on snippet details page where user can copy the snippet
-                    ? "Fork snippet"
-                    : "Save snippet"}
-                </Button>
-                {uid && user && user.uid === ownerUid ? (
+            {!underConstructionTheme ? (
+              <div className="w-full mt-8 flex md:flex-row flex-col gap-4 justify-start items-center">
+                <div className="w-full">
+                  <Input
+                    value={snippetsName}
+                    onChange={(e) =>
+                      handleConfigChange("snippetsName")(e.target.value)
+                    }
+                    placeholder="Snippet name..."
+                  />
+                </div>
+                <div className="flex flex-shrink-0 gap-4 md:flex-row flex-col md:w-fit w-full">
                   <Button
-                    StartIcon={ArrowPathIcon}
-                    disabled={updating}
+                    id="save-snippet-btn"
+                    StartIcon={ArrowDownOnSquareStackIcon}
+                    disabled={saving}
                     onClick={(e) => {
                       e.stopPropagation();
+                      if (!user)
+                        return addToast({
+                          message: "Please login first",
+                          type: "error",
+                          description:
+                            "You need to login before saving the snippet",
+                        });
                       if (!snippetsName)
                         return addToast({
                           message: "Snippet name is required",
                           type: "error",
                         });
-                      updateSnippet();
+                      else saveSnippet();
                     }}
                   >
-                    {updating ? "Updating..." : "Update snippet"}
+                    {saving
+                      ? "Saving..."
+                      : uid // if there is a uid, we are on snippet details page where user can copy the snippet
+                      ? "Fork snippet"
+                      : "Save snippet"}
                   </Button>
-                ) : null}
+                  {uid && user && user.uid === ownerUid ? (
+                    <Button
+                      StartIcon={ArrowPathIcon}
+                      disabled={updating}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!snippetsName)
+                          return addToast({
+                            message: "Snippet name is required",
+                            type: "error",
+                          });
+                        updateSnippet();
+                      }}
+                    >
+                      {updating ? "Updating..." : "Update snippet"}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
-            </div>
-            {/* TODO: Add CTA to remove background image */}
+            ) : null}
           </div>
           {uid ? (
             <small className="dark:text-zinc-300 text-left text-zinc-600 py-2 inline-block">

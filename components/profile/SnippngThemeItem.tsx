@@ -50,33 +50,37 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
           <span title={theme.label} className="truncate">
             {theme.label}
           </span>
-          <span className="inline-flex items-center gap-2 dark:text-white text-zinc-700">
+          <button
+            aria-label="delete-theme"
+            title="Delete theme"
+            onClick={() => {
+              let ok = confirm(
+                "Are you sure you want to delete this theme permanently?"
+              );
+              if (!ok) return;
+              let toBeDeletedId = theme.id;
+              let localThemes =
+                (LocalStorage.get(
+                  "local_themes"
+                ) as SnippngThemeAttributesInterface[]) || [];
+              localThemes = localThemes.filter(
+                (thm) => thm.id !== toBeDeletedId
+              );
+              LocalStorage.set("local_themes", localThemes);
+              onDelete(toBeDeletedId);
+              addToast({
+                message: "Theme deleted successfully!",
+              });
+            }}
+            className="inline-flex items-center gap-2 dark:text-white text-zinc-700"
+          >
             {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
             <TrashIcon
               role={"button"}
               tabIndex={0}
-              onClick={() => {
-                let ok = confirm(
-                  "Are you sure you want to delete this theme permanently?"
-                );
-                if (!ok) return;
-                let toBeDeletedId = theme.id;
-                let localThemes =
-                  (LocalStorage.get(
-                    "local_themes"
-                  ) as SnippngThemeAttributesInterface[]) || [];
-                localThemes = localThemes.filter(
-                  (thm) => thm.id !== toBeDeletedId
-                );
-                LocalStorage.set("local_themes", localThemes);
-                onDelete(toBeDeletedId);
-                addToast({
-                  message: "Theme deleted successfully!",
-                });
-              }}
               className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
             />
-          </span>
+          </button>
         </span>
       </div>
     </CodeMirror>

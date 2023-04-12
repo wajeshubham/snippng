@@ -43,7 +43,7 @@ export const ColorPicker: React.FC<Props> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute md:w-96 w-72 right-0 z-50 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
+        <Menu.Items className="absolute md:w-96 w-72 left-0 -translate-x-1/2 z-50 top-full max-h-[500px] mt-2 origin-top-right divide-y-[1px] dark:divide-zinc-400 divide-zinc-300 dark:bg-black bg-white overflow-auto text-sm rounded-sm outline outline-[1px] dark:outline-zinc-400 outline-zinc-300 dark:dark:text-white text-zinc-900">
           <SketchPicker
             className="!w-fit dark:!bg-black !bg-white !shadow-none"
             color={color}

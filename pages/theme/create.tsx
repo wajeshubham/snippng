@@ -1,3 +1,4 @@
+import withAuth from "@/HOC/withAuth";
 import { SnippngThemeBuilder } from "@/components";
 import Layout from "@/layout/Layout";
 import { SparklesIcon } from "@heroicons/react/24/outline";
@@ -24,4 +25,4 @@ const CreateTheme = () => {
   );
 };
 
-export default CreateTheme;
+export default withAuth(CreateTheme);

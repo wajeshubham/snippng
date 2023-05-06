@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP, THEMES } from "@/lib/constants";
 import {
+  LocalStorage,
   clsx,
   constructTheme,
   deepClone,
   getEditorWrapperBg,
   getLanguage,
   getTheme,
-  LocalStorage,
 } from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
@@ -17,9 +17,9 @@ import CodeMirror from "@uiw/react-codemirror";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { WidthHandler } from "@/lib/width-handler";
+import NoSSRWrapper from "../NoSSRWrapper";
 import Button from "../form/Button";
 import Input from "../form/Input";
-import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
 

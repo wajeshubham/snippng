@@ -11,7 +11,7 @@ import {
 } from "@/lib/constants";
 import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
-import { getEditorWrapperBg } from "@/utils";
+import { getEditorWrapperBg, loadThemes } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ArrowPathIcon,
@@ -27,23 +27,33 @@ import {
 } from "@heroicons/react/24/outline";
 import * as htmlToImage from "html-to-image";
 import { useRouter } from "next/router";
-import { Fragment, RefObject, useState } from "react";
+import { Fragment, RefObject, useEffect, useState } from "react";
 import Button from "../form/Button";
 import Checkbox from "../form/Checkbox";
 import Range from "../form/Range";
 import Select from "../form/Select";
 import SnippngConfigImportExporter from "./SnippngConfigImportExporter";
+import { useAuth } from "@/context/AuthContext";
+
+interface DropDownThemeItem {
+  icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  id: string;
+  label: string;
+  isCustom?: boolean | undefined;
+}
 
 const SnippngControlHeader: React.FC<{
   wrapperRef: RefObject<HTMLDivElement>;
   creatingTheme?: boolean;
 }> = ({ wrapperRef, creatingTheme }) => {
   const [openImportExportSidebar, setOpenImportExportSidebar] = useState(false);
+  const [themes, setThemes] = useState<DropDownThemeItem[]>([]);
 
   const { editorConfig, handleConfigChange, setEditorConfig } =
     useSnippngEditor();
 
   const { addToast } = useToast();
+  const { user } = useAuth();
   const router = useRouter();
 
   const {
@@ -102,6 +112,30 @@ const SnippngControlHeader: React.FC<{
       });
   };
 
+  const setThemesForDropDown = () => {
+    const dropDownThemes = getAvailableThemes()?.map((op) => {
+      if (op?.isCustom) {
+        // render icon for a custom theme
+        return {
+          ...op,
+          icon: FireIcon,
+        };
+      }
+      return { ...op, icon: undefined };
+    });
+    setThemes(dropDownThemes);
+  };
+
+  useEffect(() => {
+    if (!user) {
+      setThemesForDropDown();
+    } else {
+      loadThemes(user, (themes) => {
+        setThemesForDropDown();
+      });
+    }
+  }, [user]);
+
   return (
     <>
       <SnippngConfigImportExporter
@@ -130,16 +164,7 @@ const SnippngControlHeader: React.FC<{
               }
               handleConfigChange("selectedTheme")(val);
             }}
-            options={getAvailableThemes()?.map((op) => {
-              if (op?.isCustom) {
-                // render icon for a custom theme
-                return {
-                  ...op,
-                  icon: FireIcon,
-                };
-              }
-              return op;
-            })}
+            options={themes}
           />
         ) : null}
         <Select

@@ -2,7 +2,6 @@ import { SelectOptionInterface } from "@/types";
 import { clsx } from "@/utils";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { FireIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
 
 export interface SelectComponentProps {

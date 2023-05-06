@@ -169,13 +169,13 @@ OR
 
 ## Roadmap
 
-- [x] Inject images in the background from url and pexels
-- [x] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
 - [ ] Add theme presets to choose from
 - [ ] Option to create/save single default editor config for user
-- [x] Custom theme configuration
 - [ ] Publish your themes
-- [ ] Build more themes to choose from
+- [x] Inject images in the background from url and pexels
+- [x] Import and export snippng config to quickly build the editor (download the JSON file with editor config)
+- [x] Custom theme configuration
+- [x] Build more themes to choose from
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

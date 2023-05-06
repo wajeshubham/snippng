@@ -6,7 +6,11 @@ import { deepClone, LocalStorage } from "@/utils";
 
 export const isBrowser = typeof window !== "undefined";
 
-export const THEMES = [
+export const THEMES: {
+  id: string;
+  label: string;
+  isCustom?: boolean;
+}[] = [
   {
     id: "abcdef",
     label: "ABCDEF",
@@ -139,6 +143,7 @@ export const getAvailableThemes = () => {
   let localThemesToBeMerged: {
     id: string;
     label: string;
+    isCustom?: boolean;
   }[] = [];
 
   if (localThemes?.length) {
@@ -146,6 +151,7 @@ export const getAvailableThemes = () => {
     localThemesToBeMerged = localThemes?.map((x) => ({
       id: x.id,
       label: x.label,
+      isCustom: x.isCustom || false,
     }));
   }
   return [

@@ -13,6 +13,7 @@ const SnippngThemeBuilder: React.FC<{
 }> = ({ themeConfig = { ...defaultCustomTheme } }) => {
   const [theme, setTheme] = useState<SnippngThemeAttributesInterface>({
     ...themeConfig,
+    isCustom: true,
   });
 
   const { handleConfigChange, setEditorConfig } = useSnippngEditor();

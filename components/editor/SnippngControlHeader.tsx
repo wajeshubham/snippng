@@ -2,16 +2,16 @@ import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { useToast } from "@/context/ToastContext";
 import { ColorPicker } from "@/lib/color-picker";
 import {
-  defaultEditorConfig,
   DEFAULT_RANGES,
   DOWNLOAD_OPTIONS,
-  getAvailableThemes,
   LANGUAGES,
+  defaultEditorConfig,
+  getAvailableThemes,
   predefinedConfig,
 } from "@/lib/constants";
 import { ImagePicker } from "@/lib/image-picker";
 import { SelectOptionInterface } from "@/types";
-import { getEditorWrapperBg, LocalStorage } from "@/utils";
+import { getEditorWrapperBg } from "@/utils";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ArrowPathIcon,
@@ -21,6 +21,7 @@ import {
   Cog6ToothIcon,
   CommandLineIcon,
   DocumentDuplicateIcon,
+  FireIcon,
   PhotoIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
@@ -129,7 +130,16 @@ const SnippngControlHeader: React.FC<{
               }
               handleConfigChange("selectedTheme")(val);
             }}
-            options={getAvailableThemes()}
+            options={getAvailableThemes()?.map((op) => {
+              if (op?.isCustom) {
+                // render icon for a custom theme
+                return {
+                  ...op,
+                  icon: FireIcon,
+                };
+              }
+              return op;
+            })}
           />
         ) : null}
         <Select

@@ -2,11 +2,16 @@ import { SelectOptionInterface } from "@/types";
 import { clsx } from "@/utils";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { FireIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
 
 export interface SelectComponentProps {
   value: SelectOptionInterface;
-  options: { id: string; label: string }[];
+  options: {
+    id: string;
+    label: string;
+    icon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  }[];
   onChange: (value: SelectOptionInterface) => void;
   children?: React.ReactNode;
   placeholder?: string | React.ReactNode;
@@ -73,9 +78,15 @@ const Select: React.FC<SelectComponentProps> = ({
                             value.id === option.id
                               ? "font-semibold"
                               : "font-normal",
-                            "block truncate"
+                            "inline-flex truncate justify-start items-center gap-2"
                           )}
                         >
+                          {option.icon ? (
+                            <option.icon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          ) : null}
                           {option.label}
                         </span>
 

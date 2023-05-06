@@ -11,6 +11,7 @@ import { auth } from "@/config/firebase";
 import { useToast } from "./ToastContext";
 import Layout from "@/layout/Layout";
 import { Loader } from "@/components";
+import { LocalStorage } from "@/utils";
 
 const GithubProvider = new GithubAuthProvider();
 const GoogleProvider = new GoogleAuthProvider();
@@ -90,6 +91,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = async () => {
     if (!auth) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
     await signOut(auth);
+    LocalStorage.remove("local_themes");
     addToast({
       message: "Logged out successfully",
       description: "See you again!",

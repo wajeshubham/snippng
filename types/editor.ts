@@ -39,6 +39,7 @@ export interface SnippngThemeAttributesInterface {
     curlyBraces: string;
     controlFlow: string;
   };
+  isCustom?: boolean;
 }
 
 export type SnippngWindowControlsType =

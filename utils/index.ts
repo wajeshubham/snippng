@@ -1,3 +1,4 @@
+import { db } from "@/config/firebase";
 import { DEFAULT_RANGES, DEFAULT_WIDTHS, isBrowser } from "@/lib/constants";
 import {
   exportedTypeSuite,
@@ -9,6 +10,8 @@ import { tags as t } from "@lezer/highlight";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import { createTheme } from "@uiw/codemirror-themes";
 import * as themes from "@uiw/codemirror-themes-all";
+import { User } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { createCheckers } from "ts-interface-checker";
 
 /**
@@ -90,6 +93,41 @@ export const getTheme = (
   let selectedLocalTheme = localThemes?.find((thm) => thm.id === selectedTheme);
   // if yes then return the local selectedTheme else return null which means the selected selectedTheme is invalid
   return [null, selectedLocalTheme ? selectedLocalTheme : null];
+};
+
+/**
+ *
+ * @description Fetches the user themes from firebase. Before checking the local cache
+ */
+export const loadThemes = async (
+  user: User,
+  onSuccess: (themes: SnippngThemeAttributesInterface[]) => void,
+  refetch?: boolean
+) => {
+  try {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+    const themes: SnippngThemeAttributesInterface[] = [];
+    // cache layer
+    const cachedThemes = LocalStorage.get("local_themes");
+    if (!refetch && cachedThemes?.length) {
+      // if we are not refetching return the cached themes
+      onSuccess(cachedThemes as SnippngThemeAttributesInterface[]);
+      return;
+    }
+    const docRef = await getDocs(
+      query(collection(db, "themes"), where("ownerUid", "==", user.uid))
+    );
+    docRef.forEach((doc) => {
+      themes.push({
+        ...doc.data(),
+        id: doc.id,
+      } as SnippngThemeAttributesInterface);
+    });
+    LocalStorage.set("local_themes", themes);
+    onSuccess(themes);
+  } catch (error) {
+    console.log("Error fetching themes", error);
+  }
 };
 
 export const getEditorWrapperBg = (

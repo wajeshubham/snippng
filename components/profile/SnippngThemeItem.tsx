@@ -2,12 +2,16 @@ import { useToast } from "@/context/ToastContext";
 import { DEFAULT_BASE_SETUP, DEFAULT_CODE_SNIPPET } from "@/lib/constants";
 import { SnippngThemeAttributesInterface } from "@/types";
 import { constructTheme, LocalStorage } from "@/utils";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
 
-import React from "react";
+import React, { useState } from "react";
 import ErrorText from "../ErrorText";
+import { db } from "@/config/firebase";
+import { useAuth } from "@/context/AuthContext";
+import { deleteDoc, doc } from "firebase/firestore";
+import Loader from "../Loader";
 
 interface Props {
   theme: SnippngThemeAttributesInterface;
@@ -16,6 +20,35 @@ interface Props {
 
 const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
   const { addToast } = useToast();
+  const { user } = useAuth();
+
+  const [deletingTheme, setDeletingTheme] = useState(false);
+
+  const deleteThemeItem = async (themeId: string) => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+    if (!user || !themeId) return;
+    setDeletingTheme(true);
+
+    try {
+      await deleteDoc(doc(db, "themes", themeId));
+      let localThemes =
+        (LocalStorage.get(
+          "local_themes"
+        ) as SnippngThemeAttributesInterface[]) || [];
+      localThemes = localThemes.filter((thm) => thm.id !== themeId);
+      LocalStorage.set("local_themes", localThemes);
+      onDelete(themeId || "");
+
+      addToast({
+        message: "Theme deleted successfully",
+      });
+    } catch (error) {
+      console.log("Error fetching snippets", error);
+    } finally {
+      setDeletingTheme(false);
+    }
+  };
+
   if (!theme)
     return (
       <ErrorText
@@ -53,33 +86,26 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
           <button
             aria-label="delete-theme"
             title="Delete theme"
+            disabled={deletingTheme}
             onClick={() => {
               let ok = confirm(
                 "Are you sure you want to delete this theme permanently?"
               );
               if (!ok) return;
-              let toBeDeletedId = theme.id;
-              let localThemes =
-                (LocalStorage.get(
-                  "local_themes"
-                ) as SnippngThemeAttributesInterface[]) || [];
-              localThemes = localThemes.filter(
-                (thm) => thm.id !== toBeDeletedId
-              );
-              LocalStorage.set("local_themes", localThemes);
-              onDelete(toBeDeletedId);
-              addToast({
-                message: "Theme deleted successfully!",
-              });
+              deleteThemeItem(theme.id);
             }}
             className="inline-flex items-center gap-2 dark:text-white text-zinc-700"
           >
             {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
-            <TrashIcon
-              role={"button"}
-              tabIndex={0}
-              className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-            />
+            {deletingTheme ? (
+              <EllipsisHorizontalIcon className="animate-pulse h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" />
+            ) : (
+              <TrashIcon
+                role={"button"}
+                tabIndex={0}
+                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+              />
+            )}
           </button>
         </span>
       </div>

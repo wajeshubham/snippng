@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { DEFAULT_BASE_SETUP, THEMES } from "@/lib/constants";
 import {
+  LocalStorage,
   clsx,
   constructTheme,
   deepClone,
   getEditorWrapperBg,
   getLanguage,
   getTheme,
-  LocalStorage,
 } from "@/utils";
 
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
@@ -17,9 +17,9 @@ import CodeMirror from "@uiw/react-codemirror";
 
 import { useSnippngEditor } from "@/context/SnippngEditorContext";
 import { WidthHandler } from "@/lib/width-handler";
+import NoSSRWrapper from "../NoSSRWrapper";
 import Button from "../form/Button";
 import Input from "../form/Input";
-import NoSSRWrapper from "../NoSSRWrapper";
 import SnippngControlHeader from "./SnippngControlHeader";
 import SnippngWindowControls from "./SnippngWindowControls";
 
@@ -119,7 +119,7 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
   /**
    *
    * @returns editor compatible theme object
-   * @description  Function is responsible for constructing theme based on if it is a
+   * @description  Function is responsible for constructing theme based on if it is
    * - `predefined` - theme in the `@uiw/codemirror-themes-all` library
    * - `localCustom` - Build by user and saved locally
    * - `underConstructionTheme` - user is currently constructing/configuring new theme

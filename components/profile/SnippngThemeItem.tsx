@@ -2,7 +2,12 @@ import { useToast } from "@/context/ToastContext";
 import { DEFAULT_BASE_SETUP, DEFAULT_CODE_SNIPPET } from "@/lib/constants";
 import { SnippngThemeAttributesInterface } from "@/types";
 import { constructTheme, LocalStorage } from "@/utils";
-import { TrashIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  EllipsisHorizontalIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/outline";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
 
@@ -10,15 +15,21 @@ import React, { useState } from "react";
 import ErrorText from "../ErrorText";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import Loader from "../Loader";
+import Button from "../form/Button";
 
 interface Props {
   theme: SnippngThemeAttributesInterface;
   onDelete: (themeId: string) => void;
+  onPublishChange: (themeId: string) => void;
 }
 
-const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
+const SnippngThemeItem: React.FC<Props> = ({
+  theme,
+  onDelete,
+  onPublishChange,
+}) => {
   const { addToast } = useToast();
   const { user } = useAuth();
 
@@ -43,9 +54,41 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
         message: "Theme deleted successfully",
       });
     } catch (error) {
-      console.log("Error fetching snippets", error);
+      console.log("Error deleting theme", error);
     } finally {
       setDeletingTheme(false);
+    }
+  };
+
+  const togglePublishThemeItem = async (themeId: string) => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+    if (!user || !themeId) return;
+
+    try {
+      await updateDoc(doc(db, "themes", themeId), {
+        ...theme,
+        isPublished: !theme.isPublished,
+      });
+
+      let localThemes =
+        (LocalStorage.get(
+          "local_themes"
+        ) as SnippngThemeAttributesInterface[]) || [];
+      localThemes = localThemes.map((thm) => {
+        if (thm.id === themeId) {
+          thm.isPublished = !thm.isPublished;
+        }
+        return thm;
+      });
+      LocalStorage.set("local_themes", localThemes);
+      addToast({
+        message: `Theme ${
+          theme.isPublished ? "unpublished" : "published"
+        } successfully`,
+      });
+      onPublishChange(themeId || "");
+    } catch (error) {
+      console.log("Error publishing theme", error);
     }
   };
 
@@ -73,8 +116,8 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
       theme={constructTheme(theme)}
       indentWithTab
     >
-      {theme.isPublic ? (
-        <span className="absolute right-0 top-0 inline-flex items-center rounded-bl-sm rounded-tr-md dark:bg-indigo-600 bg-indigo-100 h-[15px] py-2.5 px-1 text-[10px] dark:text-indigo-100 text-indigo-600 border-[1px] border-indigo-600">
+      {theme.isPublished ? (
+        <span className="absolute z-10 right-0 top-0 inline-flex items-center rounded-bl-sm rounded-tr-md dark:bg-indigo-600 bg-indigo-100 h-[15px] py-2.5 px-1 text-[10px] dark:text-indigo-100 text-indigo-600 border-[1px] border-indigo-600">
           Published
         </span>
       ) : null}
@@ -89,12 +132,42 @@ const SnippngThemeItem: React.FC<Props> = ({ theme, onDelete }) => {
             disabled={deletingTheme}
             onClick={() => {
               let ok = confirm(
+                `Are you sure you want to ${
+                  theme.isPublished ? "unpublish" : "publish"
+                } this theme?`
+              );
+              if (!ok) return;
+              togglePublishThemeItem(theme.id);
+            }}
+            className="inline-flex ml-auto mr-2 items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
+          >
+            {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
+            {theme.isPublished ? (
+              <EyeIcon
+                title="Theme is published"
+                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+              />
+            ) : (
+              <EyeSlashIcon
+                role={"button"}
+                title="Theme is private"
+                tabIndex={0}
+                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+              />
+            )}
+          </button>
+          <button
+            aria-label="delete-theme"
+            title="Delete theme"
+            disabled={deletingTheme}
+            onClick={() => {
+              let ok = confirm(
                 "Are you sure you want to delete this theme permanently?"
               );
               if (!ok) return;
               deleteThemeItem(theme.id);
             }}
-            className="inline-flex items-center gap-2 dark:text-white text-zinc-700"
+            className="inline-flex items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
           >
             {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
             {deletingTheme ? (

@@ -126,36 +126,37 @@ const SnippngThemeItem: React.FC<Props> = ({
           <span title={theme.label} className="truncate">
             {theme.label}
           </span>
-          <button
-            aria-label="delete-theme"
-            title="Delete theme"
-            disabled={deletingTheme}
-            onClick={() => {
-              let ok = confirm(
-                `Are you sure you want to ${
-                  theme.isPublished ? "unpublish" : "publish"
-                } this theme?`
-              );
-              if (!ok) return;
-              togglePublishThemeItem(theme.id);
-            }}
-            className="inline-flex ml-auto mr-2 items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
-          >
-            {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
-            {theme.isPublished ? (
-              <EyeIcon
-                title="Theme is published"
-                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-              />
-            ) : (
-              <EyeSlashIcon
-                role={"button"}
-                title="Theme is private"
-                tabIndex={0}
-                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-              />
-            )}
-          </button>
+          {theme?.ownerUid === user?.uid ? (
+            <button
+              aria-label="delete-theme"
+              title="Delete theme"
+              disabled={deletingTheme}
+              onClick={() => {
+                let ok = confirm(
+                  `Are you sure you want to ${
+                    theme.isPublished ? "unpublish" : "publish"
+                  } this theme?`
+                );
+                if (!ok) return;
+                togglePublishThemeItem(theme.id);
+              }}
+              className="inline-flex ml-auto mr-2 items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
+            >
+              {theme.isPublished ? (
+                <EyeIcon
+                  title="Theme is published"
+                  className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+                />
+              ) : (
+                <EyeSlashIcon
+                  role={"button"}
+                  title="Theme is private"
+                  tabIndex={0}
+                  className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+                />
+              )}
+            </button>
+          ) : null}
           <button
             aria-label="delete-theme"
             title="Delete theme"
@@ -180,6 +181,22 @@ const SnippngThemeItem: React.FC<Props> = ({
               />
             )}
           </button>
+        </span>
+        <span className="block w-full h-[0.1px] dark:bg-zinc-500 bg-zinc-300 my-3"></span>
+        <span className="flex justify-start gap-3 items-center w-full">
+          <img
+            className="h-10 w-10 rounded-full border-[1px] dark:border-white border-zinc-900"
+            src={theme?.owner?.photoURL || ""}
+            alt=""
+          />
+          <span className="flex justify-start items-start flex-col">
+            <p className="text-base font-bold text-zinc-900 dark:text-white">
+              {theme?.owner?.displayName || "Snippng user"}
+            </p>
+            <p className="text-xs font-normal text-zinc-600 dark:text-zinc-200">
+              {theme?.owner?.email || "Snippng user"}
+            </p>
+          </span>
         </span>
       </div>
     </CodeMirror>

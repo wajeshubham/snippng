@@ -1,4 +1,5 @@
 import { createTheme } from "@uiw/codemirror-themes";
+import { User } from "firebase/auth";
 
 export interface SelectOptionInterface {
   id: string;
@@ -11,6 +12,8 @@ export interface SnippngThemeAttributesInterface {
   label: string;
   theme: "light" | "dark";
   isPublished?: boolean;
+  owner?: Pick<User, "displayName" | "email" | "photoURL">;
+  ownerUid?: string;
   config: {
     background: string;
     foreground: string;

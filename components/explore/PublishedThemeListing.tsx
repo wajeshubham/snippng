@@ -40,7 +40,6 @@ const PublishedThemeListing = () => {
   };
 
   useEffect(() => {
-    if (!user) return;
     fetchPublishedThemes();
   }, [user]);
 

@@ -98,9 +98,13 @@ const SnippngThemeItem: React.FC<Props> = ({
     }
   };
 
-  const forkTheme = async () => {
+  const cloneTheme = async () => {
     if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
-    if (!user) return;
+    if (!user)
+      return addToast({
+        message: "Login to clone the theme",
+        type: "error",
+      });
     try {
       let data = deepClone(theme);
       // delete original theme's uid and id to persist them as they are unique
@@ -135,8 +139,8 @@ const SnippngThemeItem: React.FC<Props> = ({
         LocalStorage.set("local_themes", previousThemes);
 
         addToast({
-          message: "Theme forked successfully!",
-          description: "You can view your forked themes in your profile",
+          message: "Theme cloned successfully!",
+          description: "You can view your cloned themes in your profile",
         });
       }
     } catch (e) {
@@ -255,10 +259,10 @@ const SnippngThemeItem: React.FC<Props> = ({
           {theme?.ownerUid !== user?.uid ? (
             <Button
               className="ml-auto"
-              aria-label="fork-theme"
-              title="Fork theme"
+              aria-label="clone-theme"
+              title="Clone theme"
               StartIcon={ClipboardDocumentIcon}
-              onClick={forkTheme}
+              onClick={cloneTheme}
             >
               Clone theme
             </Button>

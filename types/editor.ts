@@ -9,6 +9,7 @@ export interface SelectOptionInterface {
 export type CustomTheme = ReturnType<typeof createTheme>;
 export interface SnippngThemeAttributesInterface {
   id: string;
+  uid?: string;
   label: string;
   theme: "light" | "dark";
   isPublished?: boolean;

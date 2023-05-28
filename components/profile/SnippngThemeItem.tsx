@@ -1,22 +1,28 @@
 import { useToast } from "@/context/ToastContext";
 import { DEFAULT_BASE_SETUP, DEFAULT_CODE_SNIPPET } from "@/lib/constants";
 import { SnippngThemeAttributesInterface } from "@/types";
-import { constructTheme, LocalStorage } from "@/utils";
+import { LocalStorage, constructTheme, deepClone } from "@/utils";
 import {
-  TrashIcon,
+  ClipboardDocumentIcon,
   EllipsisHorizontalIcon,
   EyeIcon,
   EyeSlashIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
 
-import React, { useState } from "react";
-import ErrorText from "../ErrorText";
 import { db } from "@/config/firebase";
 import { useAuth } from "@/context/AuthContext";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import Loader from "../Loader";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import React, { useState } from "react";
+import ErrorText from "../ErrorText";
 import Button from "../form/Button";
 
 interface Props {
@@ -92,6 +98,53 @@ const SnippngThemeItem: React.FC<Props> = ({
     }
   };
 
+  const forkTheme = async () => {
+    if (!db) return console.log(Error("Firebase is not configured")); // This is to handle error when there is no `.env` file. So, that app doesn't crash while developing without `.env` file.
+    if (!user) return;
+    try {
+      let data = deepClone(theme);
+      // delete original theme's uid and id to persist them as they are unique
+      delete data.uid;
+      delete data.id;
+      const dataToBeAdded = {
+        ...data, // deep clone the theme to avoid mutation
+        ownerUid: user.uid,
+        isPublished: false,
+        owner: {
+          displayName: user?.displayName,
+          email: user?.email,
+          photoURL: user?.photoURL,
+        },
+      };
+      const savedDoc = await addDoc(collection(db, "themes"), {
+        ...dataToBeAdded,
+      });
+      if (savedDoc.id) {
+        // get previously saved themes
+        let previousThemes =
+          (LocalStorage.get(
+            "local_themes"
+          ) as SnippngThemeAttributesInterface[]) || [];
+
+        // push newly created theme inside the previous themes array
+        previousThemes.push({
+          ...dataToBeAdded,
+          id: savedDoc.id,
+        });
+        // store the newly created theme inside local storage
+        LocalStorage.set("local_themes", previousThemes);
+
+        addToast({
+          message: "Theme forked successfully!",
+          description: "You can view your forked themes in your profile",
+        });
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    } finally {
+    }
+  };
+
   if (!theme)
     return (
       <ErrorText
@@ -103,7 +156,7 @@ const SnippngThemeItem: React.FC<Props> = ({
     <CodeMirror
       readOnly
       editable={false}
-      className="CodeMirror__Theme__Preview__Editor"
+      className={"CodeMirror__Theme__Preview__Editor"}
       value={DEFAULT_CODE_SNIPPET}
       extensions={[langs.javascript()]}
       basicSetup={{
@@ -127,60 +180,62 @@ const SnippngThemeItem: React.FC<Props> = ({
             {theme.label}
           </span>
           {theme?.ownerUid === user?.uid ? (
-            <button
-              aria-label="delete-theme"
-              title="Delete theme"
-              disabled={deletingTheme}
-              onClick={() => {
-                let ok = confirm(
-                  `Are you sure you want to ${
-                    theme.isPublished ? "unpublish" : "publish"
-                  } this theme?`
-                );
-                if (!ok) return;
-                togglePublishThemeItem(theme.id);
-              }}
-              className="inline-flex ml-auto mr-2 items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
-            >
-              {theme.isPublished ? (
-                <EyeIcon
-                  title="Theme is published"
-                  className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-                />
-              ) : (
-                <EyeSlashIcon
-                  role={"button"}
-                  title="Theme is private"
-                  tabIndex={0}
-                  className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-                />
-              )}
-            </button>
+            <>
+              <button
+                aria-label="delete-theme"
+                title="Delete theme"
+                disabled={deletingTheme}
+                onClick={() => {
+                  let ok = confirm(
+                    `Are you sure you want to ${
+                      theme.isPublished ? "unpublish" : "publish"
+                    } this theme?`
+                  );
+                  if (!ok) return;
+                  togglePublishThemeItem(theme.id);
+                }}
+                className="inline-flex ml-auto mr-2 items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
+              >
+                {theme.isPublished ? (
+                  <EyeIcon
+                    title="Theme is published"
+                    className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+                  />
+                ) : (
+                  <EyeSlashIcon
+                    role={"button"}
+                    title="Theme is private"
+                    tabIndex={0}
+                    className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+                  />
+                )}
+              </button>
+              <button
+                aria-label="delete-theme"
+                title="Delete theme"
+                disabled={deletingTheme}
+                onClick={() => {
+                  let ok = confirm(
+                    "Are you sure you want to delete this theme permanently?"
+                  );
+                  if (!ok) return;
+                  deleteThemeItem(theme.id);
+                }}
+                className="inline-flex items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
+              >
+                {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
+                {deletingTheme ? (
+                  <EllipsisHorizontalIcon className="animate-pulse h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" />
+                ) : (
+                  <TrashIcon
+                    role={"button"}
+                    tabIndex={0}
+                    className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
+                  />
+                )}
+              </button>
+            </>
           ) : null}
-          <button
-            aria-label="delete-theme"
-            title="Delete theme"
-            disabled={deletingTheme}
-            onClick={() => {
-              let ok = confirm(
-                "Are you sure you want to delete this theme permanently?"
-              );
-              if (!ok) return;
-              deleteThemeItem(theme.id);
-            }}
-            className="inline-flex items-center gap-2 dark:text-white text-zinc-700 outline outline-[1px] dark:outline-zinc-500 rounded-md outline-zinc-200"
-          >
-            {/* <PencilIcon className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" /> */}
-            {deletingTheme ? (
-              <EllipsisHorizontalIcon className="animate-pulse h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer" />
-            ) : (
-              <TrashIcon
-                role={"button"}
-                tabIndex={0}
-                className="h-7 w-7 hover:dark:bg-zinc-600 hover:bg-zinc-200 p-1 rounded-md cursor-pointer"
-              />
-            )}
-          </button>
         </span>
         <span className="block w-full h-[0.1px] dark:bg-zinc-500 bg-zinc-300 my-3"></span>
         <span className="flex justify-start gap-3 items-center w-full">
@@ -197,6 +252,17 @@ const SnippngThemeItem: React.FC<Props> = ({
               {theme?.owner?.email || "Snippng user"}
             </p>
           </span>
+          {theme?.ownerUid !== user?.uid ? (
+            <Button
+              className="ml-auto"
+              aria-label="fork-theme"
+              title="Fork theme"
+              StartIcon={ClipboardDocumentIcon}
+              onClick={forkTheme}
+            >
+              Clone theme
+            </Button>
+          ) : null}
         </span>
       </div>
     </CodeMirror>

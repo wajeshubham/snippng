@@ -54,6 +54,7 @@ export type SnippngWindowControlsType =
 
 export interface SnippngEditorConfigInterface {
   ownerUid?: string;
+  owner?: Pick<User, "displayName" | "email" | "photoURL">;
   uid?: string;
   watermark?: boolean;
   code: string;

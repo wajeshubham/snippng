@@ -25,7 +25,6 @@ const PublishedThemeListing = () => {
       );
       docRef.forEach((doc) => {
         const theme = doc.data();
-        if (theme.ownerUid === user?.uid) return; // filter the own themes
         _themes.push({
           ...theme,
           uid: doc.id,

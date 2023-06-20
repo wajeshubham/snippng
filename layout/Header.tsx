@@ -1,7 +1,10 @@
 import { Button, Logo, SigninButton, ThemeToggle } from "@/components";
 import { useAuth } from "@/context/AuthContext";
 import { clsx } from "@/utils";
-import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftOnRectangleIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -17,7 +20,23 @@ const Header = () => {
           </Link>
         </div>
         <div className="flex z-40 justify-end gap-4 items-center w-1/2 flex-shrink-0">
-          <ThemeToggle />
+          <Button
+            data-testid="explore-themes"
+            StartIcon={(props) => (
+              <SparklesIcon
+                {...props}
+                className={clsx(
+                  "md:mr-2 md:!w-4 md:!h-4 !w-6 !h-6 mr-0",
+                  props.className ?? ""
+                )}
+              />
+            )}
+            onClick={() => {
+              router.push(`/explore/themes`);
+            }}
+          >
+            <span className="md:block hidden">Explore themes</span>
+          </Button>
           {user?.uid ? (
             <>
               <Button
@@ -60,6 +79,7 @@ const Header = () => {
           ) : (
             <SigninButton />
           )}
+          <ThemeToggle />
         </div>
       </nav>
     </header>

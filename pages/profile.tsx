@@ -193,6 +193,17 @@ const UserProfile = () => {
                                       )
                                     );
                                   }}
+                                  onPublishChange={(themeId) => {
+                                    setSavedThemes(
+                                      [...savedThemes].map((theme) => {
+                                        if (theme.id === themeId) {
+                                          theme.isPublished =
+                                            !theme.isPublished;
+                                        }
+                                        return theme;
+                                      })
+                                    );
+                                  }}
                                 />
                               ))}
                             </ul>

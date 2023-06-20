@@ -175,6 +175,7 @@ export const getExportableConfig = (
   deepClonedConfig.bgImageVisiblePatch = null;
   delete deepClonedConfig.uid;
   delete deepClonedConfig.ownerUid;
+  delete deepClonedConfig.owner;
   const exportableConfig: SnippngExportableConfig = deepClonedConfig;
   return exportableConfig;
 };

@@ -83,6 +83,11 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
       const savedDoc = await addDoc(collection(db, "snippets"), {
         ...dataToBeAdded,
         ownerUid: user.uid,
+        owner: {
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email,
+        },
       });
       if (savedDoc.id) {
         addToast({
@@ -148,6 +153,7 @@ const SnippngCodeArea: React.FC<Props> = ({ underConstructionTheme }) => {
       ...editorConfig,
       uid: undefined,
       ownerUid: undefined,
+      owner: undefined,
     });
   }, [editorConfig, uid, underConstructionTheme]);
 

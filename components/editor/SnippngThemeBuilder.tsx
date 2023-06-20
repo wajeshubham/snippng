@@ -42,6 +42,7 @@ const SnippngThemeBuilder: React.FC<{
       const dataToBeAdded = {
         ...deepClone(theme), // deep clone the theme to avoid mutation
         ownerUid: user.uid,
+        isPublished: false,
         owner: {
           displayName: user?.displayName,
           email: user?.email,
